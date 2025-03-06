@@ -1,0 +1,138 @@
+import { useState } from "react";
+import { Loader } from "lucide-react";
+import { useSignup } from "../../queries/auth/authMutation.js";
+import { Link } from "react-router-dom";
+
+const SignUpForm = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [noTelp, setNoTelp] = useState("");
+  const [address, setAddress] = useState("");
+  const [isAgreeTerms, setIsAgreeTerms] = useState(false);
+
+  const { mutate: signUpMutation, isPending } = useSignup();
+
+  const handleSignUp = (e) => {
+    e.preventDefault();
+
+    signUpMutation({
+      name,
+      username,
+      email,
+      password,
+      noTelp,
+      address,
+      isAgreeTerms,
+    });
+  };
+
+  return (
+    <form
+      onSubmit={handleSignUp}
+      className="flex flex-col gap-4 w-full lg:w-[30vw]"
+    >
+      <div>
+        <label htmlFor="name">Nama Lengkap</label>
+        <input
+          type="text"
+          placeholder="Masukkan Nama Lengkap"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="input input-bordered rounded-md w-full text-xs"
+          required
+        />
+      </div>
+
+      <div>
+        <label htmlFor="username">Username</label>
+        <input
+          type="text"
+          placeholder="Masukkan Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="input input-bordered rounded-md w-full text-xs"
+          required
+        />
+      </div>
+
+      <div>
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          placeholder="Masukkan Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="input input-bordered rounded-md w-full text-xs"
+          required
+        />
+      </div>
+
+      <div>
+        <label htmlFor="password">Password</label>
+        <input
+          type="password"
+          placeholder="Masukkan Password (6+ characters)"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="input input-bordered rounded-md w-full text-xs"
+          required
+        />
+      </div>
+
+      <div>
+        <label htmlFor="noTelp">No Telp.</label>
+        <input
+          type="number"
+          placeholder="Masukkan No Telp"
+          value={noTelp}
+          onChange={(e) => setNoTelp(e.target.value)}
+          className="input input-bordered rounded-md w-full text-xs"
+          required
+        />
+      </div>
+
+      <div>
+        <label htmlFor="address">Alamat</label>
+        <input
+          type="text"
+          placeholder="Masukkan Alamat"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          className="input input-bordered rounded-md w-full text-xs"
+          required
+        />
+      </div>
+
+      <div className="mt-8">
+        <input
+          required
+          type="checkbox"
+          checked={isAgreeTerms}
+          onChange={(e) => setIsAgreeTerms(e.target.checked)}
+          className="checkbox checkbox-xs checkbox-primary mr-2"
+        />
+        <span className="text-sm">
+          Saya menyetujui semua{" "}
+          <Link
+            to="/terms-and-conditions"
+            target="_blank"
+            className="text-secondary-jalin"
+          >
+            Ketentuan dan Kebijakan Privasi
+          </Link>
+        </span>
+      </div>
+      <button
+        type="submit"
+        disabled={isPending}
+        className="btn btn-primary w-full"
+      >
+        {isPending ? <Loader className="size-5 animate-spin" /> : "Daftar"}
+      </button>
+    </form>
+  );
+};
+
+export default SignUpForm;
