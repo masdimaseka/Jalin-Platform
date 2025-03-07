@@ -100,7 +100,7 @@ const ListPenjahit = () => {
           ) : (
             <tr>
               <td colSpan="10" className="text-center py-4 border">
-                Tidak ada penjahit untuk diverifikasi.
+                Tidak ada penjahit yang terverifikasi.
               </td>
             </tr>
           )}

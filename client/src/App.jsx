@@ -15,6 +15,7 @@ import LoginAdminPage from "./pages/admin/LoginAdminPage";
 import DashboardAdminPage from "./pages/admin/DashboardAdminPage";
 import StatusPage from "./pages/StatusPage";
 import MenusAdminPage from "./pages/admin/MenusAdminPage";
+import PreviewFilePage from "./pages/admin/PreviewFileAdminPage";
 
 const App = () => {
   const { data: authUser, isLoading: isLoading } = useAuthUser();
@@ -85,6 +86,16 @@ const App = () => {
         />
         <Route
           path="/admin/penjahit/verify"
+          element={
+            authAdmin ? <MenusAdminPage /> : <Navigate to="/admin/login" />
+          }
+        />
+        <Route
+          path="/admin/penjahit/verify/dok/:file"
+          element={<PreviewFilePage />}
+        />
+        <Route
+          path="/admin/kategori"
           element={
             authAdmin ? <MenusAdminPage /> : <Navigate to="/admin/login" />
           }

@@ -1,4 +1,5 @@
 import Penjahit from "../models/penjahit.model.js";
+import { decryptFile, encryptFile } from "../utils/encryption.js";
 import cloudinary from "./../lib/cloudinary.js";
 
 export const registerPenjahit = async (req, res) => {
@@ -24,6 +25,8 @@ export const registerPenjahit = async (req, res) => {
       folder: "jalin/penjahit/KTP",
     });
 
+    const hashedDokKTP = encryptFile(uploadedKTP.secure_url);
+
     let dokPortofolioUrls = [];
     if (Array.isArray(dokPortofolio) && dokPortofolio.length > 0) {
       dokPortofolioUrls = await Promise.all(
@@ -38,7 +41,7 @@ export const registerPenjahit = async (req, res) => {
 
     const penjahit = new Penjahit({
       user: userId,
-      dokKTP: uploadedKTP.secure_url,
+      dokKTP: hashedDokKTP,
       dokPortofolio: dokPortofolioUrls,
       rentangHarga,
       kategori: Array.isArray(kategori) ? kategori : [kategori],
@@ -61,7 +64,13 @@ export const getPenjahit = async (req, res) => {
       "name username email noTelp address lastLogin "
     );
 
-    res.status(200).json(penjahit);
+    const decryptedPenjahit = penjahit.map((p) => ({
+      ...p._doc,
+      dokKTP: encodeURIComponent(decryptFile(p.dokKTP)),
+      dokPortofolio: p.dokPortofolio.map((url) => encodeURIComponent(url)),
+    }));
+
+    res.status(200).json(decryptedPenjahit);
   } catch (error) {
     console.log(`error in getPenjahit: ${error.message}`);
     res.status(500).json({ message: "Internal server error" });

@@ -47,6 +47,16 @@ const SideBarAdmin = () => {
         >
           Daftar Transaksi
         </Link>
+        <Link
+          to="/admin/kategori"
+          className={`w-full hover:text-primary-jalin ${
+            location.pathname === "/admin/kategori"
+              ? "font-bold text-blue-500"
+              : ""
+          }`}
+        >
+          Daftar Kategori
+        </Link>
       </div>
     </div>
   );

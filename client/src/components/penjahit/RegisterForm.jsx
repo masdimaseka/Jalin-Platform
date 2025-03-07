@@ -58,6 +58,7 @@ const RegisterForm = () => {
         <label htmlFor="dokKTP">Dokumen KTP</label>
         <input
           type="file"
+          accept="image/*"
           onChange={(e) => setDokKTP(e.target.files[0])}
           className="file-input input-bordered rounded-md w-full text-xs"
           required
@@ -69,6 +70,7 @@ const RegisterForm = () => {
         <input
           type="file"
           multiple
+          accept="image/*"
           onChange={(e) => setDokPortofolio([...e.target.files])}
           className="file-input input-bordered rounded-md w-full text-xs"
         />

@@ -53,7 +53,7 @@ const ListUser = () => {
           ) : (
             <tr>
               <td colSpan="10" className="text-center py-4 border">
-                Tidak ada penjahit untuk diverifikasi.
+                Tidak ada user.
               </td>
             </tr>
           )}

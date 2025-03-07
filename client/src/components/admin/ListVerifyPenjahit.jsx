@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useVerifyPenjahit } from "../../queries/admin/adminMutation";
 import { usePenjahitByAdmin } from "../../queries/admin/adminQuery";
 import { useCategories } from "../../queries/penjahit/penjahitQuery";
@@ -43,14 +44,14 @@ const ListVerifyPenjahit = () => {
                   <td>{p.rentangHarga || "Tidak tersedia"}</td>
                   <td>
                     {p.dokKTP ? (
-                      <a
-                        href={p.dokKTP}
+                      <Link
+                        to={"/admin/penjahit/verify/dok/" + p.dokKTP}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 underline"
                       >
                         Lihat KTP
-                      </a>
+                      </Link>
                     ) : (
                       "Tidak tersedia"
                     )}
@@ -59,14 +60,14 @@ const ListVerifyPenjahit = () => {
                     {p.dokPortofolio?.length > 0
                       ? p.dokPortofolio.map((portofolio, i) => (
                           <div key={i}>
-                            <a
-                              href={portofolio}
+                            <Link
+                              to={"/admin/penjahit/verify/dok/" + portofolio}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-blue-500 underline"
                             >
                               Lihat Portofolio {i + 1}
-                            </a>
+                            </Link>
                           </div>
                         ))
                       : "Tidak tersedia"}
