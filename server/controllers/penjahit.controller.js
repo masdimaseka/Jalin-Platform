@@ -1,5 +1,5 @@
 import Penjahit from "../models/penjahit.model.js";
-import { decryptFile, encryptFile } from "../utils/encryption.js";
+import { decrypting, encrypting } from "../utils/encryption.js";
 import cloudinary from "./../lib/cloudinary.js";
 
 export const registerPenjahit = async (req, res) => {
@@ -25,7 +25,7 @@ export const registerPenjahit = async (req, res) => {
       folder: "jalin/penjahit/KTP",
     });
 
-    const hashedDokKTP = encryptFile(uploadedKTP.secure_url);
+    const hashedDokKTP = encrypting(uploadedKTP.secure_url);
 
     let dokPortofolioUrls = [];
     if (Array.isArray(dokPortofolio) && dokPortofolio.length > 0) {
@@ -66,7 +66,7 @@ export const getPenjahit = async (req, res) => {
 
     const decryptedPenjahit = penjahit.map((p) => ({
       ...p._doc,
-      dokKTP: encodeURIComponent(decryptFile(p.dokKTP)),
+      dokKTP: encodeURIComponent(decrypting(p.dokKTP)),
       dokPortofolio: p.dokPortofolio.map((url) => encodeURIComponent(url)),
     }));
 

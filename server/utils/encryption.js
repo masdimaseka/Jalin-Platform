@@ -7,7 +7,7 @@ const algorithm = "aes-256-cbc";
 const key = Buffer.from(process.env.ENCRYPTION_KEY, "hex");
 const iv = Buffer.from(process.env.ENCRYPTION_IV, "hex");
 
-export const encryptFile = (text) => {
+export const encrypting = (text) => {
   const cipher = crypto.createCipheriv(algorithm, key, iv);
   const encrypted = Buffer.concat([
     cipher.update(text, "utf8"),
@@ -16,7 +16,7 @@ export const encryptFile = (text) => {
   return encrypted.toString("hex"); // Simpan dalam format string hex
 };
 
-export const decryptFile = (encryptedText) => {
+export const decrypting = (encryptedText) => {
   const decipher = crypto.createDecipheriv(algorithm, key, iv);
   const decrypted = Buffer.concat([
     decipher.update(Buffer.from(encryptedText, "hex")),

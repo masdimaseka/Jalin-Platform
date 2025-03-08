@@ -3,7 +3,7 @@ import { generateTokenAndSetCookieAdmin } from "../utils/generateTokenAndSetCook
 import Penjahit from "../models/penjahit.model.js";
 import User from "../models/user.model.js";
 import Admin from "../models/admin.model.js";
-import { decryptFile } from "../utils/encryption.js";
+import { decrypting } from "../utils/encryption.js";
 
 export const checkAuthAdmin = async (req, res) => {
   try {
@@ -52,7 +52,7 @@ export const getPenjahitByAdmin = async (req, res) => {
 
     const decryptedPenjahit = penjahit.map((p) => ({
       ...p._doc,
-      dokKTP: encodeURIComponent(decryptFile(p.dokKTP)),
+      dokKTP: encodeURIComponent(decrypting(p.dokKTP)),
       dokPortofolio: p.dokPortofolio.map((url) => encodeURIComponent(url)),
     }));
 
