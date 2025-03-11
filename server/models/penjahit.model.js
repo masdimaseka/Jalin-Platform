@@ -7,6 +7,7 @@ const penjahitSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    description: { type: String, default: "" },
     dokKTP: {
       type: String,
       required: true,
@@ -23,6 +24,12 @@ const penjahitSchema = new mongoose.Schema(
     openToWork: {
       type: Boolean,
       default: true,
+    },
+    rating: {
+      type: Number,
+      min: 1,
+      max: 5,
+      default: 0,
     },
     isVerified: {
       type: Boolean,

@@ -7,7 +7,7 @@ import {
 
 const router = express.Router();
 
-router.get("/", protectRoute, getPenjahit);
+router.get("/", getPenjahit);
 router.post("/register", protectRoute, registerPenjahit);
 
 export default router;

@@ -16,6 +16,9 @@ import DashboardAdminPage from "./pages/admin/DashboardAdminPage";
 import StatusPage from "./pages/StatusPage";
 import MenusAdminPage from "./pages/admin/MenusAdminPage";
 import PreviewFilePage from "./pages/admin/PreviewFileAdminPage";
+import ListPenjahitPage from "./pages/pejahit/ListPenjahitPage";
+import ListJahitanPage from "./pages/jahitan/ListJahitanPage";
+import AboutPage from "./pages/AboutPage";
 
 const App = () => {
   const { data: authUser, isLoading: isLoading } = useAuthUser();
@@ -41,6 +44,7 @@ const App = () => {
           path="/verify-email"
           element={!authUser ? <EmailVerificationPage /> : <Navigate to="/" />}
         />
+        <Route path="/penjahit" element={<ListPenjahitPage />} />
         <Route
           path="/penjahit/register"
           element={
@@ -62,6 +66,8 @@ const App = () => {
             )
           }
         />
+        <Route path="/jahitan" element={<ListJahitanPage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route
           path="/admin/login"
           element={!authAdmin ? <LoginAdminPage /> : <Navigate to="/admin" />}

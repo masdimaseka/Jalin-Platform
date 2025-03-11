@@ -18,10 +18,12 @@ const ListVerifyPenjahit = () => {
         <thead>
           <tr className="text-center">
             <th>No</th>
+            <th>Picture</th>
             <th>Nama</th>
             <th>Email</th>
             <th>No Telp</th>
             <th>Lokasi</th>
+            <th>Deskripsi</th>
             <th>Rentang Harga</th>
             <th>Dok. KTP</th>
             <th>Dok. Portofolio</th>
@@ -37,10 +39,21 @@ const ListVerifyPenjahit = () => {
               .map((p, index) => (
                 <tr key={p._id} className="text-center">
                   <td>{index + 1}</td>
+                  <td>
+                    <img
+                      src={p.user?.profileImg || "/avatar.png"}
+                      alt={p.user?.name}
+                      className="rounded-full w-8 h-8"
+                    />
+                  </td>
                   <td>{p.user?.name || "Tidak tersedia"}</td>
                   <td>{p.user?.email || "Tidak tersedia"}</td>
                   <td>{p.user?.noTelp || "Tidak tersedia"}</td>
                   <td>{p.user?.address || "Tidak tersedia"}</td>
+                  <td className="max-w-xs break-words whitespace-normal text-justify">
+                    {p.description || "Tidak tersedia"}
+                  </td>
+
                   <td>{p.rentangHarga || "Tidak tersedia"}</td>
                   <td>
                     {p.dokKTP ? (

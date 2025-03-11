@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Loader } from "lucide-react";
 import { useSignup } from "../../queries/auth/authMutation.js";
 import { Link } from "react-router-dom";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const SignUpForm = () => {
   const [name, setName] = useState("");
@@ -13,6 +14,8 @@ const SignUpForm = () => {
   const [isAgreeTerms, setIsAgreeTerms] = useState(false);
 
   const { mutate: signUpMutation, isPending } = useSignup();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSignUp = (e) => {
     e.preventDefault();
@@ -69,16 +72,31 @@ const SignUpForm = () => {
         />
       </div>
 
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          placeholder="Masukkan Password (6+ characters)"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="input input-bordered rounded-md w-full text-xs"
-          required
-        />
+      <div className="relative">
+        <label htmlFor="password" className="block text-sm font-medium">
+          Password
+        </label>
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Masukkan Password (6+ characters)"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="input input-bordered rounded-md w-full text-xs pr-10"
+            required
+          />
+          <button
+            type="button"
+            className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            <Icon
+              icon={showPassword ? "tabler:eye-off" : "tabler:eye"}
+              width={18}
+              className="cursor-pointer"
+            />
+          </button>
+        </div>
       </div>
 
       <div>

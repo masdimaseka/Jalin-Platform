@@ -47,7 +47,7 @@ export const getPenjahitByAdmin = async (req, res) => {
   try {
     const penjahit = await Penjahit.find().populate(
       "user",
-      "name username email noTelp address lastLogin "
+      "name username email noTelp address lastLogin profileImg"
     );
 
     const decryptedPenjahit = penjahit.map((p) => ({

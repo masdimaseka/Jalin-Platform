@@ -1,4 +1,5 @@
 import Penjahit from "../models/penjahit.model.js";
+import User from "../models/user.model.js";
 import { decrypting, encrypting } from "../utils/encryption.js";
 import cloudinary from "./../lib/cloudinary.js";
 
@@ -6,10 +7,19 @@ export const registerPenjahit = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const { dokKTP, dokPortofolio, rentangHarga, kategori, isAgreeTerms } =
-      req.body;
+    const {
+      profileImg,
+      description,
+      dokKTP,
+      dokPortofolio,
+      rentangHarga,
+      kategori,
+      isAgreeTerms,
+    } = req.body;
 
     if (
+      !profileImg ||
+      !description ||
       !dokKTP ||
       !rentangHarga ||
       !kategori ||
@@ -20,6 +30,10 @@ export const registerPenjahit = async (req, res) => {
         .status(400)
         .json({ message: "Harap isi semua field yang diperlukan" });
     }
+
+    const uploadedProfileImg = await cloudinary.uploader.upload(profileImg, {
+      folder: "jalin/user/profileImg",
+    });
 
     const uploadedKTP = await cloudinary.uploader.upload(dokKTP, {
       folder: "jalin/penjahit/KTP",
@@ -41,6 +55,7 @@ export const registerPenjahit = async (req, res) => {
 
     const penjahit = new Penjahit({
       user: userId,
+      description,
       dokKTP: hashedDokKTP,
       dokPortofolio: dokPortofolioUrls,
       rentangHarga,
@@ -49,6 +64,10 @@ export const registerPenjahit = async (req, res) => {
     });
 
     await penjahit.save();
+
+    const user = await User.findById(userId).select("-password");
+    user.profileImg = uploadedProfileImg.secure_url;
+    await user.save();
 
     res.status(201).json({ message: "Penjahit berhasil didaftarkan" });
   } catch (error) {
@@ -59,14 +78,15 @@ export const registerPenjahit = async (req, res) => {
 
 export const getPenjahit = async (req, res) => {
   try {
-    const penjahit = await Penjahit.find().populate(
-      "user",
-      "name username email noTelp address lastLogin "
-    );
+    const penjahit = await Penjahit.find()
+      .populate(
+        "user",
+        "name username email noTelp address lastLogin profileImg"
+      )
+      .select("-dokKTP");
 
     const decryptedPenjahit = penjahit.map((p) => ({
       ...p._doc,
-      dokKTP: encodeURIComponent(decrypting(p.dokKTP)),
       dokPortofolio: p.dokPortofolio.map((url) => encodeURIComponent(url)),
     }));
 

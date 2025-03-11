@@ -1,17 +1,24 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCategories } from "../../queries/penjahit/penjahitQuery";
 import { useRegisterPenjahit } from "../../queries/penjahit/penjahitMutation";
+import toast from "react-hot-toast";
 
 const RegisterForm = () => {
+  const [profileImg, setProfileImg] = useState(null);
+  const [description, setDescription] = useState("");
   const [dokKTP, setDokKTP] = useState(null);
   const [dokPortofolio, setDokPortofolio] = useState([]);
   const [rentangHarga, setRentangharga] = useState("");
   const [kategori, setKategori] = useState([]);
   const [isAgreeTerms, setIsAgreeTerms] = useState(false);
 
+  const fileInputRef = useRef(null);
+
   const { data: category } = useCategories();
   const { mutate: registerPenjahit, isPending } = useRegisterPenjahit();
+
+  const maxWords = 100;
 
   const readFileAsDataURL = (file) => {
     return new Promise((resolve, reject) => {
@@ -29,11 +36,42 @@ const RegisterForm = () => {
     );
   };
 
+  const handleDescriptionChange = (e) => {
+    const words = e.target.value.split(/\s+/).filter((word) => word !== ""); // Hitung kata
+    if (words.length <= maxWords) {
+      setDescription(e.target.value);
+    }
+  };
+
+  const handleProfileImgChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+
+    img.onload = () => {
+      if (img.width !== img.height) {
+        toast.error("Foto harus memiliki rasio 1:1 (persegi)!");
+        fileInputRef.current.value = ""; // Reset input file
+        return;
+      }
+      setProfileImg(file);
+    };
+  };
   const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
-      const registerData = { rentangHarga, kategori, isAgreeTerms };
+      const registerData = {
+        description,
+        rentangHarga,
+        kategori,
+        isAgreeTerms,
+      };
+      if (profileImg) {
+        registerData.profileImg = await readFileAsDataURL(profileImg);
+      }
       if (dokKTP) {
         registerData.dokKTP = await readFileAsDataURL(dokKTP);
       }
@@ -55,6 +93,34 @@ const RegisterForm = () => {
       className="flex flex-col gap-4 w-full lg:w-[30vw]"
     >
       <div>
+        <label htmlFor="dokKTP">Foto Profile</label>
+        <input
+          type="file"
+          accept="image/*"
+          ref={fileInputRef}
+          onChange={handleProfileImgChange}
+          className="file-input input-bordered rounded-md w-full text-xs"
+          required
+        />
+      </div>
+
+      <div>
+        <label htmlFor="rentangBiaya">Deskripsi Profile</label>
+        <textarea
+          type="text"
+          placeholder="Saya adalah seorang penjahit..."
+          value={description}
+          onChange={handleDescriptionChange}
+          className="textarea textarea-bordered w-full text-xs rounded-md"
+          required
+        />
+        <p className="text-right text-xs text-gray-500 mt-1">
+          {description.split(/\s+/).filter((word) => word !== "").length} /{" "}
+          {maxWords} kata
+        </p>
+      </div>
+
+      <div>
         <label htmlFor="dokKTP">Dokumen KTP</label>
         <input
           type="file"
@@ -64,9 +130,13 @@ const RegisterForm = () => {
           required
         />
       </div>
-
       <div>
-        <label htmlFor="dokPortofolio">Dokumen Portofolio</label>
+        <label htmlFor="dokPortofolio">
+          Dokumen Portofolio{" "}
+          <span className="text-xs">
+            (alat jahit, hasil pekerjaan) *jadikan dalam satu file
+          </span>
+        </label>
         <input
           type="file"
           multiple
@@ -75,7 +145,6 @@ const RegisterForm = () => {
           className="file-input input-bordered rounded-md w-full text-xs"
         />
       </div>
-
       <div>
         <label htmlFor="rentangBiaya">Rentang Biaya Jasa</label>
         <input
@@ -87,7 +156,6 @@ const RegisterForm = () => {
           required
         />
       </div>
-
       <div>
         <label htmlFor="kategori">Kategori Spesialisasi</label>
         <p className="mt-2 text-sm text-gray-500">Kategori terpilih:</p>
@@ -117,7 +185,6 @@ const RegisterForm = () => {
           </ul>
         </div>
       </div>
-
       <div className="mt-8">
         <input
           required
@@ -137,7 +204,6 @@ const RegisterForm = () => {
           </Link>
         </span>
       </div>
-
       <button
         type="submit"
         className="btn btn-primary w-full"
