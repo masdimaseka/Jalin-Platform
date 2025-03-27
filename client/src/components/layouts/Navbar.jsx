@@ -9,8 +9,8 @@ const Navbar = () => {
   const { data: authUser, isLoading: isLoadingUser } = useAuthUser();
   const { data: penjahit, isLoading: isLoadingPenjahit } = usePenjahit();
   const { mutate: logutMutate } = useLogout();
-  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
   const isAuthPage = [
     "/login",
@@ -18,13 +18,14 @@ const Navbar = () => {
     "/verify-email",
     "/admin/login",
   ].includes(location.pathname);
+
   const userPenjahit = penjahit?.find((p) => p.user._id === authUser?._id);
 
   if (isLoadingUser || isLoadingPenjahit) return null;
 
   return (
     !isAuthPage && (
-      <nav className="navbar bg-primary-jalin shadow-md sticky top-0 z-50">
+      <nav className={`navbar bg-primary-jalin shadow-md sticky top-0 z-50`}>
         <div className="container mx-auto flex items-center justify-between max-w-screen px-2 lg:px-16 py-2">
           <div className="flex items-center gap-4">
             <Link to="/">
@@ -55,7 +56,14 @@ const Navbar = () => {
             ))}
             {authUser ? (
               <div className="flex items-center gap-4">
-                {!userPenjahit && (
+                {userPenjahit ? (
+                  <Link
+                    to="/penjahit/dashboard"
+                    className="btn btn-white text-primary-jalin font-semibold"
+                  >
+                    Dashboard Penjahit
+                  </Link>
+                ) : (
                   <Link
                     to="/penjahit/register"
                     className="btn btn-white text-primary-jalin font-semibold"
@@ -63,7 +71,10 @@ const Navbar = () => {
                     Daftar Penjahit
                   </Link>
                 )}
-                <Link className="btn btn-white text-primary-jalin flex items-center gap-2 font-semibold">
+                <Link
+                  to="/dashboard"
+                  className="btn btn-white text-primary-jalin flex items-center gap-2 font-semibold"
+                >
                   <img
                     src={authUser.profileImg || "/avatar.png"}
                     alt={authUser.name}
@@ -119,7 +130,14 @@ const Navbar = () => {
             ))}
             {authUser ? (
               <div className="flex flex-col gap-2 mt-4">
-                {!userPenjahit && (
+                {userPenjahit ? (
+                  <Link
+                    to="/penjahit/dashboard"
+                    className="btn btn-primary text-white w-full"
+                  >
+                    Dashboard Penjahit
+                  </Link>
+                ) : (
                   <Link
                     to="/penjahit/register"
                     className="btn btn-primary text-white w-full"

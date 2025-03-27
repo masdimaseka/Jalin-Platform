@@ -19,6 +19,7 @@ import PreviewFilePage from "./pages/admin/PreviewFileAdminPage";
 import ListPenjahitPage from "./pages/pejahit/ListPenjahitPage";
 import ListJahitanPage from "./pages/jahitan/ListJahitanPage";
 import AboutPage from "./pages/AboutPage";
+import DashboardPage from "./pages/DashboardPage";
 
 const App = () => {
   const { data: authUser, isLoading: isLoading } = useAuthUser();
@@ -44,6 +45,11 @@ const App = () => {
           path="/verify-email"
           element={!authUser ? <EmailVerificationPage /> : <Navigate to="/" />}
         />
+        <Route
+          path="/dashboard"
+          element={!authUser ? <LoginPage /> : <DashboardPage />}
+        />
+
         <Route path="/penjahit" element={<ListPenjahitPage />} />
         <Route
           path="/penjahit/register"
@@ -60,14 +66,16 @@ const App = () => {
           path="/penjahit/dashboard"
           element={
             authUser && authUser.role === "penjahit" ? (
-              <RegisterPenjahit />
+              <DashboardPage />
             ) : (
               <Navigate to="/login" />
             )
           }
         />
+
         <Route path="/jahitan" element={<ListJahitanPage />} />
         <Route path="/about" element={<AboutPage />} />
+
         <Route
           path="/admin/login"
           element={!authAdmin ? <LoginAdminPage /> : <Navigate to="/admin" />}

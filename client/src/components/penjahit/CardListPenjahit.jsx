@@ -5,7 +5,7 @@ import {
 import { useState } from "react";
 import InputPekerjaan from "../InputPekerjaan";
 import { useAuthUser } from "../../queries/auth/authQuery";
-import SearchBar from "../SearchBar"; // Import komponen pencarian
+import SearchBar from "../SearchBar";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 const CardListPenjahit = () => {
@@ -14,8 +14,8 @@ const CardListPenjahit = () => {
   const { data: authUser } = useAuthUser();
   const [selectedPenjahit, setSelectedPenjahit] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(""); // Filter kategori
-  const [searchQuery, setSearchQuery] = useState(""); // Filter pencarian
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const openModal = (penjahit) => {
     if (!authUser) {
@@ -47,7 +47,6 @@ const CardListPenjahit = () => {
     );
   }
 
-  // Filter berdasarkan kategori dan pencarian nama
   const filteredPenjahit = penjahit.filter((p) => {
     const matchesCategory = selectedCategory
       ? p.kategori?.includes(selectedCategory)
@@ -58,10 +57,8 @@ const CardListPenjahit = () => {
 
   return (
     <div>
-      {/* Pencarian dan Filter */}
       <div className="flex flex-col md:flex-row  mb-8 gap-4">
         <SearchBar onSearchChange={handleSearchChange} />
-        {/* Komponen Search */}
         <select
           className="select select-bordered w-48"
           value={selectedCategory}
@@ -76,7 +73,6 @@ const CardListPenjahit = () => {
         </select>
       </div>
 
-      {/* Daftar Penjahit */}
       <div className="flex flex-wrap gap-4">
         {filteredPenjahit.length > 0 ? (
           filteredPenjahit
@@ -91,6 +87,7 @@ const CardListPenjahit = () => {
                       className="rounded-full w-32 h-32"
                     />
                   </div>
+
                   <h2 className="card-title">
                     {p.user.name}{" "}
                     <Icon
@@ -100,12 +97,14 @@ const CardListPenjahit = () => {
                       className="text-primary-jalin"
                     />
                   </h2>
+
                   <p>
                     {p.description
                       ? p.description.split(" ").slice(0, 20).join(" ") +
                         (p.description.split(" ").length > 20 ? "..." : "")
                       : "Deskripsi belum tersedia."}
                   </p>
+
                   <div className="card-actions mt-4 flex flex-wrap gap-2">
                     <div className="badge badge-success">Open To Work</div>
                     {p.kategori?.length > 0 ? (
