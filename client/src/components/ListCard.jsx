@@ -12,11 +12,11 @@ export const FeatureCard = ({ imgUrl, title, desc }) => {
 
 export const StepCard = ({ num, title, desc }) => {
   return (
-    <div className="md:flex md:items-start">
-      <div className="text-3xl font-semibold bg-primary-jalin text-white rounded-full w-10 h-10 p-6 flex items-center justify-center">
+    <div className="flex items-start">
+      <div className="text-xl md:text-3xl font-semibold bg-primary-jalin text-white rounded-full w-10 h-10 p-6 flex items-center justify-center">
         <h3>{num}</h3>
       </div>
-      <div className="md:ml-8">
+      <div className="ml-4 md:ml-8">
         <h3 className="text-xl font-semibold">{title}</h3>
         <p className="mt-2">{desc}</p>
       </div>

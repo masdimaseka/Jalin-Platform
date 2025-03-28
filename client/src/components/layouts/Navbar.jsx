@@ -145,7 +145,10 @@ const Navbar = () => {
                     Daftar Penjahit
                   </Link>
                 )}
-                <Link className="btn btn-primary text-white w-full flex items-center gap-2">
+                <Link
+                  to="/dashboard"
+                  className="btn btn-primary text-white w-full flex items-center gap-2"
+                >
                   <img
                     src={authUser.profileImg || "/avatar.png"}
                     alt={authUser.name}

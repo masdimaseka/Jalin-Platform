@@ -53,7 +53,7 @@ const RegisterForm = () => {
     img.onload = () => {
       if (img.width !== img.height) {
         toast.error("Foto harus memiliki rasio 1:1 (persegi)!");
-        fileInputRef.current.value = ""; // Reset input file
+        fileInputRef.current.value = "";
         return;
       }
       setProfileImg(file);

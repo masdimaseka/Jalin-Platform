@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Link } from "react-router-dom";
 
-const OnReviewRegister = () => {
+export const OnReviewRegister = () => {
   return (
     <>
       <Icon
@@ -25,5 +25,3 @@ const OnReviewRegister = () => {
     </>
   );
 };
-
-export default OnReviewRegister;

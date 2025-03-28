@@ -8,8 +8,8 @@ const DashboardPage = () => {
   const isUserPage = location.pathname === "/dashboard";
 
   return (
-    <div className=" container mx-auto min-h-screen max-w-screen overflow-x-hidden px-8 lg:px-16 py-8 ">
-      <h1 className="text-lg sm:text-2xl font-semibold mb-8">
+    <div>
+      <h1 className="text-2xl sm:text-4xl font-semibold mb-8">
         {isUserPage ? "Dashboard User" : "Dashboard Penjahit"}
       </h1>
       {isUserPage ? <DashboardUser /> : <DashboardPenjahit />}

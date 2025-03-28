@@ -20,6 +20,7 @@ import ListPenjahitPage from "./pages/pejahit/ListPenjahitPage";
 import ListJahitanPage from "./pages/jahitan/ListJahitanPage";
 import AboutPage from "./pages/AboutPage";
 import DashboardPage from "./pages/DashboardPage";
+import EditProfilePage from "./pages/auth/EditProfilePage";
 
 const App = () => {
   const { data: authUser, isLoading: isLoading } = useAuthUser();
@@ -47,8 +48,10 @@ const App = () => {
         />
         <Route
           path="/dashboard"
-          element={!authUser ? <LoginPage /> : <DashboardPage />}
+          element={authUser ? <DashboardPage /> : <LoginPage />}
         />
+
+        <Route path="/profile/:id/edit" element={<EditProfilePage />} />
 
         <Route path="/penjahit" element={<ListPenjahitPage />} />
         <Route
