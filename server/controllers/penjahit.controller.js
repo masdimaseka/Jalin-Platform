@@ -32,7 +32,7 @@ export const registerPenjahit = async (req, res) => {
     }
 
     const uploadedProfileImg = await cloudinary.uploader.upload(profileImg, {
-      folder: "jalin/user/profileImg",
+      folder: "jalin/user/profile",
     });
 
     const uploadedKTP = await cloudinary.uploader.upload(dokKTP, {
@@ -67,6 +67,7 @@ export const registerPenjahit = async (req, res) => {
 
     const user = await User.findById(userId).select("-password");
     user.profileImg = uploadedProfileImg.secure_url;
+
     await user.save();
 
     res.status(201).json({ message: "Penjahit berhasil didaftarkan" });
@@ -94,5 +95,34 @@ export const getPenjahit = async (req, res) => {
   } catch (error) {
     console.log(`error in getPenjahit: ${error.message}`);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getPenjahitById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const penjahit = await Penjahit.findById(id)
+      .populate(
+        "user",
+        "name username email noTelp address lastLogin profileImg"
+      )
+      .select("-dokKTP");
+
+    if (!penjahit) {
+      return res.status(404).json({ message: "Penjahit tidak ditemukan" });
+    }
+
+    const decryptedPenjahit = {
+      ...penjahit._doc,
+      dokPortofolio: penjahit.dokPortofolio?.map((url) =>
+        encodeURIComponent(url)
+      ),
+    };
+
+    res.status(200).json(decryptedPenjahit);
+  } catch (error) {
+    console.error(`Error in getPenjahitById: ${error.message}`);
+    res.status(500).json({ message: "Terjadi kesalahan server" });
   }
 };

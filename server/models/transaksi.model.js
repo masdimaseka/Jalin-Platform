@@ -2,22 +2,21 @@ import mongoose from "mongoose";
 
 const TransaksiSchema = new mongoose.Schema(
   {
-    id_transaksi: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    id_user: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    id_penjahit: {
+    penjahit: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Penjahit",
       required: true,
     },
-    judulPekerjaan: {
+    judul: {
+      type: String,
+      required: true,
+    },
+    deskripsi: {
       type: String,
       required: true,
     },
@@ -38,7 +37,7 @@ const TransaksiSchema = new mongoose.Schema(
     ],
     status: {
       type: String,
-      enum: ["Menunggu", "Diproses", "Selesai", "Dibatalkan"],
+      enum: ["Menunggu", "Diproses", "Selesai", "Dibatalkan", "Ditolak"],
       default: "Menunggu",
     },
   },

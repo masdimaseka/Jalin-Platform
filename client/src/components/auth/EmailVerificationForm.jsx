@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useVerifyEmail } from "../../queries/auth/authMutation";
-import { Loader } from "lucide-react";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const EmailVerificationForm = () => {
   const [code, setCode] = useState("");
@@ -27,7 +27,11 @@ const EmailVerificationForm = () => {
         className="btn btn-primary w-full block mt-20"
         disabled={isPending}
       >
-        {isPending ? <Loader className="size-5 animate-spin" /> : "Verifikasi"}
+        {isPending ? (
+          <Icon icon="codex:loader" width="24" height="24" />
+        ) : (
+          "Verifikasi"
+        )}
       </button>
     </form>
   );

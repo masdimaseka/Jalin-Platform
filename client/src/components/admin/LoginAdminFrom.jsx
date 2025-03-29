@@ -1,6 +1,6 @@
-import { Loader } from "lucide-react";
 import { useState } from "react";
 import { useLoginAdmin } from "../../queries/admin/adminMutation.js";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const LoginAdminForm = () => {
   const [username, setUsername] = useState("");
@@ -42,7 +42,11 @@ const LoginAdminForm = () => {
         className="btn btn-primary w-full block mt-20"
         disabled={isLoading}
       >
-        {isLoading ? <Loader className="size-5 animate-spin" /> : "Masuk"}
+        {isLoading ? (
+          <Icon icon="codex:loader" width="24" height="24" />
+        ) : (
+          "Masuk"
+        )}
       </button>
     </form>
   );

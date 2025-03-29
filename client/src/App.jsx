@@ -21,6 +21,7 @@ import ListJahitanPage from "./pages/jahitan/ListJahitanPage";
 import AboutPage from "./pages/AboutPage";
 import DashboardPage from "./pages/DashboardPage";
 import EditProfilePage from "./pages/auth/EditProfilePage";
+import CreateTransaksiPage from "./pages/CreateTransaksiPage";
 
 const App = () => {
   const { data: authUser, isLoading: isLoading } = useAuthUser();
@@ -51,6 +52,8 @@ const App = () => {
           element={authUser ? <DashboardPage /> : <LoginPage />}
         />
 
+        <Route path="/:status" element={<StatusPage />} />
+
         <Route path="/profile/edit/:id" element={<EditProfilePage />} />
 
         <Route path="/penjahit" element={<ListPenjahitPage />} />
@@ -64,7 +67,6 @@ const App = () => {
             )
           }
         />
-        <Route path="/penjahit/register/:status" element={<StatusPage />} />
         <Route
           path="/penjahit/dashboard"
           element={
@@ -75,8 +77,11 @@ const App = () => {
             )
           }
         />
+        <Route path="/penjahit/apply/:id" element={<CreateTransaksiPage />} />
 
         <Route path="/jahitan" element={<ListJahitanPage />} />
+        <Route path="/jahitan/create" element={<CreateTransaksiPage />} />
+
         <Route path="/about" element={<AboutPage />} />
 
         <Route

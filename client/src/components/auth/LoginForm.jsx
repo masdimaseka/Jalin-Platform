@@ -1,4 +1,3 @@
-import { Loader } from "lucide-react";
 import { useState } from "react";
 import { useLogin } from "../../queries/auth/authMutation";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -62,7 +61,11 @@ const LoginForm = () => {
         className="btn btn-primary w-full block mt-20"
         disabled={isPending}
       >
-        {isPending ? <Loader className="size-5 animate-spin" /> : "Masuk"}
+        {isPending ? (
+          <Icon icon="codex:loader" width="24" height="24" />
+        ) : (
+          "Masuk"
+        )}
       </button>
     </form>
   );

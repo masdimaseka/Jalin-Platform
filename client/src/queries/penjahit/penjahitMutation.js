@@ -21,8 +21,8 @@ export const useRegisterPenjahit = () => {
 
       queryClient.invalidateQueries({ queryKey: ["penjahit"] });
 
-      const status = "onReview";
-      navigate("/penjahit/register/" + status);
+      const status = "register-penjahit-on-review";
+      navigate("/" + status);
     },
     onError: (err) => {
       toast.error(err.response.data.message || "Registrasi gagal!");

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Loader } from "lucide-react";
 import { useSignup } from "../../queries/auth/authMutation.js";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -147,7 +146,11 @@ const SignUpForm = () => {
         disabled={isPending}
         className="btn btn-primary w-full"
       >
-        {isPending ? <Loader className="size-5 animate-spin" /> : "Daftar"}
+        {isPending ? (
+          <Icon icon="codex:loader" width="24" height="24" />
+        ) : (
+          "Daftar"
+        )}
       </button>
     </form>
   );

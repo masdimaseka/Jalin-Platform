@@ -10,6 +10,7 @@ import penjahitRoutes from "./routes/penjahit.route.js";
 import categoryRoutes from "./routes/category.route.js";
 import adminRoutes from "./routes/admin.route.js";
 import userRoutes from "./routes/user.route.js";
+import transaksiRoutes from "./routes/transaksi.route.js";
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use("/api/penjahit", penjahitRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/transaksi", transaksiRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

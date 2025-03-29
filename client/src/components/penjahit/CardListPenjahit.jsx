@@ -3,33 +3,18 @@ import {
   usePenjahit,
 } from "../../queries/penjahit/penjahitQuery";
 import { useState } from "react";
-import InputPekerjaan from "../InputPekerjaan";
 import { useAuthUser } from "../../queries/auth/authQuery";
 import SearchBar from "../SearchBar";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { Link } from "react-router-dom";
 
 const CardListPenjahit = () => {
-  const { data: penjahit } = usePenjahit();
+  const { data: penjahit, isLoading } = usePenjahit();
   const { data: category } = useCategories();
   const { data: authUser } = useAuthUser();
-  const [selectedPenjahit, setSelectedPenjahit] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-
-  const openModal = (penjahit) => {
-    if (!authUser) {
-      alert("Silakan login terlebih dahulu untuk menghubungi penjahit.");
-      return;
-    }
-    setSelectedPenjahit(penjahit);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setSelectedPenjahit(null);
-    setIsModalOpen(false);
-  };
 
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
@@ -39,10 +24,18 @@ const CardListPenjahit = () => {
     setSearchQuery(query.toLowerCase());
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-40">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
+
   if (!penjahit || penjahit.length === 0) {
     return (
       <h1 className="text-center text-lg font-semibold mt-4">
-        Tidak ada penjahit
+        Tidak ada penjahit yang tersedia
       </h1>
     );
   }
@@ -58,7 +51,7 @@ const CardListPenjahit = () => {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row  mb-8 gap-4">
+      <div className="flex flex-col md:flex-row mb-8 gap-4">
         <SearchBar onSearchChange={handleSearchChange} />
         <select
           className="select select-bordered w-48"
@@ -123,14 +116,14 @@ const CardListPenjahit = () => {
                       <div className="badge badge-outline">Tidak tersedia</div>
                     )}
                   </div>
-                  <button
-                    onClick={() => openModal(p)}
+                  <Link
+                    to={`/penjahit/apply/${p._id}`}
                     className={`btn mt-4 ${
                       authUser ? "btn-primary" : "btn-disabled"
                     }`}
                   >
                     {authUser ? "Hubungi Penjahit" : "Bergabung untuk Hubungi"}
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))
@@ -140,10 +133,6 @@ const CardListPenjahit = () => {
           </p>
         )}
       </div>
-
-      {isModalOpen && selectedPenjahit && (
-        <InputPekerjaan penjahit={selectedPenjahit} onClose={closeModal} />
-      )}
     </div>
   );
 };
