@@ -1,7 +1,9 @@
 import User from "../models/user.model.js";
+import cloudinary from "./../lib/cloudinary.js";
 
 export const getUsers = async (req, res) => {
   try {
+    console.log("Fetching all users...");
     const users = await User.find().select("-password");
     res.json(users);
   } catch (error) {
@@ -12,11 +14,7 @@ export const getUsers = async (req, res) => {
 
 export const getUserById = async (req, res) => {
   try {
-    console.log("req.params :", req.params);
-
     const { id } = req.params;
-
-    console.log("id :", id);
 
     const user = await User.findById(id).select("-password");
     if (!user) {

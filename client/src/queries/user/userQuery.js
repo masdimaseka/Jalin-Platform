@@ -23,7 +23,6 @@ export const useUserById = (id) => {
     queryKey: ["user"],
     queryFn: async () => {
       try {
-        console.log(id);
         const res = await axiosInstance.get(`/user/${id}`);
         return res.data;
       } catch (err) {

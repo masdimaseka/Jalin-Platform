@@ -52,7 +52,8 @@ const CardListPenjahit = () => {
       ? p.kategori?.includes(selectedCategory)
       : true;
     const matchesSearch = p.user.name.toLowerCase().includes(searchQuery);
-    return matchesCategory && matchesSearch;
+    const isNotCurrentUser = authUser ? p.user._id !== authUser._id : true;
+    return matchesCategory && matchesSearch && isNotCurrentUser;
   });
 
   return (

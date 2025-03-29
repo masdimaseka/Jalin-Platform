@@ -1,6 +1,6 @@
 import Penjahit from "../models/penjahit.model.js";
 import User from "../models/user.model.js";
-import { decrypting, encrypting } from "../utils/encryption.js";
+import { encrypting } from "../utils/encryption.js";
 import cloudinary from "./../lib/cloudinary.js";
 
 export const registerPenjahit = async (req, res) => {

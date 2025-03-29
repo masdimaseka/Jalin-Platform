@@ -21,7 +21,7 @@ const Profile = ({ user }) => {
 
           {authUser?.id === user.id && (
             <Link
-              to={`/profile/${user._id}/edit`}
+              to={`/profile/edit/${user._id}`}
               className="btn btn-primary mt-4"
             >
               Edit Profile

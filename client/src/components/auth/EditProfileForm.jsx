@@ -15,6 +15,15 @@ const EditProfileForm = ({ id }) => {
   const { data: user } = useUserById(id);
   const { mutate: updateProfile, isPending } = useUpdateProfile();
 
+  const readFileAsDataURL = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
   useEffect(() => {
     if (user) {
       setName(user.name || "");
@@ -28,7 +37,6 @@ const EditProfileForm = ({ id }) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validasi rasio gambar harus 1:1
     const img = new Image();
     img.src = URL.createObjectURL(file);
 
@@ -39,31 +47,25 @@ const EditProfileForm = ({ id }) => {
         return;
       }
       setProfileImg(file);
-      setPreviewImg(URL.createObjectURL(file));
+      readFileAsDataURL(file).then(setPreviewImg);
     };
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Gunakan FormData untuk mengirim file
-    const formData = new FormData();
-    formData.append("id", id);
-    formData.append("name", name);
-    formData.append("noTelp", noTelp);
-    formData.append("address", address);
+    const updateData = {
+      id,
+      name,
+      noTelp,
+      address,
+    };
+
     if (profileImg) {
-      formData.append("profileImg", profileImg);
+      updateData.profileImg = await readFileAsDataURL(profileImg);
     }
 
-    updateProfile(formData, {
-      onSuccess: () => {
-        toast.success("Profil berhasil diperbarui!");
-      },
-      onError: (error) => {
-        toast.error(error.message || "Gagal memperbarui profil!");
-      },
-    });
+    updateProfile(updateData);
   };
 
   return (
@@ -72,6 +74,13 @@ const EditProfileForm = ({ id }) => {
       className="flex flex-col gap-4 w-full lg:w-[30vw]"
     >
       <div>
+        {previewImg && (
+          <img
+            src={previewImg}
+            alt="Preview"
+            className="rounded-full w-24 h-24 border-2 border-primary-jalin p-1 mb-2"
+          />
+        )}
         <label htmlFor="profileImg">Foto Profile</label>
         <input
           type="file"
@@ -80,13 +89,6 @@ const EditProfileForm = ({ id }) => {
           onChange={handleProfileImgChange}
           className="file-input input-bordered rounded-md w-full text-xs"
         />
-        {previewImg && (
-          <img
-            src={previewImg}
-            alt="Preview"
-            className="mt-2 w-20 h-20 rounded-full"
-          />
-        )}
       </div>
 
       <div>

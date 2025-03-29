@@ -51,7 +51,7 @@ const App = () => {
           element={authUser ? <DashboardPage /> : <LoginPage />}
         />
 
-        <Route path="/profile/:id/edit" element={<EditProfilePage />} />
+        <Route path="/profile/edit/:id" element={<EditProfilePage />} />
 
         <Route path="/penjahit" element={<ListPenjahitPage />} />
         <Route
