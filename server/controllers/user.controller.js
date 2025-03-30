@@ -29,14 +29,23 @@ export const getUserById = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const allowedFields = ["name", "noTelp", "address", "profileImg"];
-
     const updatedData = {};
 
     for (const field of allowedFields) {
       if (req.body[field]) updatedData[field] = req.body[field];
     }
 
+    const user = await User.findById(req.user._id);
+
     if (req.body.profileImg) {
+      if (user.profileImg) {
+        const oldImagePublicId = user.profileImg.split("/").pop().split(".")[0];
+
+        await cloudinary.uploader.destroy(
+          `jalin/user/profile/${oldImagePublicId}`
+        );
+      }
+
       const uploadedProfileImg = await cloudinary.uploader.upload(
         req.body.profileImg,
         {
@@ -46,13 +55,13 @@ export const updateProfile = async (req, res) => {
       updatedData.profileImg = uploadedProfileImg.secure_url;
     }
 
-    const user = await User.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
       { $set: updatedData },
       { new: true }
     ).select("-password");
 
-    res.json(user);
+    res.json(updatedUser);
   } catch (error) {
     console.error("Error in updateProfile: ", error);
     res.status(500).json({ message: "Internal server error" });

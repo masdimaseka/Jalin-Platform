@@ -1,10 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "../../lib/axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 export const useUpdateProfile = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (updateData) => {
@@ -19,6 +20,7 @@ export const useUpdateProfile = () => {
     },
     onSuccess: () => {
       toast.success("Profil berhasil diperbarui!");
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
       navigate("/dashboard");
     },
     onError: (err) => {

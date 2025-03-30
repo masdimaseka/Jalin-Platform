@@ -28,13 +28,13 @@ const HomePage = () => {
           <div className="mt-6 flex flex-col lg:flex-row gap-2">
             <Link
               to="/penjahit"
-              className="btn btn-primary text-white px-6 py-3 font-semibold sm:max-lg:w-full"
+              className="btn btn-white text-primary-jalin px-6 py-3 font-semibold sm:max-lg:w-full"
             >
               Cari Penjahit
             </Link>
             <Link
               to="/jahitan"
-              className="btn btn-white text-blue-600 px-6 py-3 font-semibold sm:max-lg:w-full"
+              className=" btn btn-primary text-white px-6 py-3 font-semibold sm:max-lg:w-full"
             >
               Dapatkan Jahitan
             </Link>
@@ -224,16 +224,16 @@ const HomePage = () => {
 
             <div className="mt-6 flex flex-col lg:flex-row justify-center gap-2">
               <Link
-                to="/jahitan"
-                className="btn btn-white text-blue-600 px-6 py-3 font-semibold sm:max-lg:w-full"
-              >
-                Dapatkan Jahitan
-              </Link>
-              <Link
                 to="/penjahit"
-                className="btn btn-primary text-white px-6 py-3 font-semibold sm:max-lg:w-full"
+                className="btn btn-white text-primary-jalin px-6 py-3 font-semibold sm:max-lg:w-full"
               >
                 Cari Penjahit
+              </Link>
+              <Link
+                to="/jahitan"
+                className=" btn btn-primary text-white px-6 py-3 font-semibold sm:max-lg:w-full"
+              >
+                Dapatkan Jahitan
               </Link>
             </div>
           </div>

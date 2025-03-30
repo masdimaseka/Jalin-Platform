@@ -1,16 +1,18 @@
 import { Link } from "react-router-dom";
+import { usePenjahitById } from "../../queries/penjahit/penjahitQuery";
 import { useRef, useState } from "react";
 import { useCreateTransaksiToPenjahit } from "../../queries/transaksi/transaksiMutation";
 
-const InputTransaksi = () => {
+const InputTransaksiToPenjahit = ({ id }) => {
   const [judul, setJudul] = useState("");
   const [deskripsi, setDeskripsi] = useState("");
   const [tenggatWaktu, setTenggatWaktu] = useState("");
-  const [catatan, setCatatan] = useState("");
-  const [prosesPengerjaan, setProsesPengerjaan] = useState("Diantar");
+  const [catatan, setCatatan] = useState(""); // Tambahkan state catatan
+  const [prosesPengerjaan, setProsesPengerjaan] = useState("Diantar"); // Tambahkan state proses pengerjaan
   const [image, setImage] = useState(null);
   const [previewImg, setPreviewImg] = useState(null);
 
+  const { data: penjahitById, isLoading } = usePenjahitById(id);
   const fileInputRef = useRef(null);
   const { mutate: createTransaksiToPenjahit, isPending } =
     useCreateTransaksiToPenjahit();
@@ -38,6 +40,7 @@ const InputTransaksi = () => {
     e.preventDefault();
 
     const createData = {
+      penjahitId: id,
       judul,
       deskripsi,
       tenggatWaktu,
@@ -52,13 +55,25 @@ const InputTransaksi = () => {
     createTransaksiToPenjahit(createData);
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-40">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full flex">
       <div className="w-full">
-        <h1 className="text-2xl sm:text-4xl font-semibold mb-8">
-          Buat Jahitan
-        </h1>
-        <h1></h1>
+        <div className="flex gap-2 mb-8">
+          <img
+            src={penjahitById?.user?.profileImg || "/avatar.png"}
+            alt={penjahitById?.user?.name}
+            className="rounded-full w-8 h-8"
+          />
+          <h2 className="text-xl font-semibold">{penjahitById?.user?.name}</h2>
+        </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium">Judul Pekerjaan</label>
@@ -124,7 +139,7 @@ const InputTransaksi = () => {
               accept="image/*"
             />
             <p className="text-xs font-light mt-2">
-              *Disarankan untuk upload gambar landscape (max 7MB)
+              *Disarankan untuk upload gambar horizontal (max 7MB)
             </p>
             {previewImg && (
               <img
@@ -166,4 +181,4 @@ const InputTransaksi = () => {
   );
 };
 
-export default InputTransaksi;
+export default InputTransaksiToPenjahit;

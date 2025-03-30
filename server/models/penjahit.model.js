@@ -20,7 +20,7 @@ const penjahitSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    kategori: [{ type: mongoose.Schema.Types.ObjectId, ref: "Kategori" }],
+    kategori: [{ type: mongoose.Schema.Types.ObjectId, ref: "Category" }],
     openToWork: {
       type: Boolean,
       default: true,
@@ -29,7 +29,7 @@ const penjahitSchema = new mongoose.Schema(
       type: Number,
       min: 1,
       max: 5,
-      default: 0,
+      default: 5,
     },
     isVerified: {
       type: Boolean,

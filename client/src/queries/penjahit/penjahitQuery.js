@@ -34,6 +34,22 @@ export const usePenjahitById = (id) => {
   });
 };
 
+export const usePenjahitByIdUser = (id) => {
+  return useQuery({
+    queryKey: ["penjahitByIdUser"],
+    queryFn: async () => {
+      try {
+        const res = await axiosInstance.get(`/penjahit/user/${id}`);
+        return res.data;
+      } catch (err) {
+        if (err.response && err.response.status === 401) return null;
+        toast.error(err.response.data.message || "Something went wrong");
+        return null;
+      }
+    },
+  });
+};
+
 export const useCategories = () => {
   return useQuery({
     queryKey: ["categories"],

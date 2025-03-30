@@ -52,12 +52,14 @@ export const useVerifyEmail = () => {
 
 export const useLogout = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: async () => {
       await axiosInstance.post("/auth/logout");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      navigate("/");
     },
     onError: (err) => {
       toast.error(err.response.data.message || "Something went wrong");

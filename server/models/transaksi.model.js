@@ -40,6 +40,14 @@ const TransaksiSchema = new mongoose.Schema(
       enum: ["Menunggu", "Diproses", "Selesai", "Dibatalkan", "Ditolak"],
       default: "Menunggu",
     },
+    pengerjaan: {
+      type: String,
+      enum: ["diantar", "diambil"],
+      default: "diantar",
+    },
+    catatan: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
