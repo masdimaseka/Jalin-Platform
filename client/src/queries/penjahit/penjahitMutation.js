@@ -22,7 +22,7 @@ export const useRegisterPenjahit = () => {
       queryClient.invalidateQueries({ queryKey: ["penjahit"] });
 
       const status = "register-penjahit-on-review";
-      navigate("/" + status);
+      navigate("/status/" + status);
     },
     onError: (err) => {
       toast.error(err.response.data.message || "Registrasi gagal!");

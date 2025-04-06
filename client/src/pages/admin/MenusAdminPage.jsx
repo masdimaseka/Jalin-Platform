@@ -4,7 +4,7 @@ import ListVerifyPenjahit from "../../components/admin/ListVerifyPenjahit";
 import ListPenjahit from "../../components/admin/ListPenjahit";
 import ListCategory from "../../components/admin/ListCategory";
 
-const MenuPages = () => {
+const MenusAdminPage = () => {
   const location = useLocation();
 
   return (
@@ -27,4 +27,4 @@ const MenuPages = () => {
   );
 };
 
-export default MenuPages;
+export default MenusAdminPage;

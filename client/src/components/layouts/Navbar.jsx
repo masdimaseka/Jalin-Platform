@@ -2,13 +2,12 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuthUser } from "../../queries/auth/authQuery";
 import { Icon } from "@iconify/react";
-import { useLogout } from "../../queries/auth/authMutation";
 import { usePenjahit } from "./../../queries/penjahit/penjahitQuery";
 
 const Navbar = () => {
   const { data: authUser, isLoading: isLoadingUser } = useAuthUser();
   const { data: penjahit, isLoading: isLoadingPenjahit } = usePenjahit();
-  const { mutate: logutMutate } = useLogout();
+
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
@@ -82,12 +81,6 @@ const Navbar = () => {
                   />
                   <span>{authUser.username}</span>
                 </Link>
-                <button
-                  className="btn border-0 bg-error text-white"
-                  onClick={logutMutate}
-                >
-                  <Icon icon="majesticons:logout" width="24" height="24" />
-                </button>
               </div>
             ) : (
               <Link
@@ -156,13 +149,6 @@ const Navbar = () => {
                   />
                   <span>{authUser.username}</span>
                 </Link>
-                <button
-                  className="btn border-0 bg-error text-white w-full"
-                  onClick={logutMutate}
-                >
-                  <Icon icon="majesticons:logout" width="24" height="24" />
-                  Logout
-                </button>
               </div>
             ) : (
               <Link

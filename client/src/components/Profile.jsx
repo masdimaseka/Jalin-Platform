@@ -1,9 +1,11 @@
 import { useAuthUser } from "../queries/auth/authQuery";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useLogout } from "../queries/auth/authMutation";
 
 export const Profile = ({ user }) => {
   const { data: authUser } = useAuthUser();
+  const { mutate: logutMutate } = useLogout();
 
   return (
     <div>
@@ -21,12 +23,21 @@ export const Profile = ({ user }) => {
           <p className="flex gap-1">{user.address}</p>
 
           {authUser?.id === user.id && (
-            <Link
-              to={`/profile/edit/${user._id}`}
-              className="btn btn-primary mt-4"
-            >
-              Edit Profile
-            </Link>
+            <div className="flex flex-col lg:flex-row items-center gap-2 mt-4 max-lg:w-full">
+              <Link
+                to={`/profile/edit/${user._id}`}
+                className="btn btn-primary max-lg:w-full"
+              >
+                Edit Profile
+              </Link>
+              <button
+                className="btn border-0 bg-error text-white max-lg:w-full"
+                onClick={logutMutate}
+              >
+                <Icon icon="majesticons:logout" width="24" height="24" /> Log
+                out
+              </button>
+            </div>
           )}
         </div>
       </div>
@@ -107,12 +118,14 @@ export const ProfilePenjait = ({ penjahit }) => {
         </div>
 
         {authUser?._id === penjahit?.user?._id?.toString() && (
-          <Link
-            to={`/penjahit/edit/${penjahit?._id}`}
-            className="btn btn-primary mt-4"
-          >
-            Edit Profile
-          </Link>
+          <>
+            <Link
+              to={`/penjahit/edit/${penjahit?._id}`}
+              className="btn btn-primary mt-4"
+            >
+              Edit Profile
+            </Link>
+          </>
         )}
       </div>
     </div>

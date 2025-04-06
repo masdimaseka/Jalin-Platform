@@ -18,7 +18,7 @@ export const useCreateTransaksiToPenjahit = () => {
       queryClient.invalidateQueries(["transaksi"]);
 
       const status = "transaksi-created";
-      navigate("/" + status);
+      navigate("/status/" + status);
     },
     onError: (error) => {
       console.error(
