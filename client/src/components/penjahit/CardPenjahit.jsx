@@ -14,13 +14,14 @@ const CardPenjahit = ({ penjahit, authUser }) => {
               src={penjahit.user.profileImg || "/avatar.png"}
               alt={penjahit.user.name}
               className="rounded-full w-32 h-32"
+              loading="lazy"
             />
           </Link>
         </div>
 
         <div>
-          <h2 className="card-title">
-            {penjahit.user.name}{" "}
+          <h2 className="card-title truncate ">
+            {penjahit.user.name}
             <Icon
               icon="material-symbols:verified-rounded"
               width="20"
@@ -29,7 +30,11 @@ const CardPenjahit = ({ penjahit, authUser }) => {
             />
           </h2>
 
-          <div className="flex flex-col lg:flex-row gap-4 mt-2">
+          <div className="badge badge-success my-4">
+            <p className="text-xs">Open To Work</p>
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-4 ">
             <span className="flex items-center gap-1">
               <Icon
                 icon="ic:round-star"
@@ -58,19 +63,25 @@ const CardPenjahit = ({ penjahit, authUser }) => {
                 height="16"
                 className="text-primary-jalin"
               />
-              <p className="text-sm">{penjahit.user.address}</p>
+              <p className="text-sm truncate ">{penjahit.user.address}</p>
             </span>
           </div>
         </div>
 
         <div className="card-actions mt-4 flex flex-wrap gap-2">
-          <div className="badge badge-success">Open To Work</div>
           {penjahit.kategori?.length > 0 ? (
-            penjahit.kategori?.map((k, i) => (
-              <div key={i} className="badge badge-outline">
-                {k.name}
-              </div>
-            ))
+            <>
+              {penjahit.kategori.slice(0, 2).map((k, i) => (
+                <div key={i} className="badge badge-outline">
+                  {k.name}
+                </div>
+              ))}
+              {penjahit.kategori.length > 2 && (
+                <div className="badge badge-outline">
+                  +{penjahit.kategori.length - 2}
+                </div>
+              )}
+            </>
           ) : (
             <div className="badge badge-outline">Tidak tersedia</div>
           )}

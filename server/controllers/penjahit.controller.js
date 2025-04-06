@@ -167,3 +167,28 @@ export const getPenjahitByIdUser = async (req, res) => {
     res.status(500).json({ message: "Terjadi kesalahan server" });
   }
 };
+
+export const getPenjahitPremium = async (req, res) => {
+  try {
+    const penjahit = await Penjahit.find({ isPremium: true })
+      .populate(
+        "user",
+        "name username email noTelp address lastLogin profileImg"
+      )
+      .populate({
+        path: "kategori",
+        select: "name",
+      })
+      .select("-dokKTP");
+
+    const decryptedPenjahit = penjahit.map((p) => ({
+      ...p._doc,
+      dokPortofolio: p.dokPortofolio.map((url) => encodeURIComponent(url)),
+    }));
+
+    res.status(200).json(decryptedPenjahit);
+  } catch (error) {
+    console.log(`error in getPenjahit: ${error.message}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

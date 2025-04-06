@@ -135,3 +135,19 @@ export const registerCategoryByAdmin = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const setPenjahitPremium = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const premiumPenjahit = await Penjahit.findByIdAndUpdate(
+      id,
+      { isPremium: true },
+      { new: true }
+    );
+
+    res.json(premiumPenjahit);
+  } catch (error) {
+    console.log(`error in setPenjahitPremium: ${error.message}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

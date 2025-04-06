@@ -42,10 +42,14 @@ const ListPenjahit = () => {
 
   const filteredPenjahit = penjahit.filter((p) => {
     const matchesCategory = selectedCategory
-      ? p.kategori?.includes(selectedCategory)
+      ? Array.isArray(p.kategori)
+        ? p.kategori.some((k) => k._id === selectedCategory)
+        : p.kategori?._id === selectedCategory
       : true;
-    const matchesSearch = p.user.name.toLowerCase().includes(searchQuery);
-    const isNotCurrentUser = authUser ? p.user._id !== authUser._id : true;
+
+    const matchesSearch = p.user?.name?.toLowerCase().includes(searchQuery);
+    const isNotCurrentUser = authUser ? p.user?._id !== authUser._id : true;
+
     return matchesCategory && matchesSearch && isNotCurrentUser;
   });
 

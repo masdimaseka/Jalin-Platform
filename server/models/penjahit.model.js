@@ -39,6 +39,10 @@ const penjahitSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isPremium: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

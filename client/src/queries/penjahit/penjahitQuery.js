@@ -50,6 +50,22 @@ export const usePenjahitByIdUser = (id) => {
   });
 };
 
+export const usePenjahitPremium = () => {
+  return useQuery({
+    queryKey: ["penjahitPremium"],
+    queryFn: async () => {
+      try {
+        const res = await axiosInstance.get("/penjahit/premium");
+        return res.data;
+      } catch (err) {
+        if (err.response && err.response.status === 401) return null;
+        toast.error(err.response.data.message || "Something went wrong");
+        return null;
+      }
+    },
+  });
+};
+
 export const useCategories = () => {
   return useQuery({
     queryKey: ["categories"],

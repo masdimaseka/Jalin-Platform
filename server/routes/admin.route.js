@@ -8,6 +8,7 @@ import {
   loginAdmin,
   logoutAdmin,
   registerCategoryByAdmin,
+  setPenjahitPremium,
   verifyPenjahit,
 } from "../controllers/admin.controller.js";
 
@@ -20,6 +21,7 @@ router.post("/logout", logoutAdmin);
 
 router.get("/penjahit", protectRouteAdmin, getPenjahitByAdmin);
 router.post("/verify/:id", protectRouteAdmin, verifyPenjahit);
+router.put("/penjahit/premium/:id", protectRouteAdmin, setPenjahitPremium);
 
 router.get("/user", protectRouteAdmin, getUserByAdmin);
 
