@@ -20,15 +20,17 @@ const CardPenjahit = ({ penjahit, authUser }) => {
         </div>
 
         <div>
-          <h2 className="card-title truncate ">
-            {penjahit.user.name}
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-semibold  truncate">
+              {penjahit.user.name}
+            </h2>
             <Icon
               icon="material-symbols:verified-rounded"
               width="20"
               height="20"
               className="text-primary-jalin"
             />
-          </h2>
+          </div>
 
           <div className="badge badge-success my-4">
             <p className="text-xs">Open To Work</p>

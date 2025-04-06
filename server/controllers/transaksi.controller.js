@@ -77,11 +77,79 @@ export const getTransaksi = async (req, res) => {
     );
 
     const transaksi = await Transaksi.find()
-      .populate("user", "name profileImg")
+      .populate("user", "name profileImg email noTelp address lastLogin")
       .populate({
         path: "penjahit",
         select: "user",
-        populate: { path: "user", select: "name profileImg" },
+        populate: {
+          path: "user",
+          select: "name profileImg email noTelp address lastLogin",
+        },
+      });
+
+    res.json(transaksi);
+  } catch (error) {
+    console.log(`error in getTransaksi: ${error.message}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getTransaksiPenjahit = async (req, res) => {
+  try {
+    const penjahitId = req.params.id;
+
+    const now = new Date();
+    const threeDaysAgo = new Date();
+    threeDaysAgo.setDate(now.getDate() - 3);
+
+    await Transaksi.updateMany(
+      { createdAt: { $lt: threeDaysAgo }, status: "Menunggu" },
+      { $set: { status: "Dibatalkan" } }
+    );
+
+    const transaksi = await Transaksi.find({ penjahit: penjahitId })
+      .populate("user", "name profileImg email noTelp address lastLogin")
+      .populate({
+        path: "penjahit",
+        select: "user",
+        populate: {
+          path: "user",
+          select: "name profileImg email noTelp address lastLogin",
+        },
+      });
+
+    res.json(transaksi);
+  } catch (error) {
+    console.log(`error in getTransaksi: ${error.message}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getTransaksiPenjahitWaiting = async (req, res) => {
+  try {
+    const penjahitId = req.params.id;
+
+    const now = new Date();
+    const threeDaysAgo = new Date();
+    threeDaysAgo.setDate(now.getDate() - 3);
+
+    await Transaksi.updateMany(
+      { createdAt: { $lt: threeDaysAgo }, status: "Menunggu" },
+      { $set: { status: "Dibatalkan" } }
+    );
+
+    const transaksi = await Transaksi.find({
+      penjahit: penjahitId,
+      status: "Menunggu",
+    })
+      .populate("user", "name profileImg email noTelp address lastLogin")
+      .populate({
+        path: "penjahit",
+        select: "user",
+        populate: {
+          path: "user",
+          select: "name profileImg email noTelp address lastLogin",
+        },
       });
 
     res.json(transaksi);

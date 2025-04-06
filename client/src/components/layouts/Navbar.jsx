@@ -3,10 +3,12 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuthUser } from "../../queries/auth/authQuery";
 import { Icon } from "@iconify/react";
 import { usePenjahit } from "./../../queries/penjahit/penjahitQuery";
+import { useTransaksi } from "../../queries/transaksi/transaksiQuery";
 
 const Navbar = () => {
   const { data: authUser, isLoading: isLoadingUser } = useAuthUser();
   const { data: penjahit, isLoading: isLoadingPenjahit } = usePenjahit();
+  const { data: transaksi, isLoading: isLoadingTransaksi } = useTransaksi();
 
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
@@ -20,7 +22,13 @@ const Navbar = () => {
 
   const userPenjahit = penjahit?.find((p) => p.user._id === authUser?._id);
 
-  if (isLoadingUser || isLoadingPenjahit) return null;
+  const pendingTransaksiCount = transaksi?.filter(
+    (t) =>
+      t.penjahit._id === userPenjahit?._id &&
+      t.status.toLowerCase() === "menunggu"
+  ).length;
+
+  if (isLoadingUser || isLoadingPenjahit || isLoadingTransaksi) return null;
 
   return (
     !isAuthPage && (
@@ -58,9 +66,14 @@ const Navbar = () => {
                 {userPenjahit ? (
                   <Link
                     to="/penjahit/dashboard"
-                    className="btn btn-white text-primary-jalin font-semibold"
+                    className="btn btn-white text-primary-jalin font-semibold relative"
                   >
                     Dashboard Penjahit
+                    {pendingTransaksiCount > 0 && (
+                      <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                        {pendingTransaksiCount}
+                      </span>
+                    )}
                   </Link>
                 ) : (
                   <Link

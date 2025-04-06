@@ -5,7 +5,7 @@ const CardTransaksi = ({ transaksi, show }) => {
     <div className="card bg-base-100 w-80 shadow-sm">
       <figure className="w-full h-48 overflow-hidden rounded-lg">
         <img
-          src="/banner.png"
+          src={transaksi.image || "/banner.png"}
           alt="Jahitan"
           className="w-full h-full object-cover"
         />
@@ -48,7 +48,7 @@ const CardTransaksi = ({ transaksi, show }) => {
             <p className="text-sm">{transaksi.pengerjaan}</p>
           </span>
         </div>
-        <div className="my-4 font-medium">
+        <div className="my-4">
           <p>{show} : </p>
           <div className="flex items-center mt-2 gap-2">
             <img
@@ -60,17 +60,19 @@ const CardTransaksi = ({ transaksi, show }) => {
               alt="avatar"
               className="rounded-full w-8 h-8"
             />
-            <span className="text-md flex gap-1">
-              {show === "Customer"
-                ? transaksi.user.name
-                : transaksi.penjahit.user.name}
+            <div className="flex items-center gap-2 max-w-[200px]">
+              <h2 className="text-md font-semibold truncate flex-1">
+                {show === "Customer"
+                  ? transaksi.user.name
+                  : transaksi.penjahit.user.name}
+              </h2>
               <Icon
                 icon="material-symbols:verified-rounded"
                 width="20"
                 height="20"
                 className="text-primary-jalin"
               />
-            </span>
+            </div>
           </div>
         </div>
       </div>
