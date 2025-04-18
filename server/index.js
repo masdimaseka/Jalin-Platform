@@ -41,7 +41,8 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/transaksi", transaksiRoutes);
 
+connectDB();
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  connectDB();
 });
