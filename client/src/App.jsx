@@ -4,7 +4,7 @@ import { Toaster } from "react-hot-toast";
 import { useAuthUser } from "./queries/auth/authQuery";
 import { useAuthAdmin } from "./queries/admin/adminQuery";
 
-import Layout from "./components/layouts/layout";
+import Layout from "./components/layouts/Layout";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/auth/LoginPage";
 import SignUpPage from "./pages/auth/SignUpPage";
