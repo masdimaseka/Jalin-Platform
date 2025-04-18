@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: "https://jalin-platform.vercel.app/",
+    origin: "https://jalin-platform.vercel.app",
     credentials: true,
   })
 );
