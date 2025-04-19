@@ -61,7 +61,7 @@ const Navbar = () => {
                 </Link>
               </li>
             ))}
-            {authUser && (
+            {authUser ? (
               <div className="flex items-center gap-4">
                 {userPenjahit ? (
                   <Link
@@ -95,6 +95,13 @@ const Navbar = () => {
                   <span>{authUser.username}</span>
                 </Link>
               </div>
+            ) : (
+              <Link
+                to="/login"
+                className="btn btn-white text-primary-jalin font-bold"
+              >
+                Bergabung
+              </Link>
             )}
           </ul>
 
