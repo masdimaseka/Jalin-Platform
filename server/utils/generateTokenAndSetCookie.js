@@ -7,8 +7,8 @@ export const generateTokenAndSetCookie = (res, userId) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    secure: true,
+    sameSite: "None",
     maxAge: 3 * 60 * 60 * 1000,
   });
 
@@ -22,8 +22,8 @@ export const generateTokenAndSetCookieAdmin = (res, adminId) => {
 
   res.cookie("token-admin", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    secure: true,
+    sameSite: "None",
     maxAge: 1 * 60 * 60 * 1000,
   });
 
