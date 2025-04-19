@@ -122,17 +122,18 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section className="relative w-full h-[85vh] px-8 lg:px-16 my-24 flex items-center">
-        <img
-          src="/banner.png"
-          alt="Penjahit"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="relative z-10 w-full">
-          <h1 className="text-xl sm:text-3xl font-semibold mb-8 text-white">
-            Temui Penjahit Unggulan
-          </h1>
-          {penjahitPremium?.length > 0 ? (
+      {penjahitPremium?.length > 0 && (
+        <section className="relative w-full h-[85vh] px-8 lg:px-16 my-24 flex items-center">
+          <img
+            src="/banner.png"
+            alt="Penjahit"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="relative z-10 w-full">
+            <h1 className="text-xl sm:text-3xl font-semibold mb-8 text-white">
+              Temui Penjahit Unggulan
+            </h1>
+
             <Swiper
               slidesPerView={1}
               breakpoints={{
@@ -155,11 +156,9 @@ const HomePage = () => {
                 ) : null;
               })}
             </Swiper>
-          ) : (
-            <p className="text-white">Belum ada penjahit tersedia.</p>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       <section className="px-8 lg:px-16 my-24">
         <h1 className="text-xl sm:text-3xl font-semibold mb-8">
