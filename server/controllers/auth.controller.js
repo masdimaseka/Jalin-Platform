@@ -104,7 +104,8 @@ export const logout = async (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
     secure: true,
-    sameSite: "None",
+    sameSite: "Lax",
+    domain: ".jalin.my.id",
   });
   res.json({ message: "Logged out" });
 };

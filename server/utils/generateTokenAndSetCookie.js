@@ -8,7 +8,8 @@ export const generateTokenAndSetCookie = (res, userId) => {
   res.cookie("token", token, {
     httpOnly: true,
     secure: true,
-    sameSite: "None",
+    sameSite: "Lax",
+    domain: ".jalin.my.id",
     maxAge: 3 * 60 * 60 * 1000,
   });
 
@@ -23,7 +24,8 @@ export const generateTokenAndSetCookieAdmin = (res, adminId) => {
   res.cookie("token-admin", token, {
     httpOnly: true,
     secure: true,
-    sameSite: "None",
+    sameSite: "Lax",
+    domain: ".jalin.my.id",
     maxAge: 1 * 60 * 60 * 1000,
   });
 

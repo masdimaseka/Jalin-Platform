@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-  baseURL: "https://jalin-platform-api.vercel.app/api",
+  baseURL: "https://api.jalin.my.id/api",
   withCredentials: true,
 });

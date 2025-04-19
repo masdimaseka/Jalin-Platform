@@ -42,7 +42,8 @@ export const logoutAdmin = async (req, res) => {
   res.clearCookie("token-admin", {
     httpOnly: true,
     secure: true,
-    sameSite: "None",
+    sameSite: "Lax",
+    domain: ".jalin.my.id",
   });
   res.json({ message: "Logged out" });
 };
