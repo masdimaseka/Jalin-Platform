@@ -41,14 +41,14 @@ const App = () => {
 
           <Route path="/" element={<HomePage />} />
           <Route path="/status/:status" element={<StatusPage />} />
-          {/* <Route
+          <Route
             path="/login"
             element={!authUser ? <LoginPage /> : <Navigate to="/" />}
           />
           <Route
             path="/signup"
             element={!authUser ? <SignUpPage /> : <Navigate to="/" />}
-          /> */}
+          />
           <Route path="/terms-and-conditions" element={<TermAndConPage />} />
           <Route
             path="/verify-email"
