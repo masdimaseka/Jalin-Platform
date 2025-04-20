@@ -9,7 +9,6 @@ export const generateTokenAndSetCookie = (res, userId) => {
     httpOnly: true,
     secure: true,
     sameSite: "Lax",
-    domain: ".jalin.my.id",
     maxAge: 3 * 60 * 60 * 1000,
   });
 
@@ -25,7 +24,6 @@ export const generateTokenAndSetCookieAdmin = (res, adminId) => {
     httpOnly: true,
     secure: true,
     sameSite: "Lax",
-    domain: ".jalin.my.id",
     maxAge: 1 * 60 * 60 * 1000,
   });
 
