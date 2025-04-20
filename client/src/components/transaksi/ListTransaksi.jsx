@@ -4,13 +4,18 @@ import { CardTransaksiCustomer, CardTransaksiPenjahit } from "./CardTransaksi";
 import { useState } from "react";
 import SearchBar from "./../SearchBar";
 import { Link } from "react-router-dom";
+import { Pagination } from "../Pagination";
+
+const ITEMS_PER_PAGE = 12;
 
 export const ListTransaksi = () => {
   const { data: transaksi, isLoading } = useTransaksi();
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleSearchChange = (query) => {
     setSearchQuery(query.toLowerCase());
+    setCurrentPage(1);
   };
 
   if (isLoading) {
@@ -37,26 +42,42 @@ export const ListTransaksi = () => {
     return matchesSearch && notToPenjahit && statusWaiting;
   });
 
+  const totalPages = Math.ceil(filteredTransaksi.length / ITEMS_PER_PAGE);
+
+  const currentData = filteredTransaksi.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div>
       <div className="flex flex-col md:flex-row mb-8 gap-4">
         <SearchBar onSearchChange={handleSearchChange} />
         <Link
           to="/jahitan/create"
-          className="btn btn-primary text-white px-6 py-3 font-semibold "
+          className="btn btn-primary text-white px-6 py-3 font-semibold"
         >
           Upload Jahitan
         </Link>
       </div>
-      {filteredTransaksi.length > 0 ? (
+      {currentData.length > 0 ? (
         <div className="flex flex-wrap gap-4">
-          {filteredTransaksi.map((t) => (
+          {currentData.map((t) => (
             <CardTransaksiPenjahit key={t._id} transaksi={t} />
           ))}
         </div>
       ) : (
         <p className="text-center text-gray-500">Transaksi tidak ditemukan.</p>
       )}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };

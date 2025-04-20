@@ -88,7 +88,12 @@ const App = () => {
           <Route path="/penjahit/apply/:id" element={<CreateTransaksiPage />} />
 
           <Route path="/jahitan" element={<ListJahitanPage />} />
-          <Route path="/jahitan/create" element={<CreateTransaksiPage />} />
+          <Route
+            path="/jahitan/create"
+            element={
+              !authUser ? <Navigate to="/login" /> : <CreateTransaksiPage />
+            }
+          />
 
           <Route path="/about" element={<AboutPage />} />
 

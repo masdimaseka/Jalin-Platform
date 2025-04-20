@@ -24,7 +24,7 @@ export const generateTokenAndSetCookieAdmin = (res, adminId) => {
     httpOnly: true,
     secure: true,
     sameSite: "Lax",
-    maxAge: 1 * 60 * 60 * 1000,
+    maxAge: 8 * 60 * 60 * 1000,
   });
 
   return token;

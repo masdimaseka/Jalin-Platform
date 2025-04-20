@@ -7,6 +7,9 @@ import { useAuthUser } from "../../queries/auth/authQuery";
 import SearchBar from "../SearchBar";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import CardPenjahit from "./CardPenjahit";
+import { Pagination } from "../Pagination";
+
+const ITEMS_PER_PAGE = 1;
 
 const ListPenjahit = () => {
   const { data: penjahit, isLoading } = usePenjahit();
@@ -15,9 +18,11 @@ const ListPenjahit = () => {
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
+    setCurrentPage(1);
   };
 
   const handleSearchChange = (query) => {
@@ -53,6 +58,17 @@ const ListPenjahit = () => {
     return matchesCategory && matchesSearch && isNotCurrentUser;
   });
 
+  const totalPages = Math.ceil(filteredPenjahit.length / ITEMS_PER_PAGE);
+
+  const currentData = filteredPenjahit.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div>
       <div className="flex flex-col md:flex-row mb-8 gap-4">
@@ -72,8 +88,8 @@ const ListPenjahit = () => {
       </div>
 
       <div className="flex flex-wrap gap-4">
-        {filteredPenjahit.length > 0 ? (
-          filteredPenjahit
+        {currentData.length > 0 ? (
+          currentData
             .filter((p) => p.openToWork && p.isVerified)
             .map((p) => (
               <CardPenjahit key={p._id} penjahit={p} authUser={authUser} />
@@ -84,6 +100,12 @@ const ListPenjahit = () => {
           </p>
         )}
       </div>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };
