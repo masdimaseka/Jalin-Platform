@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.get("/", protectRoute, getTransaksi);
+router.get("/", getTransaksi);
 router.get("/penjahit/:id", protectRoute, getTransaksiPenjahit);
 router.get("/penjahit/:id/waiting", protectRoute, getTransaksiPenjahitWaiting);
 router.post("/create", protectRoute, createTransaksi);

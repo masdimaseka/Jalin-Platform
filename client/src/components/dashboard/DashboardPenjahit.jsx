@@ -1,8 +1,8 @@
 import { useAuthUser } from "../../queries/auth/authQuery";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { ProfilePenjait } from "../Profile";
 import { usePenjahitByIdUser } from "../../queries/penjahit/penjahitQuery";
 import { ListTransaksiForPenjahit } from "../transaksi/ListTransaksi";
+import { ProfilePenjahit } from "../Profile";
 
 const DashboardPenjahit = () => {
   const { data: authUser } = useAuthUser();
@@ -20,7 +20,7 @@ const DashboardPenjahit = () => {
 
   return (
     <div>
-      <ProfilePenjait penjahit={penjahitByIdUser} />
+      <ProfilePenjahit penjahit={penjahitByIdUser} />
       <div className="mt-12 pt-8 border-t-2 border-gray-300">
         <h1 className="text-lg sm:text-2xl font-semibold mb-8">
           Daftar Pekerjaanmu

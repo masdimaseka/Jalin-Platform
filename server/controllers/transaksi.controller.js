@@ -72,7 +72,13 @@ export const getTransaksi = async (req, res) => {
     threeDaysAgo.setDate(now.getDate() - 3);
 
     await Transaksi.updateMany(
-      { createdAt: { $lt: threeDaysAgo }, status: "Menunggu" },
+      {
+        status: "Menunggu",
+        $or: [
+          { createdAt: { $lt: threeDaysAgo } },
+          { tenggatWaktu: { $lt: now } },
+        ],
+      },
       { $set: { status: "Dibatalkan" } }
     );
 

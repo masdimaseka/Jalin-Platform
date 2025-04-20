@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { usePenjahitById } from "../../queries/penjahit/penjahitQuery";
 import { useRef, useState } from "react";
 import { useCreateTransaksiToPenjahit } from "../../queries/transaksi/transaksiMutation";
+import Penjahit from "./../../../../server/models/penjahit.model";
 
 const InputTransaksiToPenjahit = ({ id }) => {
   const [judul, setJudul] = useState("");
@@ -123,8 +124,8 @@ const InputTransaksiToPenjahit = ({ id }) => {
               onChange={(e) => setProsesPengerjaan(e.target.value)}
               className="select w-full"
             >
-              <option>Diantar</option>
-              <option>Diambil</option>
+              <option>Diantar ke Penjahit</option>
+              <option>Diambil oleh Penjahit</option>
             </select>
           </div>
 

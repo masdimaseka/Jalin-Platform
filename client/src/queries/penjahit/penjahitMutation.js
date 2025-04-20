@@ -29,3 +29,25 @@ export const useRegisterPenjahit = () => {
     },
   });
 };
+
+export const useUpdateStatusPenjahit = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (updateData) => {
+      const res = await axiosInstance.put(
+        `/penjahit/update/status/${updateData.id}`,
+        updateData
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      toast.success("Status Diperbarui");
+
+      queryClient.invalidateQueries({ queryKey: ["penjahitByIdUser"] });
+    },
+    onError: (err) => {
+      toast.error(err.response.data.message || "Registrasi gagal!");
+    },
+  });
+};

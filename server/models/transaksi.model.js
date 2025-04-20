@@ -10,7 +10,7 @@ const TransaksiSchema = new mongoose.Schema(
     penjahit: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Penjahit",
-      required: true,
+      default: null,
     },
     judul: {
       type: String,
@@ -42,8 +42,8 @@ const TransaksiSchema = new mongoose.Schema(
     },
     pengerjaan: {
       type: String,
-      enum: ["diantar", "diambil"],
-      default: "diantar",
+      enum: ["diantar ke penjahit", "diambil oleh penjahit"],
+      default: "diantar ke penjahit",
     },
     catatan: {
       type: String,

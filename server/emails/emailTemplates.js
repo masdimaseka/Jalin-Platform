@@ -23,7 +23,7 @@ export function verificationEmailTemplate(verificationCode) {
         text-align: center;
       "
     >
-      <h1 style="color: white; margin: 0">Verifikasi Email Kamu</h1>
+      <h1 style="color: white; margin: 0">Verifikasi Email Kamu </h1>
     </div>
     <div
       style="
@@ -51,7 +51,9 @@ export function verificationEmailTemplate(verificationCode) {
       </p>
       <p>
         Kode ini akan kedaluwarsa dalam 15 menit. Jika Anda tidak membuat akun
-        dengan kami, harap abaikan email ini.
+        dengan kami, harap abaikan email ini. <a href="http://localhost:5173/verify-email" target="_blank"
+          >menuju halaman verifikasi</a
+        >
       </p>
       <p>Salam hormat,<br />Jalin Team</p>
     </div>

@@ -22,11 +22,13 @@ const Navbar = () => {
 
   const userPenjahit = penjahit?.find((p) => p.user._id === authUser?._id);
 
-  const pendingTransaksiCount = transaksi?.filter(
-    (t) =>
+  const pendingTransaksiCount = transaksi?.filter((t) => {
+    if (!t.penjahit || !t.penjahit._id) return false;
+    return (
       t.penjahit._id === userPenjahit?._id &&
       t.status.toLowerCase() === "menunggu"
-  ).length;
+    );
+  }).length;
 
   if (isLoadingUser || isLoadingPenjahit || isLoadingTransaksi) return null;
 

@@ -2,6 +2,7 @@ import { useAuthUser } from "../queries/auth/authQuery";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useLogout } from "../queries/auth/authMutation";
+import { useUpdateStatusPenjahit } from "../queries/penjahit/penjahitMutation";
 
 export const Profile = ({ user }) => {
   const { data: authUser } = useAuthUser();
@@ -45,8 +46,15 @@ export const Profile = ({ user }) => {
   );
 };
 
-export const ProfilePenjait = ({ penjahit }) => {
+export const ProfilePenjahit = ({ penjahit }) => {
   const { data: authUser } = useAuthUser();
+
+  const { mutate: updateStatusPenjahit } = useUpdateStatusPenjahit();
+
+  const handleToggleOpenToWork = (event) => {
+    const isChecked = event.target.checked;
+    updateStatusPenjahit({ id: penjahit._id, status: isChecked });
+  };
 
   return (
     <div>
@@ -105,9 +113,9 @@ export const ProfilePenjait = ({ penjahit }) => {
           </div>
         </div>
 
-        <div className="collapse bg-base-100 border-gray-100 border-2 mt-4  collapse-arrow">
+        <div className="collapse bg-base-100 border-gray-100 border-2 mt-4 collapse-arrow">
           <input type="checkbox" />
-          <div className="collapse-title font-semibold">Deskripsi Profle</div>
+          <div className="collapse-title font-semibold">Deskripsi Profile</div>
           <div className="collapse-content text-sm">
             <p className="text-justify">
               {penjahit?.description
@@ -118,14 +126,23 @@ export const ProfilePenjait = ({ penjahit }) => {
         </div>
 
         {authUser?._id === penjahit?.user?._id?.toString() && (
-          <>
+          <div className="mt-4 flex flex-col lg:flex-row lg:items-center gap-8">
+            <div className="flex items-center justify-between gap-2 border-gray-100 border-2 px-4 py-4 rounded-xl">
+              <p className="text-md font-medium">Open to work: </p>
+              <input
+                type="checkbox"
+                className="toggle toggle-md border-gray-600 bg-gray-50 checked:border-primary-jalin checked:bg-blue-50 checked:text-primary-jalin"
+                checked={penjahit?.openToWork}
+                onChange={handleToggleOpenToWork}
+              />
+            </div>
             <Link
               to={`/penjahit/edit/${penjahit?._id}`}
-              className="btn btn-primary mt-4"
+              className="btn btn-primary"
             >
               Edit Profile
             </Link>
-          </>
+          </div>
         )}
       </div>
     </div>

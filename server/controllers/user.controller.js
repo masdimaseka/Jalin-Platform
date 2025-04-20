@@ -55,13 +55,13 @@ export const updateProfile = async (req, res) => {
       updatedData.profileImg = uploadedProfileImg.secure_url;
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
+    await User.findByIdAndUpdate(
       req.user._id,
       { $set: updatedData },
       { new: true }
     ).select("-password");
 
-    res.json(updatedUser);
+    res.status(200).json({ message: "Profil berhasil diperbarui" });
   } catch (error) {
     console.error("Error in updateProfile: ", error);
     res.status(500).json({ message: "Internal server error" });
