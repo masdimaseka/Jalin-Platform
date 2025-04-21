@@ -34,7 +34,7 @@ export const usePenjahitById = (id) => {
   });
 };
 
-export const usePenjahitByIdUser = (id, options = {}) => {
+export const usePenjahitByIdUser = (id) => {
   return useQuery({
     queryKey: ["penjahitByIdUser"],
     queryFn: async () => {
@@ -47,8 +47,6 @@ export const usePenjahitByIdUser = (id, options = {}) => {
         return null;
       }
     },
-    enabled: !!id,
-    ...options,
   });
 };
 

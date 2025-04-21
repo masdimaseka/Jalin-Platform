@@ -25,6 +25,7 @@ import LoginAdminPage from "./pages/admin/LoginAdminPage";
 import MenusAdminPage from "./pages/admin/MenusAdminPage";
 import PreviewFilePage from "./pages/admin/PreviewFileAdminPage";
 import NotFoundPage from "./pages/error/NotFoundPage";
+import EditProfilePenjahitPage from "./pages/pejahit/EditProfilePenjahitPage";
 
 const App = () => {
   const { data: authUser, isLoading: isLoading } = useAuthUser();
@@ -84,8 +85,12 @@ const App = () => {
               )
             }
           />
-          <Route path="/penjahit/:id" element={<ProfilePenjahitPage />} />
+          <Route
+            path="/penjahit/edit/:id"
+            element={<EditProfilePenjahitPage />}
+          />
           <Route path="/penjahit/apply/:id" element={<CreateTransaksiPage />} />
+          <Route path="/penjahit/:id" element={<ProfilePenjahitPage />} />
 
           <Route path="/jahitan" element={<ListJahitanPage />} />
           <Route
@@ -107,6 +112,13 @@ const App = () => {
           <Route
             path="/admin/login"
             element={!authAdmin ? <LoginAdminPage /> : <Navigate to="/admin" />}
+          />
+
+          <Route
+            path="/admin/*"
+            element={
+              <Navigate to={authAdmin ? "/admin/dashboard" : "/admin/login"} />
+            }
           />
         </Route>
 

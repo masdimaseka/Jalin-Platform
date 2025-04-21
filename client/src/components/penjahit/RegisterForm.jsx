@@ -175,7 +175,7 @@ const RegisterForm = () => {
                   value={cat._id}
                   checked={kategori.includes(cat._id)}
                   onChange={handleCheckboxChange}
-                  className="checkbox checkbox-sm checkbox-primary appearance-auto"
+                  className="checkbox checkbox-sm checkbox-primary"
                 />
                 <span className="text-sm">{cat.name}</span>
               </li>

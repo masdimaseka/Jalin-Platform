@@ -33,9 +33,9 @@ const DashboardPenjahit = () => {
         </h1>
 
         <div className="mb-12">
-          <div class="flex overflow-x-auto flex-nowrap gap-8 mb-8">
+          <div className="flex overflow-x-auto flex-nowrap gap-8 mb-8">
             <div
-              class={`whitespace-nowrap ${
+              className={`whitespace-nowrap ${
                 activeTab === "diproses" &&
                 "border-b-4 border-primary-jalin pb-2"
               }`}
@@ -44,7 +44,7 @@ const DashboardPenjahit = () => {
               Pekerjaan Berlangsung
             </div>
             <div
-              class={`whitespace-nowrap ${
+              className={`whitespace-nowrap ${
                 activeTab === "menunggu" &&
                 "border-b-4 border-primary-jalin pb-2"
               }`}
@@ -53,7 +53,7 @@ const DashboardPenjahit = () => {
               Permintaan Pekerjaan
             </div>
             <div
-              class={`whitespace-nowrap ${
+              className={`whitespace-nowrap ${
                 activeTab === "riwayat" &&
                 "border-b-4 border-primary-jalin pb-2"
               }`}

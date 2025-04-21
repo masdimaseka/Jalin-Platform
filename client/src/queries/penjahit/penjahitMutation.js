@@ -51,3 +51,29 @@ export const useUpdateStatusPenjahit = () => {
     },
   });
 };
+
+export const useUpdateProfilePenjahit = () => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (updateData) => {
+      const res = await axiosInstance.put(
+        `/penjahit/update/${updateData.id}`,
+        updateData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      toast.success("Profil berhasil diperbarui!");
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      navigate("/penjahit/dashboard");
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || "Gagal memperbarui profil!");
+    },
+  });
+};

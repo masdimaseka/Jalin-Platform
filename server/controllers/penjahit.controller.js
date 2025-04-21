@@ -214,3 +214,69 @@ export const updateStatusPenjahit = async (req, res) => {
     res.status(500).json({ message: "Terjadi kesalahan server" });
   }
 };
+
+export const updateProfilePenjahit = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { name, noTelp, address, description, kategori, rentangHarga } =
+      req.body;
+
+    let { profileImg } = req.body;
+
+    if (!name || !noTelp || !address || !description || !rentangHarga) {
+      return res
+        .status(400)
+        .json({ message: "Harap isi semua field yang diperlukan" });
+    }
+
+    const user = await User.findById(userId);
+
+    if (profileImg) {
+      if (user.profileImg) {
+        const oldImagePublicId = user.profileImg.split("/").pop().split(".")[0];
+
+        await cloudinary.uploader.destroy(
+          `jalin/user/profile/${oldImagePublicId}`
+        );
+      }
+
+      const uploadedProfileImg = await cloudinary.uploader.upload(
+        req.body.profileImg,
+        {
+          folder: "jalin/user/profile",
+        }
+      );
+      profileImg = uploadedProfileImg.secure_url;
+    }
+
+    await User.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          name,
+          noTelp,
+          address,
+          profileImg,
+        },
+      },
+      { new: true }
+    ).select("-password");
+
+    await Penjahit.findOneAndUpdate(
+      { user: userId },
+      {
+        $set: {
+          description,
+          kategori: Array.isArray(kategori) ? kategori : [kategori],
+          rentangHarga,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json({ message: "Profil berhasil diperbarui" });
+  } catch (error) {
+    console.error("Error in updateProfilePenjahit: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

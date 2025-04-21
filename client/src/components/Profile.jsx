@@ -107,7 +107,9 @@ export const ProfilePenjahit = ({ penjahit }) => {
                   </div>
                 ))
               ) : (
-                <div className="badge badge-outline">Tidak tersedia</div>
+                <div className="badge badge-outline">
+                  Tidak ada spesialisasi
+                </div>
               )}
             </div>
           </div>
