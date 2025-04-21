@@ -37,7 +37,14 @@ const TransaksiSchema = new mongoose.Schema(
     ],
     status: {
       type: String,
-      enum: ["Menunggu", "Diproses", "Selesai", "Dibatalkan", "Ditolak"],
+      enum: [
+        "Menunggu",
+        "Diproses",
+        "Selesai",
+        "Dibatalkan",
+        "Dibatalkan Sistem",
+        "Ditolak",
+      ],
       default: "Menunggu",
     },
     pengerjaan: {

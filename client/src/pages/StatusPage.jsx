@@ -17,7 +17,7 @@ const StatusPage = () => {
           <OnReviewRegister
             title="Pekerjaan anda sudah terkirim!"
             desc="Terima kasih sudah menghubungi penjahit kami. Pekerjaan mu sudah diterima oleh penjahit, mohon ditunggu pekerjaan mu diterima oleh penjahit. Pekerjaan akan otomatis dibatalkan jika sudah lebih dari 3 hari belum diterima oleh penjahit."
-            navigation="/penjahit"
+            navigation="/jahitan"
           />
         )}
       </div>

@@ -1,8 +1,11 @@
 import { useParams } from "react-router-dom";
-import { ListTransaksiForPenjahit } from "../../components/transaksi/ListTransaksi";
 import { usePenjahitById } from "../../queries/penjahit/penjahitQuery";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { ProfilePenjahit } from "../../components/Profile";
+import {
+  ListTransaksiForPenjahit,
+  ListTransaksiForPenjahitFiltered,
+} from "../../components/transaksi/ListTransaksiForPenjahit";
 const ProfilePenjahitPage = () => {
   const { id } = useParams();
   const { data: penjahitById, isLoading } = usePenjahitById(id);
@@ -25,7 +28,10 @@ const ProfilePenjahitPage = () => {
         <h1 className="text-lg sm:text-2xl font-semibold mb-8">
           Daftar Pekerjaan
         </h1>
-        <ListTransaksiForPenjahit penjahit={penjahitById} />
+        <ListTransaksiForPenjahitFiltered
+          penjahit={penjahitById}
+          filter={["menunggu", "selesai"]}
+        />
       </div>
     </div>
   );

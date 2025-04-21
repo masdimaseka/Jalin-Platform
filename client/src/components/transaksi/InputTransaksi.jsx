@@ -90,7 +90,7 @@ const InputTransaksi = () => {
               Tenggat Pekerjaan
             </label>
             <input
-              type="date"
+              type="datetime-local"
               value={tenggatWaktu}
               onChange={(e) => setTenggatWaktu(e.target.value)}
               className="input input-bordered w-full"

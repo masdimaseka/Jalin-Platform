@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { usePenjahitById } from "../../queries/penjahit/penjahitQuery";
 import { useRef, useState } from "react";
 import { useCreateTransaksiToPenjahit } from "../../queries/transaksi/transaksiMutation";
-import Penjahit from "./../../../../server/models/penjahit.model";
 
 const InputTransaksiToPenjahit = ({ id }) => {
   const [judul, setJudul] = useState("");
@@ -107,7 +106,7 @@ const InputTransaksiToPenjahit = ({ id }) => {
               Tenggat Pekerjaan
             </label>
             <input
-              type="date"
+              type="datetime-local"
               value={tenggatWaktu}
               onChange={(e) => setTenggatWaktu(e.target.value)}
               className="input input-bordered w-full"

@@ -56,8 +56,7 @@ export const getPenjahitByAdmin = async (req, res) => {
 
     const decryptedPenjahit = penjahit.map((p) => ({
       ...p._doc,
-      dokKTP: encodeURIComponent(decrypting(p.dokKTP)),
-      dokPortofolio: p.dokPortofolio.map((url) => encodeURIComponent(url)),
+      dokKTP: decrypting(p.dokKTP),
     }));
 
     res.status(200).json(decryptedPenjahit);

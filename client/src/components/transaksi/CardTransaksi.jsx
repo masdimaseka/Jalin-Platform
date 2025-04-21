@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-export const CardTransaksiCustomer = ({ transaksi }) => {
+export const CardTransaksiForCustomer = ({ transaksi }) => {
   return (
     <div className="card bg-base-100 w-80 shadow-sm">
       <figure className="w-full h-48 overflow-hidden rounded-lg">
@@ -30,10 +30,12 @@ export const CardTransaksiCustomer = ({ transaksi }) => {
               color="red"
             />
             <p className="text-sm">
-              {new Date(transaksi.tenggatWaktu).toLocaleDateString("id-ID", {
+              {new Date(transaksi.tenggatWaktu).toLocaleString("id-ID", {
                 day: "numeric",
                 month: "long",
                 year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
               })}
             </p>
           </span>
@@ -82,7 +84,7 @@ export const CardTransaksiCustomer = ({ transaksi }) => {
   );
 };
 
-export const CardTransaksiPenjahit = ({ transaksi }) => {
+export const CardTransaksiForPenjahit = ({ transaksi }) => {
   return (
     <div className="card bg-base-100 w-80 shadow-sm">
       <figure className="w-full h-48 overflow-hidden rounded-lg">
@@ -116,6 +118,11 @@ export const CardTransaksiPenjahit = ({ transaksi }) => {
                 day: "numeric",
                 month: "long",
                 year: "numeric",
+              })}{" "}
+              pukul{" "}
+              {new Date(transaksi.tenggatWaktu).toLocaleTimeString("id-ID", {
+                hour: "2-digit",
+                minute: "2-digit",
               })}
             </p>
           </span>

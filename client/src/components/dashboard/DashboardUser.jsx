@@ -1,8 +1,5 @@
 import { useAuthUser } from "../../queries/auth/authQuery";
-import {
-  ListTransaksi,
-  ListTransaksiForUser,
-} from "../transaksi/ListTransaksi";
+import { ListTransaksiForUser } from "../transaksi/ListTransaksiForUser";
 import { Profile } from "./../Profile";
 
 const DashboardUser = () => {

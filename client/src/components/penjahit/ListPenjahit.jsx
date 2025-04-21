@@ -9,7 +9,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import CardPenjahit from "./CardPenjahit";
 import { Pagination } from "../Pagination";
 
-const ITEMS_PER_PAGE = 1;
+const ITEMS_PER_PAGE = 12;
 
 const ListPenjahit = () => {
   const { data: penjahit, isLoading } = usePenjahit();
