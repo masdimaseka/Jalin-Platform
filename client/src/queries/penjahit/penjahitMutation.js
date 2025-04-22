@@ -79,6 +79,7 @@ export const useUpdateProfilePenjahit = () => {
 };
 
 export const useCreateTransaksiPoint = () => {
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: async (transaksiData) => {
       const res = await axiosInstance.post(
@@ -92,6 +93,7 @@ export const useCreateTransaksiPoint = () => {
     },
     onSuccess: () => {
       toast.success("Lakukan Pembayaran");
+      navigate("/penjahit/dashboard");
     },
     onError: (err) => {
       toast.error(err.response?.data?.message || "Gagal membuat transaksi!");
