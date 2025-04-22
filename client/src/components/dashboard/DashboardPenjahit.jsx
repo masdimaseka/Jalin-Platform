@@ -38,7 +38,10 @@ const DashboardPenjahit = () => {
               penjahitByIdUser.point > 2000 ? "text-success" : "text-error"
             }`}
           >
-            {penjahitByIdUser.point}
+            {Number(penjahitByIdUser.point).toLocaleString("id-ID", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            })}
           </span>
         </h1>
         <Link

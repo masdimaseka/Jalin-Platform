@@ -91,7 +91,7 @@ export const useCreateTransaksiPoint = () => {
       return res.data;
     },
     onSuccess: () => {
-      toast.success("Transaksi berhasil dibuat!");
+      toast.success("Lakukan Pembayaran");
     },
     onError: (err) => {
       toast.error(err.response?.data?.message || "Gagal membuat transaksi!");

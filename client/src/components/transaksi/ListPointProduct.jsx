@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useCreateTransaksiPoint } from "../../queries/penjahit/penjahitMutation";
 import { usePointProducts } from "../../queries/penjahit/penjahitQuery";
 import toast, { Toaster } from "react-hot-toast";
-import { redirect } from "react-router-dom";
 
 const insertSnapScript = () => {
   return new Promise((resolve) => {
@@ -42,12 +41,11 @@ const ListPointProduct = ({ penjahit }) => {
         onSuccess: function (result) {
           console.log(result);
           toast.success("Transaksi berhasil!");
-          redirect("/penjahit/dashboard");
         },
         // Optional
         onPending: function (result) {
           console.log(result);
-          toast.custom("Transaksi pending!");
+          toast.error("Transaksi pending!");
         },
         // Optional
         onError: function (result) {
@@ -80,7 +78,10 @@ const ListPointProduct = ({ penjahit }) => {
                 Akan mendapatkan{" "}
                 <span className={`text-primary-jalin inline font-semibold`}>
                   <img src="/jalinPoint.svg" className="w-4 inline" />
-                  {item.point}
+                  {Number(item.point).toLocaleString("id-ID", {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                  })}
                 </span>{" "}
                 point
               </p>
