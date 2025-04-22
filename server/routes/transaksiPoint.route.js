@@ -8,6 +8,6 @@ import {
 const router = express.Router();
 
 router.post("/create", protectRoute, createTransaksiPoint);
-router.post("/callback/midtrans", protectRoute, callbackPayment);
+router.post("/callback/midtrans", callbackPayment);
 
 export default router;
