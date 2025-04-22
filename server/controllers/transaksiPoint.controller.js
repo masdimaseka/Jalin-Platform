@@ -5,7 +5,7 @@ import TransaksiPoint from "../models/transaksiPoint.model.js";
 import User from "../models/user.model.js";
 
 let snap = new midtransClient.Snap({
-  isProduction: false,
+  isProduction: true,
   serverKey: process.env.MIDTRANS_SERVER_KEY,
 });
 
