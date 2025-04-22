@@ -34,7 +34,7 @@ export const usePenjahitById = (id) => {
   });
 };
 
-export const usePenjahitByIdUser = (id, options = {}) => {
+export const usePenjahitByIdUser = (id) => {
   return useQuery({
     queryKey: ["penjahitByIdUser"],
     queryFn: async () => {
@@ -47,8 +47,6 @@ export const usePenjahitByIdUser = (id, options = {}) => {
         return null;
       }
     },
-    enabled: !!id,
-    ...options,
   });
 };
 
@@ -72,8 +70,46 @@ export const useCategories = () => {
   return useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
-      const res = await axiosInstance.get("/categories");
-      return res.data;
+      try {
+        const res = await axiosInstance.get("/categories");
+        return res.data;
+      } catch (err) {
+        if (err.response && err.response.status === 401) return null;
+        toast.error(err.response.data.message || "Something went wrong");
+        return null;
+      }
+    },
+  });
+};
+
+export const usePointProducts = () => {
+  return useQuery({
+    queryKey: ["pointProducts"],
+    queryFn: async () => {
+      try {
+        const res = await axiosInstance.get("/point-product");
+        return res.data;
+      } catch (err) {
+        if (err.response && err.response.status === 401) return null;
+        toast.error(err.response.data.message || "Something went wrong");
+        return null;
+      }
+    },
+  });
+};
+
+export const usePointProductsById = (id) => {
+  return useQuery({
+    queryKey: ["pointProductById"],
+    queryFn: async () => {
+      try {
+        const res = await axiosInstance.get(`/point-product/${id}`);
+        return res.data;
+      } catch (err) {
+        if (err.response && err.response.status === 401) return null;
+        toast.error(err.response.data.message || "Something went wrong");
+        return null;
+      }
     },
   });
 };

@@ -1,5 +1,8 @@
+import { sendGetTransactionEmail } from "../emails/emailHandlers.js";
 import cloudinary from "../lib/cloudinary.js";
 import Transaksi from "../models/transaksi.model.js";
+import User from "../models/user.model.js";
+import Penjahit from "./../models/penjahit.model.js";
 
 export const createTransaksi = async (req, res) => {
   try {
@@ -7,11 +10,20 @@ export const createTransaksi = async (req, res) => {
 
     const { judul, deskripsi, image, tenggatWaktu } = req.body;
 
+    let uploadedImgUrl = null;
+
+    if (image) {
+      const uploadedImg = await cloudinary.uploader.upload(image, {
+        folder: "jalin/transaksi",
+      });
+      uploadedImgUrl = uploadedImg.secure_url;
+    }
+
     const transaksiBaru = new Transaksi({
       user: userId,
       judul,
       deskripsi,
-      image,
+      image: uploadedImgUrl,
       tenggatWaktu,
     });
 
@@ -55,6 +67,13 @@ export const createTransaksiToPenjahit = async (req, res) => {
 
     await transaksi.save();
 
+    const user = await User.findById(userId);
+    const penjahit = await Penjahit.findById(penjahitId).populate(
+      "user",
+      "email"
+    );
+    await sendGetTransactionEmail(penjahit.user.email, judul, user.name);
+
     res.status(201).json({
       message: "Transaksi berhasil dibuat",
       transaksi: transaksi,
@@ -72,8 +91,14 @@ export const getTransaksi = async (req, res) => {
     threeDaysAgo.setDate(now.getDate() - 3);
 
     await Transaksi.updateMany(
-      { createdAt: { $lt: threeDaysAgo }, status: "Menunggu" },
-      { $set: { status: "Dibatalkan" } }
+      {
+        status: "Menunggu",
+        $or: [
+          { createdAt: { $lt: threeDaysAgo } },
+          { tenggatWaktu: { $lt: now } },
+        ],
+      },
+      { $set: { status: "Dibatalkan Sistem" } }
     );
 
     const transaksi = await Transaksi.find()

@@ -29,3 +29,72 @@ export const useRegisterPenjahit = () => {
     },
   });
 };
+
+export const useUpdateStatusPenjahit = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (updateData) => {
+      const res = await axiosInstance.put(
+        `/penjahit/update/status/${updateData.id}`,
+        updateData
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      toast.success("Status Diperbarui");
+
+      queryClient.invalidateQueries({ queryKey: ["penjahitByIdUser"] });
+    },
+    onError: (err) => {
+      toast.error(err.response.data.message || "Registrasi gagal!");
+    },
+  });
+};
+
+export const useUpdateProfilePenjahit = () => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (updateData) => {
+      const res = await axiosInstance.put(
+        `/penjahit/update/${updateData.id}`,
+        updateData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      toast.success("Profil berhasil diperbarui!");
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      navigate("/penjahit/dashboard");
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || "Gagal memperbarui profil!");
+    },
+  });
+};
+
+export const useCreateTransaksiPoint = () => {
+  return useMutation({
+    mutationFn: async (transaksiData) => {
+      const res = await axiosInstance.post(
+        "/transaksi-point/create",
+        transaksiData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      toast.success("Transaksi berhasil dibuat!");
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || "Gagal membuat transaksi!");
+    },
+  });
+};

@@ -25,6 +25,8 @@ import LoginAdminPage from "./pages/admin/LoginAdminPage";
 import MenusAdminPage from "./pages/admin/MenusAdminPage";
 import PreviewFilePage from "./pages/admin/PreviewFileAdminPage";
 import NotFoundPage from "./pages/error/NotFoundPage";
+import EditProfilePenjahitPage from "./pages/pejahit/EditProfilePenjahitPage";
+import TopupPointPage from "./pages/pejahit/TopupPointPage";
 
 const App = () => {
   const { data: authUser, isLoading: isLoading } = useAuthUser();
@@ -84,11 +86,31 @@ const App = () => {
               )
             }
           />
-          <Route path="/penjahit/:id" element={<ProfilePenjahitPage />} />
+          <Route
+            path="/penjahit/edit/:id"
+            element={<EditProfilePenjahitPage />}
+          />
           <Route path="/penjahit/apply/:id" element={<CreateTransaksiPage />} />
+          <Route path="/penjahit/:id" element={<ProfilePenjahitPage />} />
+
+          <Route
+            path="/topup-point/:id"
+            element={
+              authUser && authUser.role === "penjahit" ? (
+                <TopupPointPage />
+              ) : (
+                <Navigate to="/penjahit/register" />
+              )
+            }
+          />
 
           <Route path="/jahitan" element={<ListJahitanPage />} />
-          <Route path="/jahitan/create" element={<CreateTransaksiPage />} />
+          <Route
+            path="/jahitan/create"
+            element={
+              !authUser ? <Navigate to="/login" /> : <CreateTransaksiPage />
+            }
+          />
 
           <Route path="/about" element={<AboutPage />} />
 
@@ -102,6 +124,13 @@ const App = () => {
           <Route
             path="/admin/login"
             element={!authAdmin ? <LoginAdminPage /> : <Navigate to="/admin" />}
+          />
+
+          <Route
+            path="/admin/*"
+            element={
+              <Navigate to={authAdmin ? "/admin/dashboard" : "/admin/login"} />
+            }
           />
         </Route>
 
