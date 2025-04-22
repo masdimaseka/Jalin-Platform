@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useCreateTransaksiPoint } from "../../queries/penjahit/penjahitMutation";
 import { usePointProducts } from "../../queries/penjahit/penjahitQuery";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import { redirect } from "react-router-dom";
 
 const insertSnapScript = () => {
   return new Promise((resolve) => {
@@ -40,17 +41,18 @@ const ListPointProduct = ({ penjahit }) => {
         // Optional
         onSuccess: function (result) {
           console.log(result);
-          alert("Transaksi berhasil!");
+          toast.success("Transaksi berhasil!");
+          redirect("/penjahit/dashboard");
         },
         // Optional
         onPending: function (result) {
           console.log(result);
-          alert("Transaksi pending!");
+          toast.custom("Transaksi pending!");
         },
         // Optional
         onError: function (result) {
           console.log(result);
-          alert("Transaksi error!");
+          toast.error("Transaksi gagal!");
         },
       });
     } catch (error) {
