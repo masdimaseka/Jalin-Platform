@@ -77,12 +77,13 @@ export const callbackPayment = async (req, res) => {
   if (transactionStatus == "capture" || transactionStatus == "settlement") {
     if (fraudStatus == "accept") {
       const penjahit = await Penjahit.findById(transaksiPoint.penjahit);
+      const point = await PointProduct.findById(transaksiPoint.point);
 
-      penjahit.point = penjahit.point + transaksiPoint.point;
-
-      if (!penjahit) {
-        return res.status(404).json({ message: "penjahit not found" });
+      if (!penjahit || !point) {
+        return res.status(404).json({ message: "penjahit or point not found" });
       }
+
+      penjahit.point = penjahit.point + point.point;
 
       await penjahit.save();
       transaksiPoint.status = "success";
