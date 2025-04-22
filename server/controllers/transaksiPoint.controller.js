@@ -72,10 +72,13 @@ export const callbackPayment = async (req, res) => {
     return res.status(404).json({ message: "Transaction not found" });
   }
 
-  // Sample transactionStatus handling logic
+  // Prevent duplicate processing
+  if (transaksiPoint.status === "success") {
+    return res.status(200).json({ message: "Transaction already processed" });
+  }
 
-  if (transactionStatus == "capture" || transactionStatus == "settlement") {
-    if (fraudStatus == "accept") {
+  if (transactionStatus === "capture" || transactionStatus === "settlement") {
+    if (fraudStatus === "accept") {
       const penjahit = await Penjahit.findById(transaksiPoint.penjahit);
       const point = await PointProduct.findById(transaksiPoint.point);
 
@@ -83,20 +86,20 @@ export const callbackPayment = async (req, res) => {
         return res.status(404).json({ message: "penjahit or point not found" });
       }
 
-      penjahit.point = penjahit.point + point.point;
-
+      penjahit.point += point.point;
       await penjahit.save();
       transaksiPoint.status = "success";
     }
   } else if (
-    transactionStatus == "cancel" ||
-    transactionStatus == "deny" ||
-    transactionStatus == "expire"
+    transactionStatus === "cancel" ||
+    transactionStatus === "deny" ||
+    transactionStatus === "expire"
   ) {
     transaksiPoint.status = "failed";
-  } else if (transactionStatus == "pending") {
+  } else if (transactionStatus === "pending") {
     transaksiPoint.status = "pending";
   }
 
   await transaksiPoint.save();
+  return res.status(200).json({ message: "Callback processed successfully" });
 };
