@@ -77,3 +77,24 @@ export const useUpdateProfilePenjahit = () => {
     },
   });
 };
+
+export const useCreateTransaksiPoint = () => {
+  return useMutation({
+    mutationFn: async (transaksiData) => {
+      const res = await axiosInstance.post(
+        "/transaksi-point/create",
+        transaksiData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      toast.success("Transaksi berhasil dibuat!");
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || "Gagal membuat transaksi!");
+    },
+  });
+};
