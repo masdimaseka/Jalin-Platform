@@ -69,16 +69,13 @@ const EditProfileForm = ({ id }) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-4 w-full lg:w-[30vw]"
-    >
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full ">
       <div>
         {previewImg && (
           <img
             src={previewImg}
             alt="Preview"
-            className="rounded-full w-24 h-24 border-2 border-primary-jalin p-1 mb-2"
+            className="rounded-full w-32 h-32 border-2 border-primary-jalin p-1 mb-4"
           />
         )}
         <label htmlFor="profileImg">Foto Profile</label>
@@ -130,7 +127,7 @@ const EditProfileForm = ({ id }) => {
       <button
         type="submit"
         disabled={isPending}
-        className="btn btn-primary w-full"
+        className="btn btn-primary w-full mt-8"
       >
         {isPending ? "Menyimpan..." : "Simpan Perubahan"}
       </button>

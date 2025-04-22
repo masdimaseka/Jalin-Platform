@@ -105,7 +105,6 @@ export const logout = async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "Lax",
-    domain: ".jalin.my.id",
   });
   res.json({ message: "Logged out" });
 };

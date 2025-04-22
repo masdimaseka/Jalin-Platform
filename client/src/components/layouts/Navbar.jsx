@@ -22,11 +22,13 @@ const Navbar = () => {
 
   const userPenjahit = penjahit?.find((p) => p.user._id === authUser?._id);
 
-  const pendingTransaksiCount = transaksi?.filter(
-    (t) =>
+  const pendingTransaksiCount = transaksi?.filter((t) => {
+    if (!t.penjahit || !t.penjahit._id) return false;
+    return (
       t.penjahit._id === userPenjahit?._id &&
       t.status.toLowerCase() === "menunggu"
-  ).length;
+    );
+  }).length;
 
   if (isLoadingUser || isLoadingPenjahit || isLoadingTransaksi) return null;
 
@@ -108,9 +110,18 @@ const Navbar = () => {
           <div className="lg:hidden ">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="btn btn-ghost"
+              className="btn btn-ghost relative"
             >
               <Icon icon="ic:round-menu" width="30" height="30" color="white" />
+              {pendingTransaksiCount > 0 && (
+                <span
+                  className={`${
+                    isOpen && "hidden"
+                  } absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center`}
+                >
+                  {pendingTransaksiCount}
+                </span>
+              )}
             </button>
           </div>
         </div>
@@ -139,9 +150,14 @@ const Navbar = () => {
                 {userPenjahit ? (
                   <Link
                     to="/penjahit/dashboard"
-                    className="btn btn-primary text-white w-full"
+                    className="btn btn-primary text-white w-full relative"
                   >
                     Dashboard Penjahit
+                    {pendingTransaksiCount > 0 && (
+                      <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                        {pendingTransaksiCount}
+                      </span>
+                    )}
                   </Link>
                 ) : (
                   <Link

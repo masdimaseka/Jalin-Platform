@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Verifikasi Email</title>
+    <title>Kamu Mendapatkan Transaksi Baru</title>
   </head>
   <body
     style="
@@ -22,7 +22,7 @@
         text-align: center;
       "
     >
-      <h1 style="color: white; margin: 0">Verifikasi Email Kamu</h1>
+      <h1 style="color: white; margin: 0">Kamu Mendapatkan Transaksi Baru!</h1>
     </div>
     <div
       style="
@@ -32,30 +32,31 @@
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       "
     >
-      <p>Terima kasih telah mendaftar! Kode verifikasi Anda adalah:</p>
-      <div style="text-align: center; margin: 30px 0">
-        <span
+      <p>Selamat! Kamu mendapatkan pekerjaan baru di platform kami.</p>
+      <p>
+        <strong>Pekerjaan:</strong> {judulTransaksi}<br />
+        <strong>Customer:</strong> {namaCustomer}
+      </p>
+      <p>Detail transaksi dapat dilihat dengan mengunjungi dashboard kamu.</p>
+      <div style="text-align: center; margin: 20px 0">
+        <a
+          href="http://localhost:5173/penjahit/dashboard"
+          target="_blank"
           style="
-            font-size: 32px;
+            display: inline-block;
+            background-color: #435ccc;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
             font-weight: bold;
-            letter-spacing: 5px;
-            color: #435ccc;
           "
-          >{verificationCode}</span
+          >Menuju Dashboard</a
         >
       </div>
-      <p>
-        Masukkan kode ini pada halaman verifikasi untuk menyelesaikan
-        pendaftaran Anda.
-      </p>
-      <p>
-        Kode ini akan kedaluwarsa dalam 15 menit. Jika Anda tidak membuat akun
-        dengan kami, harap abaikan email ini.
-        <a href="http://localhost:5173/verify-email" target="_blank"
-          >menuju halaman verifikasi</a
-        >
-      </p>
-      <p>Salam hormat,<br />Jalin Team</p>
+      <p>Semoga harimu menyenangkan!</p>
+      <p>Salam hangat,<br />Jalin Team</p>
     </div>
     <div
       style="

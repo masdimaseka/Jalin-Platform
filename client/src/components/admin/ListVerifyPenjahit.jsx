@@ -58,7 +58,7 @@ const ListVerifyPenjahit = () => {
                   <td>
                     {p.dokKTP ? (
                       <Link
-                        to={"/admin/penjahit/verify/dok/" + p.dokKTP}
+                        to={p.dokKTP}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 underline"

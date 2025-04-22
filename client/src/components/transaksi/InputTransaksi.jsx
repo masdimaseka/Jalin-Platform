@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useRef, useState } from "react";
-import { useCreateTransaksiToPenjahit } from "../../queries/transaksi/transaksiMutation";
+import { useCreateTransaksi } from "../../queries/transaksi/transaksiMutation";
 
 const InputTransaksi = () => {
   const [judul, setJudul] = useState("");
@@ -12,8 +12,7 @@ const InputTransaksi = () => {
   const [previewImg, setPreviewImg] = useState(null);
 
   const fileInputRef = useRef(null);
-  const { mutate: createTransaksiToPenjahit, isPending } =
-    useCreateTransaksiToPenjahit();
+  const { mutate: createTransaksi, isPending } = useCreateTransaksi();
 
   const readFileAsDataURL = (file) => {
     return new Promise((resolve, reject) => {
@@ -49,7 +48,7 @@ const InputTransaksi = () => {
       createData.image = await readFileAsDataURL(image);
     }
 
-    createTransaksiToPenjahit(createData);
+    createTransaksi(createData);
   };
 
   return (
@@ -91,7 +90,7 @@ const InputTransaksi = () => {
               Tenggat Pekerjaan
             </label>
             <input
-              type="date"
+              type="datetime-local"
               value={tenggatWaktu}
               onChange={(e) => setTenggatWaktu(e.target.value)}
               className="input input-bordered w-full"
@@ -108,8 +107,8 @@ const InputTransaksi = () => {
               onChange={(e) => setProsesPengerjaan(e.target.value)}
               className="select w-full"
             >
-              <option>Diantar</option>
-              <option>Diambil</option>
+              <option>Diantar ke Penjahit</option>
+              <option>Diambil oleh Penjahit</option>
             </select>
           </div>
 

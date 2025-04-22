@@ -133,9 +133,7 @@ const RegisterForm = () => {
       <div>
         <label htmlFor="dokPortofolio">
           Dokumen Portofolio{" "}
-          <span className="text-xs">
-            (alat jahit, hasil pekerjaan) *jadikan dalam satu file
-          </span>
+          <span className="text-xs">(alat jahit, hasil pekerjaan)</span>
         </label>
         <input
           type="file"
@@ -159,25 +157,25 @@ const RegisterForm = () => {
       <div>
         <label htmlFor="kategori">Kategori Spesialisasi</label>
         <p className="mt-2 text-sm text-gray-500">Kategori terpilih:</p>
-        <div className="input input-bordered w-full">
+        <div className="input input-bordered w-full overflow-x-auto whitespace-nowrap">
           {category
             ?.filter((cat) => kategori.includes(cat._id))
             .map((cat) => cat.name)
             .join(", ") || "Belum ada"}
         </div>
-        <div className="dropdown dropdown-start mt-2">
+        <div className="dropdown dropdown-start mt-2 w-full">
           <div tabIndex={0} role="button" className="btn w-full">
             Pilih Spesialisasi
           </div>
-          <ul className="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow-sm">
+          <ul className="dropdown-content bg-base-100 rounded-box z-50 w-full max-h-64 overflow-y-auto grid grid-cols-2 gap-y-2 p-2 shadow-sm">
             {category?.map((cat) => (
-              <li key={cat._id} className="flex flex-row items-center gap-2">
+              <li key={cat._id} className="flex items-center gap-2">
                 <input
                   type="checkbox"
-                  value={cat._id} // Menggunakan _id, bukan name
+                  value={cat._id}
                   checked={kategori.includes(cat._id)}
                   onChange={handleCheckboxChange}
-                  className="checkbox checkbox-sm checkbox-primary appearance-auto"
+                  className="checkbox checkbox-sm checkbox-primary"
                 />
                 <span className="text-sm">{cat.name}</span>
               </li>

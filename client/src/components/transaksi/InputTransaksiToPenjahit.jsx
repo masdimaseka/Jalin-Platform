@@ -106,7 +106,7 @@ const InputTransaksiToPenjahit = ({ id }) => {
               Tenggat Pekerjaan
             </label>
             <input
-              type="date"
+              type="datetime-local"
               value={tenggatWaktu}
               onChange={(e) => setTenggatWaktu(e.target.value)}
               className="input input-bordered w-full"
@@ -123,8 +123,8 @@ const InputTransaksiToPenjahit = ({ id }) => {
               onChange={(e) => setProsesPengerjaan(e.target.value)}
               className="select w-full"
             >
-              <option>Diantar</option>
-              <option>Diambil</option>
+              <option>Diantar ke Penjahit</option>
+              <option>Diambil oleh Penjahit</option>
             </select>
           </div>
 
