@@ -6,7 +6,6 @@ import {
   useUserByAdmin,
 } from "./../../queries/admin/adminQuery";
 import { Link } from "react-router-dom";
-import Penjahit from "./../../../../server/models/penjahit.model";
 const DashboardAdminPage = () => {
   const { data: user, isLoading: isLoadingUser } = useUserByAdmin();
   const { data: penjahit, isLoading: isLoadingPenjahit } = usePenjahitByAdmin();
