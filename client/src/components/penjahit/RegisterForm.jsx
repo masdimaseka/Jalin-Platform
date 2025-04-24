@@ -93,7 +93,12 @@ const RegisterForm = () => {
       className="flex flex-col gap-4 w-full lg:w-[30vw]"
     >
       <div>
-        <label htmlFor="dokKTP">Foto Profile</label>
+        <label htmlFor="dokKTP">
+          Foto Profile{" "}
+          <span className="text-xs">
+            (gunakan foto yang memperlihatkan wajah)
+          </span>
+        </label>
         <input
           type="file"
           accept="image/*"

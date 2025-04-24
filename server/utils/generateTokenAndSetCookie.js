@@ -10,7 +10,7 @@ export const generateTokenAndSetCookie = (res, userId) => {
     secure: true,
     sameSite: "Lax",
     maxAge: 24 * 60 * 60 * 1000,
-    domain: ".jalin.my.id",
+    ...(process.env.NODE_ENV === "production" && { domain: ".jalin.my.id" }),
   });
 
   return token;
@@ -18,7 +18,7 @@ export const generateTokenAndSetCookie = (res, userId) => {
 
 export const generateTokenAndSetCookieAdmin = (res, adminId) => {
   const token = jwt.sign({ adminId }, process.env.JWT_SECRET_ADMIN, {
-    expiresIn: "1h",
+    expiresIn: "8h",
   });
 
   res.cookie("token-admin", token, {
@@ -26,7 +26,7 @@ export const generateTokenAndSetCookieAdmin = (res, adminId) => {
     secure: true,
     sameSite: "Lax",
     maxAge: 8 * 60 * 60 * 1000,
-    domain: ".jalin.my.id",
+    ...(process.env.NODE_ENV === "production" && { domain: ".jalin.my.id" }),
   });
 
   return token;

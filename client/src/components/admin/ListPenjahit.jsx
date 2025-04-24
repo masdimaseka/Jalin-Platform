@@ -1,93 +1,129 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { usePenjahitByAdmin } from "../../queries/admin/adminQuery";
-import { useCategories } from "../../queries/penjahit/penjahitQuery";
+import { useState } from "react";
+import SearchBar from "../SearchBar";
+import { Link } from "react-router-dom";
+import { useDeletePenjahitByIdByAdmin } from "../../queries/admin/adminMutation";
 
 const ListPenjahit = () => {
-  const { data: penjahit } = usePenjahitByAdmin();
-  const { data: category } = useCategories();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [deletingPenjahitId, setDeletingPenjahitId] = useState(null);
+  const { data: penjahit, isLoading } = usePenjahitByAdmin();
+  const { mutate: deletePenjahitByIdByAdmin } = useDeletePenjahitByIdByAdmin();
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center mt-20">
+        <Icon icon="line-md:loading-loop" width="64" height="64" color="gray" />
+      </div>
+    );
+  }
+
+  const handleSearchChange = (query) => {
+    setSearchQuery(query.toLowerCase());
+  };
+
+  const filteredPenjahit = penjahit?.filter((p) => {
+    const matchesSearch = p.user.name?.toLowerCase().includes(searchQuery);
+    return matchesSearch;
+  });
 
   return (
-    <div className="overflow-x-auto">
-      <table className="table table-xs min-w-max w-full">
-        <thead>
-          <tr className="text-center">
-            <th>No</th>
-            <th>Nama</th>
-            <th>Email</th>
-            <th>No Telp</th>
-            <th>Lokasi</th>
-            <th>Rentang Harga</th>
-            <th>Dok. KTP</th>
-            <th>Dok. Portofolio</th>
-            <th>Kategori</th>
-            <th>Status Verifikasi</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {penjahit?.length > 0 ? (
-            penjahit
-              .filter((p) => p.isVerified)
-              .map((p, index) => (
-                <tr key={p._id} className="text-center">
-                  <td>{index + 1}</td>
-                  <td>{p.user?.name || "Tidak tersedia"}</td>
-                  <td>{p.user?.email || "Tidak tersedia"}</td>
-                  <td>{p.user?.noTelp || "Tidak tersedia"}</td>
-                  <td>{p.user?.address || "Tidak tersedia"}</td>
-                  <td>{p.rentangHarga || "Tidak tersedia"}</td>
-                  <td>
-                    {p.dokKTP ? (
-                      <a
-                        href={p.dokKTP}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 underline"
-                      >
-                        Lihat KTP
-                      </a>
+    <>
+      <SearchBar
+        onSearchChange={handleSearchChange}
+        placeholder="Search penjahit..."
+      />
+      <div className="overflow-x-auto">
+        <table className="table table-xs min-w-max w-full border border-base-content/5 bg-base-100">
+          <thead>
+            <tr className="text-center">
+              <th className="py-4 px-4 border border-base-content/5">No</th>
+              <th className="py-4 px-4 border border-base-content/5">Nama</th>
+              <th className="py-4 px-4 border border-base-content/5">Email</th>
+              <th className="py-4 px-4 border border-base-content/5">
+                No Telp
+              </th>
+              <th className="py-4 px-4 border border-base-content/5">Point</th>
+              <th className="py-4 px-4 border border-base-content/5">
+                Open To Work
+              </th>
+              <th className="py-4 px-4 border border-base-content/5">
+                Verifikasi
+              </th>
+              <th className="py-4 px-4 border border-base-content/5">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredPenjahit?.length > 0 ? (
+              filteredPenjahit.map((p, index) => (
+                <tr key={p._id}>
+                  <td className="text-center py-2 px-4 border border-base-content/5">
+                    {index + 1}
+                  </td>
+                  <td className="py-2 px-4">
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={p.user.profileImg || "/avatar.png"}
+                        alt={p.user.name}
+                        className="rounded-full w-8 h-8"
+                      />
+                      <p>{p.user.name || "Tidak tersedia"}</p>
+                    </div>
+                  </td>
+                  <td className="text-center py-2 px-4 border border-base-content/5">
+                    {p.user.email || "Tidak tersedia"}
+                  </td>
+                  <td className="text-center py-2 px-4 border border-base-content/5">
+                    {p.user.noTelp || "Tidak tersedia"}
+                  </td>
+                  <td className="text-center py-2 px-4 border border-base-content/5">
+                    <span>
+                      <img src="/jalinPoint.svg" className="w-3 inline" />{" "}
+                      {Number(p.point).toLocaleString("id-ID", {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      })}
+                    </span>
+                  </td>
+                  <td className="text-center py-2 px-4 border border-base-content/5">
+                    {p.openToWork ? "Iya" : "Tidak"}
+                  </td>
+                  <td className="text-center py-2 px-4 border border-base-content/5">
+                    {p.isVerified ? (
+                      <div className="flex justify-center items-center">
+                        <Icon
+                          icon="ix:success-filled"
+                          width="20"
+                          height="20"
+                          className="text-success"
+                        />
+                      </div>
                     ) : (
-                      "Tidak tersedia"
+                      <div className="flex justify-center items-center">
+                        <Icon
+                          icon="ix:namur-failure-filled"
+                          width="20"
+                          height="20"
+                          className="text-error"
+                        />
+                      </div>
                     )}
                   </td>
-                  <td>
-                    {p.dokPortofolio?.length > 0
-                      ? p.dokPortofolio.map((portofolio, i) => (
-                          <div key={i}>
-                            <a
-                              href={portofolio}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-500 underline"
-                            >
-                              Lihat Portofolio {i + 1}
-                            </a>
-                          </div>
-                        ))
-                      : "Tidak tersedia"}
-                  </td>
-                  <td>
-                    {p.kategori?.length > 0
-                      ? p.kategori
-                          .map(
-                            (id) =>
-                              category?.find((cat) => cat._id === id)?.name ||
-                              "Tidak ditemukan"
-                          )
-                          .join(", ")
-                      : "Tidak tersedia"}
-                  </td>
-                  <td>
-                    <span className="text-green-500">Terverifikasi</span>
-                  </td>
-                  <td>
-                    <button className="btn btn-primary mr-2">
+                  <td className="text-center py-2 px-4 border border-base-content/5">
+                    <Link
+                      to={`/admin/penjahit/${p._id}`}
+                      className="btn btn-primary mr-2"
+                    >
                       <Icon icon="carbon:view-filled" width="16" height="16" />
-                    </button>
+                    </Link>
                     <button className="btn btn-success mr-2">
                       <Icon icon="iconamoon:edit-fill" width="16" height="16" />
                     </button>
-                    <button className="btn btn-error">
+                    <button
+                      className="btn btn-error"
+                      onClick={() => setDeletingPenjahitId(p)}
+                    >
                       <Icon
                         icon="iconamoon:trash-fill"
                         width="16"
@@ -97,16 +133,50 @@ const ListPenjahit = () => {
                   </td>
                 </tr>
               ))
-          ) : (
-            <tr>
-              <td colSpan="10" className="text-center py-4 border">
-                Tidak ada penjahit yang terverifikasi.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
+            ) : (
+              <tr>
+                <td colSpan="10" className="text-center py-4">
+                  Tidak ada penjahit.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {deletingPenjahitId && (
+        <>
+          <div className="fixed inset-0 flex items-center justify-center bg-black opacity-50 z-40"></div>
+          <dialog open className="modal z-50">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg mb-4">Perhatian!</h3>
+              <p className="mb-4">
+                Anda yakin ingin menghapus penjahit{" "}
+                <span className="font-semibold">{deletingPenjahitId.name}</span>
+                ?
+              </p>
+              <div className="modal-action flex flex-col">
+                <button
+                  onClick={() => {
+                    deletePenjahitByIdByAdmin(deletingPenjahitId._id);
+                    setDeletingPenjahitId(null);
+                  }}
+                  className="btn bg-error text-white w-full"
+                >
+                  Hapus
+                </button>
+                <button
+                  className="btn bg-none font-light"
+                  onClick={() => setDeletingPenjahitId(null)}
+                >
+                  Batal
+                </button>
+              </div>
+            </div>
+          </dialog>
+        </>
+      )}
+    </>
   );
 };
 

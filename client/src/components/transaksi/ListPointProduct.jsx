@@ -1,12 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCreateTransaksiPoint } from "../../queries/penjahit/penjahitMutation";
 import { usePointProducts } from "../../queries/penjahit/penjahitQuery";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const insertSnapScript = () => {
   return new Promise((resolve) => {
     const script = document.createElement("script");
-    script.src = "https://app.midtrans.com/snap/snap.js";
+    script.src =
+      import.meta.env.VITE_NODE_ENV === "production"
+        ? "https://app.midtrans.com/snap/snap.js"
+        : "https://app.sandbox.midtrans.com/snap/snap.js";
     script.setAttribute(
       "data-client-key",
       import.meta.env.VITE_MIDTRANS_CLIENT_KEY
@@ -21,8 +24,22 @@ const ListPointProduct = ({ penjahit }) => {
 
   const { mutateAsync: createTransaksiPoint } = useCreateTransaksiPoint();
 
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
   useEffect(() => {
     insertSnapScript();
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setSelectedProduct(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   const handleCheckout = async (item) => {
@@ -103,7 +120,7 @@ const ListPointProduct = ({ penjahit }) => {
               </h3>
             </div>
             <button
-              onClick={() => handleCheckout(item)}
+              onClick={() => setSelectedProduct(item)}
               className="btn btn-primary"
             >
               Beli
@@ -111,6 +128,79 @@ const ListPointProduct = ({ penjahit }) => {
           </div>
         </div>
       ))}
+
+      {selectedProduct && (
+        <>
+          <div
+            className="fixed inset-0 bg-black opacity-50 z-40"
+            onClick={() => setSelectedProduct(null)}
+          ></div>
+
+          <dialog open className="modal z-50">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg mb-6">
+                Konfirmasi Pesanan Kamu!
+              </h3>
+              <div className="my-4">
+                <div className="flex gap-2 items-center mb-4">
+                  <img
+                    src={`/${selectedProduct.pointName}.svg`}
+                    className="w-8"
+                    alt=""
+                  />
+                  <h1 className="text-lg sm:text-2xl font-semibold ">
+                    {selectedProduct.pointName}
+                  </h1>
+                </div>
+                <p>
+                  Akan mendapatkan{" "}
+                  <span className="text-primary-jalin inline font-semibold">
+                    <img src="/jalinPoint.svg" className="w-4 inline" alt="" />
+                    {Number(selectedProduct.point).toLocaleString("id-ID", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })}
+                  </span>{" "}
+                  point
+                </p>
+              </div>
+              <div className="flex gap-2 items-center bg-blue-50 px-4 py-2 mb-8 rounded-lg">
+                <h3 className="text-error text-sm line-through">
+                  {Number(selectedProduct.price + 2000).toLocaleString(
+                    "id-ID",
+                    {
+                      style: "currency",
+                      currency: "IDR",
+                      minimumFractionDigits: 0,
+                    }
+                  )}
+                </h3>
+                <h3 className="text-lg font-medium">
+                  {Number(selectedProduct.price).toLocaleString("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                    minimumFractionDigits: 0,
+                  })}
+                </h3>
+              </div>
+              <div className="modal-action flex flex-col">
+                <button
+                  className="btn btn-primary w-full"
+                  onClick={() => handleCheckout(selectedProduct)}
+                >
+                  Bayar Sekarang
+                </button>
+                <button
+                  className="btn bg-none font-light"
+                  onClick={() => setSelectedProduct(null)}
+                >
+                  Batal
+                </button>
+              </div>
+            </div>
+          </dialog>
+        </>
+      )}
     </div>
   );
 };

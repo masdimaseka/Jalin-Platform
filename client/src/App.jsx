@@ -23,10 +23,12 @@ import LayoutAdmin from "./components/layouts/LayoutAdmin";
 import DashboardAdminPage from "./pages/admin/DashboardAdminPage";
 import LoginAdminPage from "./pages/admin/LoginAdminPage";
 import MenusAdminPage from "./pages/admin/MenusAdminPage";
-import PreviewFilePage from "./pages/admin/PreviewFileAdminPage";
 import NotFoundPage from "./pages/error/NotFoundPage";
 import EditProfilePenjahitPage from "./pages/pejahit/EditProfilePenjahitPage";
 import TopupPointPage from "./pages/pejahit/TopupPointPage";
+import ProfileUserAdminPage from "./pages/admin/ProfileUserAdminPage";
+import ProfilePenjahitAdminPage from "./pages/admin/ProfilePenjahitAdminPage";
+import DetailTransaksiAdminPage from "./pages/admin/DetailTransaksiAdminPage";
 
 const App = () => {
   const { data: authUser, isLoading: isLoading } = useAuthUser();
@@ -154,10 +156,32 @@ const App = () => {
                 authAdmin ? <MenusAdminPage /> : <Navigate to="/admin/login" />
               }
             />
+
+            <Route
+              path="/admin/user/:id"
+              element={
+                authAdmin ? (
+                  <ProfileUserAdminPage />
+                ) : (
+                  <Navigate to="/admin/login" />
+                )
+              }
+            />
+
             <Route
               path="/admin/penjahit"
               element={
                 authAdmin ? <MenusAdminPage /> : <Navigate to="/admin/login" />
+              }
+            />
+            <Route
+              path="/admin/penjahit/:id"
+              element={
+                authAdmin ? (
+                  <ProfilePenjahitAdminPage />
+                ) : (
+                  <Navigate to="/admin/login" />
+                )
               }
             />
             <Route
@@ -166,12 +190,39 @@ const App = () => {
                 authAdmin ? <MenusAdminPage /> : <Navigate to="/admin/login" />
               }
             />
+
             <Route
-              path="/admin/penjahit/verify/dok/:file"
-              element={<PreviewFilePage />}
+              path="/admin/transaksi"
+              element={
+                authAdmin ? <MenusAdminPage /> : <Navigate to="/admin/login" />
+              }
             />
             <Route
-              path="/admin/kategori"
+              path="/admin/transaksi/:id"
+              element={
+                authAdmin ? (
+                  <DetailTransaksiAdminPage />
+                ) : (
+                  <Navigate to="/admin/login" />
+                )
+              }
+            />
+
+            <Route
+              path="/admin/transaksi-point"
+              element={
+                authAdmin ? <MenusAdminPage /> : <Navigate to="/admin/login" />
+              }
+            />
+
+            <Route
+              path="/admin/category"
+              element={
+                authAdmin ? <MenusAdminPage /> : <Navigate to="/admin/login" />
+              }
+            />
+            <Route
+              path="/admin/category/create"
               element={
                 authAdmin ? <MenusAdminPage /> : <Navigate to="/admin/login" />
               }
@@ -180,7 +231,15 @@ const App = () => {
         )}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-      <Toaster />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            marginTop: "70px",
+            marginRight: "50px",
+          },
+        }}
+      />
     </>
   );
 };

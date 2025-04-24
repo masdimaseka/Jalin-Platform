@@ -21,7 +21,10 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: "https://www.jalin.my.id",
+    origin:
+      process.env.NODE_ENV === "production"
+        ? "https://www.jalin.my.id"
+        : "http://localhost:5173",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   })

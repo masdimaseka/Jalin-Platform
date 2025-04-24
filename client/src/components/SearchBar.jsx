@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const SearchBar = ({ onSearchChange }) => {
+const SearchBar = ({ onSearchChange, placeholder }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (event) => {
@@ -13,7 +13,7 @@ const SearchBar = ({ onSearchChange }) => {
     <div className="flex mb-4">
       <input
         type="text"
-        placeholder="Cari penjahit..."
+        placeholder={placeholder || "Search..."}
         className="input input-bordered w-full max-w-xs"
         value={searchTerm}
         onChange={handleSearch}
