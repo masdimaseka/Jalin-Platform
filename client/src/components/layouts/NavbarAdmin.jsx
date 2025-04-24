@@ -3,7 +3,6 @@ import { useAuthAdmin } from "../../queries/admin/adminQuery";
 import { useLogoutAdmin } from "../../queries/admin/adminMutation";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useState } from "react";
-import Category from "./../../../../server/models/category.model";
 
 const NavbarAdmin = () => {
   const [isOpen, setIsOpen] = useState(false);
