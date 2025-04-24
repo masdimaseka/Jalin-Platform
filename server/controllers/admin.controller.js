@@ -1,9 +1,9 @@
 import bcrypt from "bcryptjs";
 import { generateTokenAndSetCookieAdmin } from "../utils/generateTokenAndSetCookie.js";
-import Penjahit from "../models/penjahit.model.js";
-import User from "../models/user.model.js";
 import Admin from "../models/admin.model.js";
-import { decrypting } from "../utils/encryption.js";
+import Category from "./../models/category.model.js";
+import TransaksiPoint from "./../models/transaksiPoint.model.js";
+import Transaksi from "../models/transaksi.model.js";
 
 export const checkAuthAdmin = async (req, res) => {
   try {
@@ -43,74 +43,10 @@ export const logoutAdmin = async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "Lax",
-    domain: ".jalin.my.id",
+    ...(process.env.NODE_ENV === "production" && { domain: ".jalin.my.id" }),
   });
   res.json({ message: "Logged out" });
 };
-
-export const getPenjahitByAdmin = async (req, res) => {
-  try {
-    const penjahit = await Penjahit.find().populate(
-      "user",
-      "name username email noTelp address lastLogin profileImg"
-    );
-
-    const decryptedPenjahit = penjahit.map((p) => ({
-      ...p._doc,
-      dokKTP: decrypting(p.dokKTP),
-    }));
-
-    res.status(200).json(decryptedPenjahit);
-  } catch (error) {
-    console.log(`error in getPenjahit: ${error.message}`);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-export const verifyPenjahit = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const penjahit = await Penjahit.findByIdAndUpdate(
-      id,
-      { isVerified: true },
-      { new: true }
-    );
-
-    if (!penjahit) {
-      return res.status(404).json({ message: "Penjahit tidak ditemukan" });
-    }
-
-    await penjahit.save();
-
-    const userId = penjahit.user._id;
-    await User.findByIdAndUpdate(
-      userId,
-      { $set: { role: "penjahit" } },
-      { new: true, runValidators: true }
-    );
-
-    res
-      .status(200)
-      .json({ message: "Penjahit berhasil diverifikasi", penjahit });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Terjadi kesalahan pada server", error: error.message });
-  }
-};
-
-export const getUserByAdmin = async (req, res) => {
-  try {
-    const user = await User.find({ role: "user" });
-    res.status(200).json(user);
-  } catch (error) {
-    console.log(`error in getUser: ${error.message}`);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-import Category from "./../models/category.model.js";
 
 export const getCategoryByAdmin = async (req, res) => {
   try {
@@ -140,18 +76,93 @@ export const registerCategoryByAdmin = async (req, res) => {
   }
 };
 
-export const setPenjahitPremium = async (req, res) => {
+export const deleteCategoryByAdmin = async (req, res) => {
   try {
-    const { id } = req.params;
-    const premiumPenjahit = await Penjahit.findByIdAndUpdate(
-      id,
-      { isPremium: true },
-      { new: true }
+    const categories = await Category.findByIdAndDelete(req.params.id);
+    res.status(200).json(categories);
+  } catch (error) {
+    console.log(`error in deleteCategory: ${error.message}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getTransaksiPointByAdmin = async (req, res) => {
+  try {
+    const transaksi = await TransaksiPoint.find()
+      .populate({
+        path: "penjahit",
+        populate: {
+          path: "user",
+          select: "name username email noTelp address profileImg",
+        },
+      })
+      .populate("point", "pointName point")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(transaksi);
+  } catch (error) {
+    console.log(`error in getTransaksiPointByAdmin: ${error.message}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getTransaksiByAdmin = async (req, res) => {
+  try {
+    const now = new Date();
+    const threeDaysAgo = new Date();
+    threeDaysAgo.setDate(now.getDate() - 3);
+
+    await Transaksi.updateMany(
+      {
+        status: "Menunggu",
+        $or: [
+          { createdAt: { $lt: threeDaysAgo } },
+          { tenggatWaktu: { $lt: now } },
+        ],
+      },
+      { $set: { status: "Dibatalkan Sistem" } }
     );
 
-    res.json(premiumPenjahit);
+    const transaksi = await Transaksi.find()
+      .populate(
+        "user",
+        "name username profileImg email noTelp address lastLogin"
+      )
+      .populate({
+        path: "penjahit",
+        select: "user",
+        populate: {
+          path: "user",
+          select: "name username profileImg email noTelp address lastLogin",
+        },
+      });
+
+    res.json(transaksi);
   } catch (error) {
-    console.log(`error in setPenjahitPremium: ${error.message}`);
+    console.log(`error in getTransaksi: ${error.message}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getTransaksiByIdByAdmin = async (req, res) => {
+  try {
+    const transaksi = await Transaksi.findById(req.params.id)
+      .populate(
+        "user",
+        "name username profileImg email noTelp address lastLogin"
+      )
+      .populate({
+        path: "penjahit",
+        select: "user",
+        populate: {
+          path: "user",
+          select: "name username profileImg email noTelp address lastLogin",
+        },
+      });
+
+    res.json(transaksi);
+  } catch (error) {
+    console.log(`error in getTransaksi: ${error.message}`);
     res.status(500).json({ message: "Internal server error" });
   }
 };

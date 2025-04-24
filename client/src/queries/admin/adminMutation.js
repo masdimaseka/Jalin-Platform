@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "../../lib/axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export const useLoginAdmin = () => {
   const queryClient = useQueryClient();
@@ -36,14 +37,89 @@ export const useVerifyPenjahit = () => {
 
   return useMutation({
     mutationFn: async (penjahitId) => {
-      await axiosInstance.post(`/admin/verify/${penjahitId}`);
+      await axiosInstance.post(`/admin/penjahit/verify/${penjahitId}`);
     },
 
     onSuccess: () => {
       queryClient.invalidateQueries(["penjahit"]);
+      toast.success("berhasil diverifikasi!");
     },
     onError: (error) => {
       console.error("Gagal memverifikasi penjahit:", error);
+    },
+  });
+};
+
+export const useDeleteUserByIdByAdmin = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (userId) => {
+      await axiosInstance.delete(`/admin/user/${userId}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["userByAdmin"]);
+      toast.success("berhasil dihapus!");
+    },
+    onError: (error) => {
+      console.error("Gagal menghapus user:", error);
+      toast.error(error.response.data.message || "Something went wrong");
+    },
+  });
+};
+
+export const useDeletePenjahitByIdByAdmin = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (userId) => {
+      await axiosInstance.delete(`/admin/penjahit/${userId}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["penjahitByAdmin"]);
+      toast.success("berhasil dihapus!");
+    },
+    onError: (error) => {
+      console.error("Gagal menghapus penjahit:", error);
+      toast.error(error.response.data.message || "Something went wrong");
+    },
+  });
+};
+
+export const useCreateCategoryByAdmin = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: async (categoryData) => {
+      await axiosInstance.post("/admin/category/register", categoryData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["categoryByAdmin"]);
+      navigate("/admin/category");
+      toast.success("berhasil ditambahkan!");
+    },
+    onError: (error) => {
+      console.error("Gagal menambahkan kategori:", error);
+      toast.error(error.response.data.message || "Something went wrong");
+    },
+  });
+};
+
+export const useDeleteCategoryByIdByAdmin = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (categoryId) => {
+      await axiosInstance.delete(`/admin/category/${categoryId}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["categoryByAdmin"]);
+      toast.success("berhasil dihapus!");
+    },
+    onError: (error) => {
+      console.error("Gagal menghapus penjahit:", error);
+      toast.error(error.response.data.message || "Something went wrong");
     },
   });
 };

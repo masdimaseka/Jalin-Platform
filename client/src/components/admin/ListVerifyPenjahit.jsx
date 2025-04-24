@@ -1,117 +1,138 @@
-import { Link } from "react-router-dom";
 import { useVerifyPenjahit } from "../../queries/admin/adminMutation";
 import { usePenjahitByAdmin } from "../../queries/admin/adminQuery";
-import { useCategories } from "../../queries/penjahit/penjahitQuery";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const ListVerifyPenjahit = () => {
   const { data: penjahit } = usePenjahitByAdmin();
-  const { data: category } = useCategories();
   const { mutate: verifyPenjahit } = useVerifyPenjahit();
 
   const handleVerify = (penjahitId) => {
     verifyPenjahit(penjahitId);
   };
 
+  const filteredPenjahit = penjahit?.filter((p) => {
+    const notVerif = p.isVerified === false;
+    return notVerif;
+  });
+
   return (
     <div className="overflow-x-auto">
-      <table className="table table-xs min-w-max w-full">
+      <table className="table table-xs min-w-max w-full border border-base-content/5 bg-base-100">
         <thead>
           <tr className="text-center">
-            <th>No</th>
-            <th>Picture</th>
-            <th>Nama</th>
-            <th>Email</th>
-            <th>No Telp</th>
-            <th>Lokasi</th>
-            <th>Deskripsi</th>
-            <th>Rentang Harga</th>
-            <th>Dok. KTP</th>
-            <th>Dok. Portofolio</th>
-            <th>Kategori</th>
-            <th>Status Verifikasi</th>
-            <th>Verifikasi</th>
+            <th className="py-4 px-4 border border-base-content/5">No</th>
+            <th className="py-4 px-4 border border-base-content/5">Nama</th>
+            <th className="py-4 px-4 border border-base-content/5">Email</th>
+            <th className="py-4 px-4 border border-base-content/5">No Telp</th>
+            <th className="py-4 px-4 border border-base-content/5">Lokasi</th>
+            <th className="py-4 px-4 border border-base-content/5">
+              Deskripsi
+            </th>
+            <th className="py-4 px-4 border border-base-content/5">
+              Rentang Harga
+            </th>
+            <th className="py-4 px-4 border border-base-content/5">Dok. KTP</th>
+            <th className="py-4 px-4 border border-base-content/5">
+              Dok. Portofolio
+            </th>
+            <th className="py-4 px-4 border border-base-content/5">Kategori</th>
+            <th className="py-4 px-4 border border-base-content/5">
+              Status Verifikasi
+            </th>
+            <th className="py-4 px-4 border border-base-content/5">
+              Verifikasi
+            </th>
           </tr>
         </thead>
         <tbody>
-          {penjahit?.length > 0 ? (
-            penjahit
-              .filter((p) => !p.isVerified)
-              .map((p, index) => (
-                <tr key={p._id} className="text-center">
-                  <td>{index + 1}</td>
-                  <td>
+          {filteredPenjahit?.length > 0 ? (
+            filteredPenjahit.map((p, index) => (
+              <tr key={p._id} className="text-center">
+                <td className="text-center py-2 px-4 border border-base-content/5">
+                  {index + 1}
+                </td>
+                <td className="text-center py-2 px-4 border border-base-content/5">
+                  <div className="flex items-center gap-2">
                     <img
                       src={p.user?.profileImg || "/avatar.png"}
                       alt={p.user?.name}
                       className="rounded-full w-8 h-8"
                     />
-                  </td>
-                  <td>{p.user?.name || "Tidak tersedia"}</td>
-                  <td>{p.user?.email || "Tidak tersedia"}</td>
-                  <td>{p.user?.noTelp || "Tidak tersedia"}</td>
-                  <td>{p.user?.address || "Tidak tersedia"}</td>
-                  <td className="max-w-xs break-words whitespace-normal text-justify">
-                    {p.description || "Tidak tersedia"}
-                  </td>
+                    <p>{p.user?.name || "Tidak tersedia"}</p>
+                  </div>
+                </td>
+                <td className="text-center py-2 px-4 border border-base-content/5">
+                  {p.user?.email || "Tidak tersedia"}
+                </td>
+                <td className="text-center py-2 px-4 border border-base-content/5">
+                  {p.user?.noTelp || "Tidak tersedia"}
+                </td>
+                <td className="text-center py-2 px-4 border border-base-content/5">
+                  {p.user?.address || "Tidak tersedia"}
+                </td>
+                <td className="max-w-xs break-words whitespace-normal text-justify py-2 px-4 border border-base-content/5">
+                  {p.description || "Tidak tersedia"}
+                </td>
 
-                  <td>{p.rentangHarga || "Tidak tersedia"}</td>
-                  <td>
-                    {p.dokKTP ? (
-                      <Link
-                        to={p.dokKTP}
+                <td className="text-center py-2 px-4 border border-base-content/5">
+                  {p.rentangHarga || "Tidak tersedia"}
+                </td>
+                <td className="text-center py-2 px-4 border border-base-content/5">
+                  <a
+                    href={p.dokKTP}
+                    className="badge badge-info underline"
+                    target="_blank"
+                  >
+                    <Icon
+                      icon="material-symbols:id-card"
+                      width="16"
+                      height="16"
+                    />
+                    <p className="text-xs">Lihat Dokumen</p>
+                  </a>
+                </td>
+                <td className="text-center py-2 px-4 border border-base-content/5">
+                  <div className="w-80 flex flex-wrap justify-center gap-2">
+                    {p.dokPortofolio.map((dok, index) => (
+                      <a
+                        key={index}
+                        href={dok}
+                        className="badge badge-info underline mr-2"
                         target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 underline"
                       >
-                        Lihat KTP
-                      </Link>
-                    ) : (
-                      "Tidak tersedia"
-                    )}
-                  </td>
-                  <td>
-                    {p.dokPortofolio?.length > 0
-                      ? p.dokPortofolio.map((portofolio, i) => (
-                          <div key={i}>
-                            <Link
-                              to={"/admin/penjahit/verify/dok/" + portofolio}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-500 underline"
-                            >
-                              Lihat Portofolio {i + 1}
-                            </Link>
-                          </div>
-                        ))
-                      : "Tidak tersedia"}
-                  </td>
-                  <td>
-                    {p.kategori?.length > 0
-                      ? p.kategori
-                          .map(
-                            (id) =>
-                              category?.find((cat) => cat._id === id)?.name ||
-                              "Tidak ditemukan"
-                          )
-                          .join(", ")
-                      : "Tidak tersedia"}
-                  </td>
-                  <td>
-                    <span className="text-red-500">Belum Terverifikasi</span>
-                  </td>
-                  <td>
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => handleVerify(p._id)}
-                    >
-                      Verifikasi
-                    </button>
-                  </td>
-                </tr>
-              ))
+                        <Icon icon="f7:doc-fill" width="16" height="16" />
+                        <p className="text-xs">Lihat Proto {index + 1}</p>
+                      </a>
+                    ))}
+                  </div>
+                </td>
+                <td className="py-2 px-4 border border-base-content/5">
+                  <div className="w-60 flex flex-wrap justify-center gap-2">
+                    {p.kategori.map((k, i) => (
+                      <div key={i} className="badge badge-outline mr-1">
+                        {k.name}
+                      </div>
+                    ))}
+                  </div>
+                </td>
+                <td className="text-center py-2 px-4 border border-base-content/5">
+                  <div className="badge badge-error" target="_blank">
+                    <p className="text-xs font-bold">Belum Terverifikasi</p>
+                  </div>
+                </td>
+                <td className="text-center py-2 px-4 border border-base-content/5">
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => handleVerify(p._id)}
+                  >
+                    Verifikasi
+                  </button>
+                </td>
+              </tr>
+            ))
           ) : (
             <tr>
-              <td colSpan="10" className="text-center py-4 border">
+              <td colSpan="13" className="text-center py-4">
                 Tidak ada penjahit untuk diverifikasi.
               </td>
             </tr>

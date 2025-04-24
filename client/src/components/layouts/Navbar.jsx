@@ -151,6 +151,7 @@ const Navbar = () => {
                   <Link
                     to="/penjahit/dashboard"
                     className="btn btn-primary text-white w-full relative"
+                    onClick={() => setIsOpen(false)}
                   >
                     Dashboard Penjahit
                     {pendingTransaksiCount > 0 && (
@@ -163,6 +164,7 @@ const Navbar = () => {
                   <Link
                     to="/penjahit/register"
                     className="btn btn-primary text-white w-full"
+                    onClick={() => setIsOpen(false)}
                   >
                     Daftar Penjahit
                   </Link>
@@ -170,6 +172,7 @@ const Navbar = () => {
                 <Link
                   to="/dashboard"
                   className="btn btn-primary text-white w-full flex items-center gap-2"
+                  onClick={() => setIsOpen(false)}
                 >
                   <img
                     src={authUser.profileImg || "/avatar.png"}

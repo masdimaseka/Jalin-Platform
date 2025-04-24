@@ -34,12 +34,43 @@ export const usePenjahitByAdmin = () => {
   });
 };
 
+export const usePenjahitByIdByAdmin = (id) => {
+  return useQuery({
+    queryKey: ["penjahitByIdByAdmin"],
+    queryFn: async () => {
+      try {
+        const res = await axiosInstance.get("/admin/penjahit/" + id);
+        return res.data;
+      } catch (err) {
+        if (err.response && err.response.status === 401) return null;
+        toast.error(err.response.data.message || "Something went wrong");
+        return null;
+      }
+    },
+  });
+};
+
 export const useUserByAdmin = () => {
   return useQuery({
     queryKey: ["userByAdmin"],
     queryFn: async () => {
       try {
         const res = await axiosInstance.get("/admin/user");
+        return res.data;
+      } catch (err) {
+        if (err.response && err.response.status === 401) return null;
+        toast.error(err.response.data.message || "Something went wrong");
+        return null;
+      }
+    },
+  });
+};
+export const useUserByIdByAdmin = (id) => {
+  return useQuery({
+    queryKey: ["userByIdByAdmin"],
+    queryFn: async () => {
+      try {
+        const res = await axiosInstance.get("/admin/user/" + id);
         return res.data;
       } catch (err) {
         if (err.response && err.response.status === 401) return null;
@@ -56,6 +87,54 @@ export const useCategoryByAdmin = () => {
     queryFn: async () => {
       try {
         const res = await axiosInstance.get("/admin/category");
+        return res.data;
+      } catch (err) {
+        if (err.response && err.response.status === 401) return null;
+        toast.error(err.response.data.message || "Something went wrong");
+        return null;
+      }
+    },
+  });
+};
+
+export const useTransaksiPointByAdmin = () => {
+  return useQuery({
+    queryKey: ["transaksiPointByAdmin"],
+    queryFn: async () => {
+      try {
+        const res = await axiosInstance.get("/admin/transaksi-point");
+        return res.data;
+      } catch (err) {
+        if (err.response && err.response.status === 401) return null;
+        toast.error(err.response.data.message || "Something went wrong");
+        return null;
+      }
+    },
+  });
+};
+
+export const useTransaksiByAdmin = () => {
+  return useQuery({
+    queryKey: ["transaksiByAdmin"],
+    queryFn: async () => {
+      try {
+        const res = await axiosInstance.get("/admin/transaksi");
+        return res.data;
+      } catch (err) {
+        if (err.response && err.response.status === 401) return null;
+        toast.error(err.response.data.message || "Something went wrong");
+        return null;
+      }
+    },
+  });
+};
+
+export const useTransaksiByIdByAdmin = (id) => {
+  return useQuery({
+    queryKey: ["transaksiByIdByAdmin"],
+    queryFn: async () => {
+      try {
+        const res = await axiosInstance.get("/admin/transaksi/" + id);
         return res.data;
       } catch (err) {
         if (err.response && err.response.status === 401) return null;

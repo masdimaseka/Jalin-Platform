@@ -91,6 +91,9 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Please verify your email" });
     }
 
+    user.lastLogin = new Date();
+    await user.save();
+
     generateTokenAndSetCookie(res, user._id);
 
     res.status(200).json({ message: "Login successful" });
@@ -105,7 +108,7 @@ export const logout = async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "Lax",
-    domain: ".jalin.my.id",
+    ...(process.env.NODE_ENV === "production" && { domain: ".jalin.my.id" }),
   });
   res.json({ message: "Logged out" });
 };
