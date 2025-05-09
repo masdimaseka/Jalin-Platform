@@ -114,13 +114,10 @@ export const CardTransaksiForPenjahit = ({ transaksi }) => {
               color="red"
             />
             <p className="text-sm">
-              {new Date(transaksi.tenggatWaktu).toLocaleDateString("id-ID", {
+              {new Date(transaksi.tenggatWaktu).toLocaleString("id-ID", {
                 day: "numeric",
                 month: "long",
                 year: "numeric",
-              })}{" "}
-              pukul{" "}
-              {new Date(transaksi.tenggatWaktu).toLocaleTimeString("id-ID", {
                 hour: "2-digit",
                 minute: "2-digit",
               })}
