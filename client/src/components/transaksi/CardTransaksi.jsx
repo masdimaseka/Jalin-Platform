@@ -36,6 +36,7 @@ export const CardTransaksiForCustomer = ({ transaksi }) => {
                 year: "numeric",
                 hour: "2-digit",
                 minute: "2-digit",
+                timeZone: "UTC",
               })}
             </p>
           </span>
@@ -120,6 +121,7 @@ export const CardTransaksiForPenjahit = ({ transaksi }) => {
                 year: "numeric",
                 hour: "2-digit",
                 minute: "2-digit",
+                timeZone: "UTC",
               })}
             </p>
           </span>

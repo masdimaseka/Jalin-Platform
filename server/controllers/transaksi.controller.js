@@ -128,8 +128,14 @@ export const getTransaksiPenjahit = async (req, res) => {
     threeDaysAgo.setDate(now.getDate() - 3);
 
     await Transaksi.updateMany(
-      { createdAt: { $lt: threeDaysAgo }, status: "Menunggu" },
-      { $set: { status: "Dibatalkan" } }
+      {
+        status: "Menunggu",
+        $or: [
+          { createdAt: { $lt: threeDaysAgo } },
+          { tenggatWaktu: { $lt: now } },
+        ],
+      },
+      { $set: { status: "Dibatalkan Sistem" } }
     );
 
     const transaksi = await Transaksi.find({ penjahit: penjahitId })
@@ -159,8 +165,14 @@ export const getTransaksiPenjahitWaiting = async (req, res) => {
     threeDaysAgo.setDate(now.getDate() - 3);
 
     await Transaksi.updateMany(
-      { createdAt: { $lt: threeDaysAgo }, status: "Menunggu" },
-      { $set: { status: "Dibatalkan" } }
+      {
+        status: "Menunggu",
+        $or: [
+          { createdAt: { $lt: threeDaysAgo } },
+          { tenggatWaktu: { $lt: now } },
+        ],
+      },
+      { $set: { status: "Dibatalkan Sistem" } }
     );
 
     const transaksi = await Transaksi.find({
