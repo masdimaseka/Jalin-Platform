@@ -87,7 +87,7 @@ export const createTransaksiToPenjahit = async (req, res) => {
 export const getTransaksi = async (req, res) => {
   try {
     const now = new Date();
-    now.setTime(now.getTime() + 7 * 60 * 60 * 1000);
+    now.setTime(now.getTime() + 8 * 60 * 60 * 1000);
     const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
 
     await Transaksi.updateMany(
@@ -124,7 +124,7 @@ export const getTransaksiPenjahit = async (req, res) => {
     const penjahitId = req.params.id;
 
     const now = new Date();
-    now.setTime(now.getTime() + 7 * 60 * 60 * 1000);
+    now.setTime(now.getTime() + 8 * 60 * 60 * 1000);
     const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
 
     await Transaksi.updateMany(
@@ -161,7 +161,7 @@ export const getTransaksiPenjahitWaiting = async (req, res) => {
     const penjahitId = req.params.id;
 
     const now = new Date();
-    now.setTime(now.getTime() + 7 * 60 * 60 * 1000);
+    now.setTime(now.getTime() + 8 * 60 * 60 * 1000);
     const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
 
     await Transaksi.updateMany(
