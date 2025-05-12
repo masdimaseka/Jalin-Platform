@@ -164,24 +164,42 @@ const ListPointProduct = ({ penjahit }) => {
                   point
                 </p>
               </div>
-              <div className="flex gap-2 items-center bg-blue-50 px-4 py-2 mb-8 rounded-lg">
-                <h3 className="text-error text-sm line-through">
-                  {Number(selectedProduct.price + 2000).toLocaleString(
-                    "id-ID",
-                    {
+              <div className=" bg-blue-50 p-4 mb-8 rounded-lg">
+                <div className="flex justify-between mb-2">
+                  <h3 className="text-md ">Harga point</h3>
+                  <h3 className="text-md ">
+                    {Number(selectedProduct.price - 4440).toLocaleString(
+                      "id-ID",
+                      {
+                        style: "currency",
+                        currency: "IDR",
+                        minimumFractionDigits: 0,
+                      }
+                    )}
+                  </h3>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <h3 className="text-md">Admin + PPN</h3>
+                  <h3 className="text-md">
+                    {Number(
+                      selectedProduct.price - selectedProduct.point
+                    ).toLocaleString("id-ID", {
                       style: "currency",
                       currency: "IDR",
                       minimumFractionDigits: 0,
-                    }
-                  )}
-                </h3>
-                <h3 className="text-lg font-medium">
-                  {Number(selectedProduct.price).toLocaleString("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                    minimumFractionDigits: 0,
-                  })}
-                </h3>
+                    })}
+                  </h3>
+                </div>
+                <div className="flex justify-between mt-4 pt-4 border-t-1 border-gray-300">
+                  <h3 className="text-lg font-semibold">Total : </h3>
+                  <h3 className="text-lg font-semibold">
+                    {Number(selectedProduct.price).toLocaleString("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                      minimumFractionDigits: 0,
+                    })}
+                  </h3>
+                </div>
               </div>
               <div className="modal-action flex flex-col">
                 <button

@@ -8,22 +8,26 @@ export const createTransaksi = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const { judul, deskripsi, image, tenggatWaktu } = req.body;
+    const { judul, deskripsi, images, tenggatWaktu } = req.body;
 
-    let uploadedImgUrl = null;
+    let uploadedImgUrls = [];
 
-    if (image) {
-      const uploadedImg = await cloudinary.uploader.upload(image, {
-        folder: "jalin/transaksi",
-      });
-      uploadedImgUrl = uploadedImg.secure_url;
+    if (Array.isArray(images) && images.length > 0) {
+      uploadedImgUrls = await Promise.all(
+        images.map(async (file) => {
+          const upload = await cloudinary.uploader.upload(file, {
+            folder: "jalin/transaksi",
+          });
+          return upload.secure_url;
+        })
+      );
     }
 
     const transaksiBaru = new Transaksi({
       user: userId,
       judul,
       deskripsi,
-      image: uploadedImgUrl,
+      image: uploadedImgUrls,
       tenggatWaktu,
     });
 
@@ -42,16 +46,26 @@ export const createTransaksiToPenjahit = async (req, res) => {
   try {
     const userId = req.user._id;
     const penjahitId = req.params.id;
-    const { judul, deskripsi, image, tenggatWaktu, prosesPengerjaan, catatan } =
-      req.body;
+    const {
+      judul,
+      deskripsi,
+      images,
+      tenggatWaktu,
+      prosesPengerjaan,
+      catatan,
+    } = req.body;
 
-    let uploadedImgUrl = null;
+    let uploadedImgUrls = [];
 
-    if (image) {
-      const uploadedImg = await cloudinary.uploader.upload(image, {
-        folder: "jalin/transaksi",
-      });
-      uploadedImgUrl = uploadedImg.secure_url;
+    if (Array.isArray(images) && images.length > 0) {
+      uploadedImgUrls = await Promise.all(
+        images.map(async (file) => {
+          const upload = await cloudinary.uploader.upload(file, {
+            folder: "jalin/transaksi",
+          });
+          return upload.secure_url;
+        })
+      );
     }
 
     const transaksi = new Transaksi({
@@ -59,7 +73,7 @@ export const createTransaksiToPenjahit = async (req, res) => {
       penjahit: penjahitId,
       judul,
       deskripsi,
-      image: uploadedImgUrl,
+      image: uploadedImgUrls,
       tenggatWaktu: tenggatWaktu ? new Date(tenggatWaktu) : null,
       prosesPengerjaan,
       catatan,

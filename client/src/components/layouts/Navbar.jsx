@@ -108,6 +108,15 @@ const Navbar = () => {
           </ul>
 
           <div className="lg:hidden ">
+            {!authUser && (
+              <Link
+                to="/login"
+                className="btn btn-white text-primary-jalin font-bold"
+              >
+                Bergabung
+              </Link>
+            )}
+
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="btn btn-ghost relative"
@@ -145,7 +154,7 @@ const Navbar = () => {
                 </Link>
               </li>
             ))}
-            {authUser ? (
+            {authUser && (
               <div className="flex flex-col gap-2 mt-4">
                 {userPenjahit ? (
                   <Link
@@ -182,13 +191,6 @@ const Navbar = () => {
                   <span>{authUser.username}</span>
                 </Link>
               </div>
-            ) : (
-              <Link
-                to="/login"
-                className="btn btn-primary text-white w-full mt-4"
-              >
-                Bergabung
-              </Link>
             )}
           </ul>
         )}
