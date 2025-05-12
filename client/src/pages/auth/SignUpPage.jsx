@@ -26,7 +26,7 @@ const SignUpPage = () => {
 
         <SignUpForm />
 
-        <p className="text-xs mt-2 text-center">
+        <p className="mt-2 text-center">
           Sudah punya akun?{" "}
           <Link to="/login" className="text-secondary-jalin">
             Masuk disini

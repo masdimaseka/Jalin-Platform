@@ -5,7 +5,7 @@ export const CardTransaksiForCustomer = ({ transaksi }) => {
     <div className="card bg-base-100 w-80 shadow-sm">
       <figure className="w-full h-48 overflow-hidden rounded-lg">
         <img
-          src={transaksi.image || "/banner.png"}
+          src={transaksi.image[0] || "/banner.png"}
           alt="Jahitan"
           className="w-full h-full object-cover"
         />
@@ -90,7 +90,7 @@ export const CardTransaksiForPenjahit = ({ transaksi }) => {
     <div className="card bg-base-100 w-80 shadow-sm">
       <figure className="w-full h-48 overflow-hidden rounded-lg">
         <img
-          src={transaksi.image || "/banner.png"}
+          src={transaksi.image[0] || "/banner.png"}
           alt="Jahitan"
           className="w-full h-full object-cover"
         />

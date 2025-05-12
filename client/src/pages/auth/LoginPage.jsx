@@ -12,7 +12,7 @@ const LoginPage = () => {
 
         <LoginForm />
 
-        <p className="text-xs mt-2 text-center">
+        <p className="mt-2 text-center">
           Belum punya akun?{" "}
           <Link to="/signup" className="text-secondary-jalin">
             Daftar disini

@@ -8,7 +8,9 @@ export const useCreateTransaksi = () => {
 
   return useMutation({
     mutationFn: async (transaksiData) => {
-      const res = await axiosInstance.post(`/transaksi/create`, transaksiData);
+      const res = await axiosInstance.post(`/transaksi/create`, transaksiData, {
+        headers: { "Content-Type": "application/json" },
+      });
       return res.data;
     },
     onSuccess: () => {
@@ -34,7 +36,10 @@ export const useCreateTransaksiToPenjahit = () => {
     mutationFn: async (transaksiData) => {
       const res = await axiosInstance.post(
         `/transaksi/create/${transaksiData.penjahitId}`,
-        transaksiData
+        transaksiData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
       );
       return res.data;
     },
