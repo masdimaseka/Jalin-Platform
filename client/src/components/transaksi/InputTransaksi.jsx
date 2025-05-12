@@ -27,8 +27,8 @@ const InputTransaksi = () => {
 
   const handleImgChange = (e) => {
     const files = Array.from(e.target.files);
-    if (images.length + files.length > 5) {
-      toast.error("Maksimal upload 5 gambar");
+    if (images.length + files.length > 3) {
+      toast.error("Maksimal upload 3 gambar");
       return;
     }
 
@@ -147,7 +147,7 @@ const InputTransaksi = () => {
               accept="image/*"
             />
             <p className="text-xs font-light mt-2">
-              *Maksimal 5 gambar, ukuran max 7MB
+              *Maksimal 3 gambar, ukuran max 5MB
             </p>
             <div className="flex flex-wrap gap-2 mt-4">
               {previewImgs.map((src, index) => (
