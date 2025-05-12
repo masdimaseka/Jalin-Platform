@@ -2,15 +2,16 @@ import { Link } from "react-router-dom";
 import { usePenjahitById } from "../../queries/penjahit/penjahitQuery";
 import { useRef, useState } from "react";
 import { useCreateTransaksiToPenjahit } from "../../queries/transaksi/transaksiMutation";
+import { Icon } from "@iconify/react";
 
 const InputTransaksiToPenjahit = ({ id }) => {
   const [judul, setJudul] = useState("");
   const [deskripsi, setDeskripsi] = useState("");
   const [tenggatWaktu, setTenggatWaktu] = useState("");
-  const [catatan, setCatatan] = useState(""); // Tambahkan state catatan
-  const [prosesPengerjaan, setProsesPengerjaan] = useState("Diantar"); // Tambahkan state proses pengerjaan
-  const [image, setImage] = useState(null);
-  const [previewImg, setPreviewImg] = useState(null);
+  const [catatan, setCatatan] = useState("");
+  const [prosesPengerjaan, setProsesPengerjaan] = useState("Diantar");
+  const [images, setImages] = useState([]);
+  const [previewImgs, setPreviewImgs] = useState([]);
 
   const { data: penjahitById, isLoading } = usePenjahitById(id);
   const fileInputRef = useRef(null);
@@ -27,17 +28,31 @@ const InputTransaksiToPenjahit = ({ id }) => {
   };
 
   const handleImgChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-    if (file) {
-      readFileAsDataURL(file).then(setPreviewImg);
-    } else {
-      setPreviewImg(null);
+    const files = Array.from(e.target.files);
+    if (images.length + files.length > 5) {
+      alert("Maksimal upload 5 gambar.");
+      return;
     }
+
+    setImages((prev) => [...prev, ...files]);
+
+    Promise.all(files.map((file) => readFileAsDataURL(file))).then(
+      (newPreviews) => setPreviewImgs((prev) => [...prev, ...newPreviews])
+    );
+  };
+
+  const handleRemoveImage = (index) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+    setPreviewImgs((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (images.length === 0) {
+      alert("Harap upload minimal 1 gambar.");
+      return;
+    }
 
     const createData = {
       penjahitId: id,
@@ -48,8 +63,10 @@ const InputTransaksiToPenjahit = ({ id }) => {
       catatan,
     };
 
-    if (image) {
-      createData.image = await readFileAsDataURL(image);
+    if (images.length > 0) {
+      createData.images = await Promise.all(
+        images.map((file) => readFileAsDataURL(file))
+      );
     }
 
     createTransaksiToPenjahit(createData);
@@ -135,19 +152,35 @@ const InputTransaksiToPenjahit = ({ id }) => {
               ref={fileInputRef}
               onChange={handleImgChange}
               className="file-input file-input-bordered w-full"
-              required
+              multiple
               accept="image/*"
+              required
             />
             <p className="text-xs font-light mt-2">
-              *Disarankan untuk upload gambar horizontal (max 7MB)
+              * Maksimal 5 gambar, ukuran max 7MB
             </p>
-            {previewImg && (
-              <img
-                src={previewImg}
-                alt="Preview"
-                className="rounded-md lg:w-1/2 mt-4"
-              />
-            )}
+            <div className="flex flex-wrap gap-2 mt-4">
+              {previewImgs.map((src, index) => (
+                <div key={index} className="relative">
+                  <img
+                    src={src}
+                    alt={`Preview ${index + 1}`}
+                    className="rounded-md w-32 h-32 object-cover"
+                  />
+                  <button
+                    type="button"
+                    className="absolute top-0 right-0  bg-red-500 text-white cursor-pointer rounded-full"
+                    onClick={() => handleRemoveImage(index)}
+                  >
+                    <Icon
+                      icon="material-symbols:cancel"
+                      width="24"
+                      height="24"
+                    />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div>

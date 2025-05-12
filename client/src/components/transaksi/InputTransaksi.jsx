@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { useRef, useState } from "react";
 import { useCreateTransaksi } from "../../queries/transaksi/transaksiMutation";
+import toast from "react-hot-toast";
+import { Icon } from "@iconify/react";
 
 const InputTransaksi = () => {
   const [judul, setJudul] = useState("");
@@ -8,8 +10,8 @@ const InputTransaksi = () => {
   const [tenggatWaktu, setTenggatWaktu] = useState("");
   const [catatan, setCatatan] = useState("");
   const [prosesPengerjaan, setProsesPengerjaan] = useState("Diantar");
-  const [image, setImage] = useState(null);
-  const [previewImg, setPreviewImg] = useState(null);
+  const [images, setImages] = useState([]);
+  const [previewImgs, setPreviewImgs] = useState([]);
 
   const fileInputRef = useRef(null);
   const { mutate: createTransaksi, isPending } = useCreateTransaksi();
@@ -24,17 +26,32 @@ const InputTransaksi = () => {
   };
 
   const handleImgChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-    if (file) {
-      readFileAsDataURL(file).then(setPreviewImg);
-    } else {
-      setPreviewImg(null);
+    const files = Array.from(e.target.files);
+    if (images.length + files.length > 5) {
+      toast.error("Maksimal upload 5 gambar");
+      return;
     }
+
+    setImages((prev) => [...prev, ...files]);
+
+    Promise.all(files.map((file) => readFileAsDataURL(file))).then(
+      (newPreviews) => setPreviewImgs((prev) => [...prev, ...newPreviews])
+    );
+  };
+
+  const handleRemoveImage = (index) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+    setPreviewImgs((prev) => prev.filter((_, i) => i !== index));
+    toast.success("Gambar berhasil dihapus");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (images.length === 0) {
+      toast.error("Harap upload minimal 1 gambar");
+      return;
+    }
 
     const createData = {
       judul,
@@ -44,11 +61,19 @@ const InputTransaksi = () => {
       catatan,
     };
 
-    if (image) {
-      createData.image = await readFileAsDataURL(image);
+    if (images.length > 0) {
+      const imagesUrl = await Promise.all(
+        [...images].map((file) => readFileAsDataURL(file))
+      );
+      createData.images = imagesUrl;
     }
 
-    createTransaksi(createData);
+    console.log(createData);
+
+    createTransaksi(createData, {
+      onSuccess: () => toast.success("Transaksi berhasil dibuat"),
+      onError: () => toast.error("Gagal membuat transaksi"),
+    });
   };
 
   return (
@@ -57,7 +82,6 @@ const InputTransaksi = () => {
         <h1 className="text-2xl sm:text-4xl font-semibold mb-8">
           Buat Jahitan
         </h1>
-        <h1></h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium">Judul Pekerjaan</label>
@@ -119,19 +143,34 @@ const InputTransaksi = () => {
               ref={fileInputRef}
               onChange={handleImgChange}
               className="file-input file-input-bordered w-full"
-              required
+              multiple
               accept="image/*"
             />
             <p className="text-xs font-light mt-2">
-              *Disarankan untuk upload gambar landscape (max 7MB)
+              *Maksimal 5 gambar, ukuran max 7MB
             </p>
-            {previewImg && (
-              <img
-                src={previewImg}
-                alt="Preview"
-                className="rounded-md lg:w-1/2 mt-4"
-              />
-            )}
+            <div className="flex flex-wrap gap-2 mt-4">
+              {previewImgs.map((src, index) => (
+                <div key={index} className="relative">
+                  <img
+                    src={src}
+                    alt={`Preview ${index + 1}`}
+                    className="rounded-md w-32 h-32 object-cover"
+                  />
+                  <button
+                    type="button"
+                    className="absolute top-0 right-0  bg-red-500 text-white cursor-pointer rounded-full"
+                    onClick={() => handleRemoveImage(index)}
+                  >
+                    <Icon
+                      icon="material-symbols:cancel"
+                      width="24"
+                      height="24"
+                    />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div>

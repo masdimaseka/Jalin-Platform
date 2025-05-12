@@ -28,10 +28,14 @@ const DetailTransaksiAdminPage = () => {
                 Image
               </td>
               <td className="py-4 px-4 border border-base-content/5">
-                <img
-                  src={transaksiByAdmin?.image || "/avatar.png"}
-                  className="w-60"
-                />
+                {transaksiByAdmin.image.map((imgSrc, index) => (
+                  <img
+                    key={index}
+                    src={imgSrc || "/avatar.png"}
+                    className="w-60 my-4"
+                    alt={`Image ${index + 1}`}
+                  />
+                ))}
               </td>
             </tr>
             <tr>
