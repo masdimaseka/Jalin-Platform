@@ -8,7 +8,14 @@ export const createTransaksi = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const { judul, deskripsi, images, tenggatWaktu } = req.body;
+    const {
+      judul,
+      deskripsi,
+      images,
+      tenggatWaktu,
+      prosesPengerjaan,
+      catatan,
+    } = req.body;
 
     let uploadedImgUrls = [];
 
@@ -29,6 +36,8 @@ export const createTransaksi = async (req, res) => {
       deskripsi,
       image: uploadedImgUrls,
       tenggatWaktu,
+      pengerjaan: prosesPengerjaan,
+      catatan,
     });
 
     await transaksiBaru.save();
@@ -75,7 +84,7 @@ export const createTransaksiToPenjahit = async (req, res) => {
       deskripsi,
       image: uploadedImgUrls,
       tenggatWaktu: tenggatWaktu ? new Date(tenggatWaktu) : null,
-      prosesPengerjaan,
+      pengerjaan: prosesPengerjaan,
       catatan,
     });
 
@@ -116,6 +125,27 @@ export const getTransaksi = async (req, res) => {
     );
 
     const transaksi = await Transaksi.find()
+      .populate("user", "name profileImg email noTelp address lastLogin")
+      .populate({
+        path: "penjahit",
+        select: "user",
+        populate: {
+          path: "user",
+          select: "name profileImg email noTelp address lastLogin",
+        },
+      });
+
+    res.json(transaksi);
+  } catch (error) {
+    console.log(`error in getTransaksi: ${error.message}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getTransaksiById = async (req, res) => {
+  try {
+    const transaksiId = req.params.id;
+    const transaksi = await Transaksi.findById(transaksiId)
       .populate("user", "name profileImg email noTelp address lastLogin")
       .populate({
         path: "penjahit",
@@ -202,6 +232,32 @@ export const getTransaksiPenjahitWaiting = async (req, res) => {
           select: "name profileImg email noTelp address lastLogin",
         },
       });
+
+    res.json(transaksi);
+  } catch (error) {
+    console.log(`error in getTransaksi: ${error.message}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const acceptTransaksiPenjahit = async (req, res) => {
+  try {
+    const transaksiId = req.params.id;
+
+    const penjahitId = req.body.penjahitId;
+
+    const penjahit = await Penjahit.findByIdAndUpdate(
+      penjahitId,
+      { $inc: { point: -2000 } },
+      { new: true }
+    );
+    await penjahit.save();
+
+    const transaksi = await Transaksi.findByIdAndUpdate(
+      transaksiId,
+      { status: "Diproses", penjahit: penjahitId },
+      { new: true }
+    );
 
     res.json(transaksi);
   } catch (error) {
