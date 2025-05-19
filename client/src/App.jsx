@@ -29,6 +29,7 @@ import TopupPointPage from "./pages/pejahit/TopupPointPage";
 import ProfileUserAdminPage from "./pages/admin/ProfileUserAdminPage";
 import ProfilePenjahitAdminPage from "./pages/admin/ProfilePenjahitAdminPage";
 import DetailTransaksiAdminPage from "./pages/admin/DetailTransaksiAdminPage";
+import DetailJahitanPage from "./pages/jahitan/DetailJahitanPage";
 
 const App = () => {
   const { data: authUser, isLoading: isLoading } = useAuthUser();
@@ -113,6 +114,7 @@ const App = () => {
               !authUser ? <Navigate to="/login" /> : <CreateTransaksiPage />
             }
           />
+          <Route path="/jahitan/:id" element={<DetailJahitanPage />} />
 
           <Route path="/about" element={<AboutPage />} />
 

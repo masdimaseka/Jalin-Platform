@@ -9,7 +9,7 @@ const InputTransaksiToPenjahit = ({ id }) => {
   const [deskripsi, setDeskripsi] = useState("");
   const [tenggatWaktu, setTenggatWaktu] = useState("");
   const [catatan, setCatatan] = useState("");
-  const [prosesPengerjaan, setProsesPengerjaan] = useState("Diantar");
+  const [prosesPengerjaan, setProsesPengerjaan] = useState("");
   const [images, setImages] = useState([]);
   const [previewImgs, setPreviewImgs] = useState([]);
 
@@ -140,8 +140,10 @@ const InputTransaksiToPenjahit = ({ id }) => {
               onChange={(e) => setProsesPengerjaan(e.target.value)}
               className="select w-full"
             >
-              <option>Diantar ke Penjahit</option>
-              <option>Diambil oleh Penjahit</option>
+              <option value={"diantar ke penjahit"}>Diantar ke Penjahit</option>
+              <option value={"diambil oleh penjahit"}>
+                Diambil oleh Penjahit
+              </option>
             </select>
           </div>
 
@@ -202,7 +204,16 @@ const InputTransaksiToPenjahit = ({ id }) => {
               className="btn btn-primary w-30"
               disabled={isPending}
             >
-              {isPending ? "Mengirim..." : "Kirim"}
+              {isPending ? (
+                <Icon
+                  icon="line-md:loading-loop"
+                  width="16"
+                  height="16"
+                  color="gray"
+                />
+              ) : (
+                "Kirim"
+              )}
             </button>
             <Link to="/penjahit" className="btn btn-ghost w-30">
               Batal

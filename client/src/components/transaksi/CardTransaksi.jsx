@@ -1,8 +1,12 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { Link } from "react-router-dom";
 
 export const CardTransaksiForCustomer = ({ transaksi }) => {
   return (
-    <div className="card bg-base-100 w-80 shadow-sm">
+    <Link
+      to={`/jahitan/${transaksi._id}`}
+      className="card bg-base-100 w-80 shadow-sm cursor-pointer"
+    >
       <figure className="w-full h-48 overflow-hidden rounded-lg">
         <img
           src={transaksi.image[0] || "/banner.png"}
@@ -81,13 +85,16 @@ export const CardTransaksiForCustomer = ({ transaksi }) => {
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
 export const CardTransaksiForPenjahit = ({ transaksi }) => {
   return (
-    <div className="card bg-base-100 w-80 shadow-sm">
+    <Link
+      to={`/jahitan/${transaksi._id}`}
+      className="card bg-base-100 w-80 shadow-sm cursor-pointer"
+    >
       <figure className="w-full h-48 overflow-hidden rounded-lg">
         <img
           src={transaksi.image[0] || "/banner.png"}
@@ -158,6 +165,6 @@ export const CardTransaksiForPenjahit = ({ transaksi }) => {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
