@@ -70,6 +70,8 @@ const InputTransaksi = () => {
       createData.images = imagesUrl;
     }
 
+    console.log(createData);
+
     createTransaksi(createData, {
       onSuccess: () => toast.success("Transaksi berhasil dibuat"),
       onError: () => toast.error("Gagal membuat transaksi"),
