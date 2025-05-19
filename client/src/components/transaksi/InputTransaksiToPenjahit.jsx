@@ -9,7 +9,9 @@ const InputTransaksiToPenjahit = ({ id }) => {
   const [deskripsi, setDeskripsi] = useState("");
   const [tenggatWaktu, setTenggatWaktu] = useState("");
   const [catatan, setCatatan] = useState("");
-  const [prosesPengerjaan, setProsesPengerjaan] = useState("");
+  const [prosesPengerjaan, setProsesPengerjaan] = useState(
+    "diantar ke penjahit"
+  );
   const [images, setImages] = useState([]);
   const [previewImgs, setPreviewImgs] = useState([]);
 
