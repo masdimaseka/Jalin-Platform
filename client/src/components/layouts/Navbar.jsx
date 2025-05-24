@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useAuthUser } from "../../queries/auth/authQuery";
+import { useAuthPenjahit, useAuthUser } from "../../queries/auth/authQuery";
 import { Icon } from "@iconify/react";
-import { usePenjahit } from "./../../queries/penjahit/penjahitQuery";
 import { useTransaksi } from "../../queries/transaksi/transaksiQuery";
 
 const Navbar = () => {
   const { data: authUser, isLoading: isLoadingUser } = useAuthUser();
-  const { data: penjahit, isLoading: isLoadingPenjahit } = usePenjahit();
+  const { data: authPenjahit, isLoading: isLoadingPenjahit } =
+    useAuthPenjahit();
   const { data: transaksi, isLoading: isLoadingTransaksi } = useTransaksi();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -20,12 +20,10 @@ const Navbar = () => {
     "/admin/login",
   ].includes(location.pathname);
 
-  const userPenjahit = penjahit?.find((p) => p.user._id === authUser?._id);
-
   const pendingTransaksiCount = transaksi?.filter((t) => {
     if (!t.penjahit || !t.penjahit._id) return false;
     return (
-      t.penjahit._id === userPenjahit?._id &&
+      t.penjahit._id === authPenjahit?._id &&
       t.status.toLowerCase() === "menunggu"
     );
   }).length;
@@ -65,18 +63,37 @@ const Navbar = () => {
             ))}
             {authUser ? (
               <div className="flex items-center gap-4">
-                {userPenjahit ? (
-                  <Link
-                    to="/penjahit/dashboard"
-                    className="btn btn-white text-primary-jalin font-semibold relative"
-                  >
-                    Dashboard Penjahit
-                    {pendingTransaksiCount > 0 && (
-                      <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                        {pendingTransaksiCount}
-                      </span>
+                {authPenjahit ? (
+                  <>
+                    {authPenjahit.isVerified === "diterima" && (
+                      <Link
+                        to="/penjahit/dashboard"
+                        className="btn btn-white text-primary-jalin font-semibold relative"
+                      >
+                        Dashboard Penjahit
+                        {pendingTransaksiCount > 0 && (
+                          <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                            {pendingTransaksiCount}
+                          </span>
+                        )}
+                      </Link>
                     )}
-                  </Link>
+
+                    {authPenjahit.isVerified === "ditolak" && (
+                      <Link
+                        to="/penjahit/register"
+                        className="btn btn-white text-primary-jalin font-semibold"
+                      >
+                        Daftar Penjahit
+                      </Link>
+                    )}
+
+                    {authPenjahit.isVerified === "onreview" && (
+                      <div className="btn btn-white text-primary-jalin font-semibold cursor-default">
+                        Menunggu Verifikasi
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <Link
                     to="/penjahit/register"
@@ -85,6 +102,7 @@ const Navbar = () => {
                     Daftar Penjahit
                   </Link>
                 )}
+
                 <Link
                   to="/dashboard"
                   className="btn btn-white text-primary-jalin flex items-center gap-2 font-semibold"
@@ -156,7 +174,7 @@ const Navbar = () => {
             ))}
             {authUser && (
               <div className="flex flex-col gap-2 mt-4">
-                {userPenjahit ? (
+                {authPenjahit ? (
                   <Link
                     to="/penjahit/dashboard"
                     className="btn btn-primary text-white w-full relative"

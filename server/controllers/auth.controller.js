@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import Penjahit from "./../models/penjahit.model.js";
 import bcrypt from "bcryptjs";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 import { sendVerificationEmail } from "./../emails/emailHandlers.js";
@@ -6,6 +7,40 @@ import { sendVerificationEmail } from "./../emails/emailHandlers.js";
 export const checkAuth = async (req, res) => {
   try {
     res.json(req.user);
+  } catch (error) {
+    console.log(`error in checkAuth: ${error.message}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+export const checkAuthPenjahit = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const penjahit = await Penjahit.findOne({ user: req.user._id })
+      .populate(
+        "user",
+        "name username email noTelp address lastLogin profileImg"
+      )
+      .populate({
+        path: "kategori",
+        select: "name",
+      })
+      .select("-dokKTP");
+
+    if (!penjahit) {
+      return res.status(404).json({ message: "Penjahit not found" });
+    }
+
+    if (
+      penjahit.isVerified === "diterima" ||
+      penjahit.isVerified === "onreview"
+    ) {
+      res.json(penjahit);
+    } else {
+      res.status(401).json({ message: "Unauthorized as penjahit" });
+    }
   } catch (error) {
     console.log(`error in checkAuth: ${error.message}`);
     res.status(500).json({ message: "Internal server error" });
@@ -120,8 +155,6 @@ export const verifyEmail = async (req, res) => {
       verificationToken: code,
       verificationTokenExpiresAt: { $gt: Date.now() },
     });
-
-    console.log("user :", user);
 
     if (!user) {
       return res

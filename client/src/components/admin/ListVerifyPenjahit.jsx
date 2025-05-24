@@ -11,7 +11,7 @@ const ListVerifyPenjahit = () => {
   };
 
   const filteredPenjahit = penjahit?.filter((p) => {
-    const notVerif = p.isVerified === false;
+    const notVerif = p.isVerified === "onreview";
     return notVerif;
   });
 

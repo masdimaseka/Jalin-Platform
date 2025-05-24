@@ -63,7 +63,7 @@ const SignUpForm = () => {
         <label htmlFor="email">Email</label>
         <input
           type="email"
-          placeholder="Masukkan Email"
+          placeholder="example@gmail.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="input input-bordered rounded-md w-full text-xs"
@@ -102,7 +102,7 @@ const SignUpForm = () => {
         <label htmlFor="noTelp">No Telp.</label>
         <input
           type="number"
-          placeholder="Masukkan No Telp"
+          placeholder="08xx-xxxx-xxxx"
           value={noTelp}
           onChange={(e) => setNoTelp(e.target.value)}
           className="input input-bordered rounded-md w-full text-xs"
@@ -114,7 +114,7 @@ const SignUpForm = () => {
         <label htmlFor="address">Alamat</label>
         <input
           type="text"
-          placeholder="Masukkan Alamat"
+          placeholder="Jl. Raya No. 123, Denpasar Barat, Bali"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           className="input input-bordered rounded-md w-full text-xs"

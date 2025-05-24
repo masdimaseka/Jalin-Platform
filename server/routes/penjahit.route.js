@@ -5,10 +5,12 @@ import {
   getPenjahitById,
   getPenjahitByIdUser,
   getPenjahitPremium,
-  registerPenjahit,
+} from "../controllers/penjahit/get.penjahit.controller.js";
+import { registerPenjahit } from "../controllers/penjahit/create.penjahit.controller.js";
+import {
   updateProfilePenjahit,
   updateStatusPenjahit,
-} from "../controllers/penjahit.controller.js";
+} from "../controllers/penjahit/update.penjahit.controller.js";
 
 const router = express.Router();
 

@@ -1,9 +1,9 @@
 import bcrypt from "bcryptjs";
-import { generateTokenAndSetCookieAdmin } from "../utils/generateTokenAndSetCookie.js";
-import Admin from "../models/admin.model.js";
-import Category from "./../models/category.model.js";
-import TransaksiPoint from "./../models/transaksiPoint.model.js";
-import Transaksi from "../models/transaksi.model.js";
+import { generateTokenAndSetCookieAdmin } from "../../utils/generateTokenAndSetCookie.js";
+import Admin from "../../models/admin.model.js";
+import Category from "../../models/category.model.js";
+import TransaksiPoint from "../../models/transaksiPoint.model.js";
+import Transaksi from "../../models/transaksi.model.js";
 
 export const checkAuthAdmin = async (req, res) => {
   try {

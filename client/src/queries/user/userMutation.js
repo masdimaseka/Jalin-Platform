@@ -13,7 +13,7 @@ export const useUpdateProfile = () => {
         `/user/update/${updateData.id}`,
         updateData,
         {
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "multipart/form-data" },
         }
       );
       return res.data;
