@@ -8,9 +8,9 @@ export const useCreateTransaksi = () => {
   const navigate = useNavigate();
 
   return useMutation({
-    mutationFn: async (transaksiData) => {
-      const res = await axiosInstance.post(`/transaksi/create`, transaksiData, {
-        headers: { "Content-Type": "application/json" },
+    mutationFn: async (formData) => {
+      const res = await axiosInstance.post(`/transaksi/create`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
       return res.data;
     },
@@ -34,12 +34,12 @@ export const useCreateTransaksiToPenjahit = () => {
   const navigate = useNavigate();
 
   return useMutation({
-    mutationFn: async (transaksiData) => {
+    mutationFn: async (formData) => {
       const res = await axiosInstance.post(
-        `/transaksi/create/${transaksiData.penjahitId}`,
-        transaksiData,
+        `/transaksi/create/${formData.get("penjahitId")}`,
+        formData,
         {
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "multipart/form-data" },
         }
       );
       return res.data;
@@ -72,6 +72,29 @@ export const useAcceptTransaksi = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(["transaksiById"]);
       toast.success("Transaksi berhasil diterima");
+    },
+    onError: (error) => {
+      console.error(
+        "Gagal menerima transaksi:",
+        error.response?.data || error.message
+      );
+    },
+  });
+};
+
+export const useRejectTransaksi = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (transaksiData) => {
+      const res = await axiosInstance.put(
+        `/transaksi/reject/${transaksiData.transaksiId}`,
+        transaksiData
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["transaksiById"]);
+      toast.success("Transaksi telah ditolak");
     },
     onError: (error) => {
       console.error(

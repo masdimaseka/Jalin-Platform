@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { usePenjahitById } from "../../queries/penjahit/penjahitQuery";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { ProfilePenjahit } from "../../components/Profile";
+import { ProfilePenjahit } from "../../components/ProfilePenjahit";
 import {
   ListTransaksiForPenjahit,
   ListTransaksiForPenjahitFiltered,

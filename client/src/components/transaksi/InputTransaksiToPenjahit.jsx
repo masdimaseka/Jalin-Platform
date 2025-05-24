@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { usePenjahitById } from "../../queries/penjahit/penjahitQuery";
 import { useRef, useState } from "react";
 import { useCreateTransaksiToPenjahit } from "../../queries/transaksi/transaksiMutation";
+import toast from "react-hot-toast";
 import { Icon } from "@iconify/react";
 
 const InputTransaksiToPenjahit = ({ id }) => {
@@ -15,32 +16,21 @@ const InputTransaksiToPenjahit = ({ id }) => {
   const [images, setImages] = useState([]);
   const [previewImgs, setPreviewImgs] = useState([]);
 
-  const { data: penjahitById, isLoading } = usePenjahitById(id);
   const fileInputRef = useRef(null);
+  const { data: penjahitById, isLoading } = usePenjahitById(id);
   const { mutate: createTransaksiToPenjahit, isPending } =
     useCreateTransaksiToPenjahit();
-
-  const readFileAsDataURL = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  };
 
   const handleImgChange = (e) => {
     const files = Array.from(e.target.files);
     if (images.length + files.length > 3) {
-      alert("Maksimal upload 3 gambar.");
+      toast.error("Maksimal upload 3 gambar");
       return;
     }
 
+    const previews = files.map((file) => URL.createObjectURL(file));
     setImages((prev) => [...prev, ...files]);
-
-    Promise.all(files.map((file) => readFileAsDataURL(file))).then(
-      (newPreviews) => setPreviewImgs((prev) => [...prev, ...newPreviews])
-    );
+    setPreviewImgs((prev) => [...prev, ...previews]);
   };
 
   const handleRemoveImage = (index) => {
@@ -52,26 +42,23 @@ const InputTransaksiToPenjahit = ({ id }) => {
     e.preventDefault();
 
     if (images.length === 0) {
-      alert("Harap upload minimal 1 gambar.");
+      toast.error("Harap upload minimal 1 gambar");
       return;
     }
 
-    const createData = {
-      penjahitId: id,
-      judul,
-      deskripsi,
-      tenggatWaktu,
-      prosesPengerjaan,
-      catatan,
-    };
+    const formData = new FormData();
+    formData.append("penjahitId", id);
+    formData.append("judul", judul);
+    formData.append("deskripsi", deskripsi);
+    formData.append("tenggatWaktu", tenggatWaktu);
+    formData.append("prosesPengerjaan", prosesPengerjaan);
+    formData.append("catatan", catatan);
+    images.forEach((img) => formData.append("images", img));
 
-    if (images.length > 0) {
-      createData.images = await Promise.all(
-        images.map((file) => readFileAsDataURL(file))
-      );
-    }
-
-    createTransaksiToPenjahit(createData);
+    createTransaksiToPenjahit(formData, {
+      onSuccess: () => toast.success("Transaksi berhasil dikirim ke penjahit"),
+      onError: () => toast.error("Gagal mengirim transaksi"),
+    });
   };
 
   if (isLoading) {
@@ -93,6 +80,7 @@ const InputTransaksiToPenjahit = ({ id }) => {
           />
           <h2 className="text-xl font-semibold">{penjahitById?.user?.name}</h2>
         </div>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium">Judul Pekerjaan</label>
@@ -117,7 +105,7 @@ const InputTransaksiToPenjahit = ({ id }) => {
               className="textarea textarea-bordered w-full"
               rows="3"
               required
-            ></textarea>
+            />
           </div>
 
           <div>
@@ -142,8 +130,8 @@ const InputTransaksiToPenjahit = ({ id }) => {
               onChange={(e) => setProsesPengerjaan(e.target.value)}
               className="select w-full"
             >
-              <option value={"diantar ke penjahit"}>Diantar ke Penjahit</option>
-              <option value={"diambil oleh penjahit"}>
+              <option value="diantar ke penjahit">Diantar ke Penjahit</option>
+              <option value="diambil oleh penjahit">
                 Diambil oleh Penjahit
               </option>
             </select>
@@ -158,10 +146,9 @@ const InputTransaksiToPenjahit = ({ id }) => {
               className="file-input file-input-bordered w-full"
               multiple
               accept="image/*"
-              required
             />
             <p className="text-xs font-light mt-2">
-              *Maksimal 3 gambar, ukuran max 5MB
+              *Maksimal 3 gambar, ukuran max 3MB
             </p>
             <div className="flex flex-wrap gap-2 mt-4">
               {previewImgs.map((src, index) => (
@@ -173,7 +160,7 @@ const InputTransaksiToPenjahit = ({ id }) => {
                   />
                   <button
                     type="button"
-                    className="absolute top-0 right-0  bg-red-500 text-white cursor-pointer rounded-full"
+                    className="absolute top-0 right-0 bg-red-500 text-white cursor-pointer rounded-full"
                     onClick={() => handleRemoveImage(index)}
                   >
                     <Icon

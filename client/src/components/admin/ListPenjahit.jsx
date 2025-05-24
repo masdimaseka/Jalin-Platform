@@ -90,7 +90,7 @@ const ListPenjahit = () => {
                     {p.openToWork ? "Iya" : "Tidak"}
                   </td>
                   <td className="text-center py-2 px-4 border border-base-content/5">
-                    {p.isVerified ? (
+                    {p.isVerified === "diterima" && (
                       <div className="flex justify-center items-center">
                         <Icon
                           icon="ix:success-filled"
@@ -99,13 +99,24 @@ const ListPenjahit = () => {
                           className="text-success"
                         />
                       </div>
-                    ) : (
+                    )}
+                    {p.isVerified === "ditolak" && (
                       <div className="flex justify-center items-center">
                         <Icon
                           icon="ix:namur-failure-filled"
                           width="20"
                           height="20"
                           className="text-error"
+                        />
+                      </div>
+                    )}
+                    {p.isVerified === "onreview" && (
+                      <div className="flex justify-center items-center">
+                        <Icon
+                          icon="mingcute:time-fill"
+                          width="20"
+                          height="20"
+                          className="text-primary-jalin"
                         />
                       </div>
                     )}

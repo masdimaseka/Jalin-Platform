@@ -13,12 +13,15 @@ import userRoutes from "./routes/user.route.js";
 import transaksiRoutes from "./routes/transaksi.route.js";
 import pointProductRoutes from "./routes/pointProduct.route.js";
 import transaksiPointRoutes from "./routes/transaksiPoint.route.js";
+import multer from "multer";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const upload = multer();
 
+app.use(upload.any());
 app.use(
   cors({
     origin:

@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import cloudinary from "./../lib/cloudinary.js";
+import uploadStream from "./../middleware/multer.middleware.js";
 
 export const getUsers = async (req, res) => {
   try {
@@ -28,36 +29,42 @@ export const getUserById = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const allowedFields = ["name", "noTelp", "address", "profileImg"];
-    const updatedData = {};
-
-    for (const field of allowedFields) {
-      if (req.body[field]) updatedData[field] = req.body[field];
+    const { name, noTelp, address, previousImg } = req.body;
+    if (!name || !noTelp || !address) {
+      return res
+        .status(400)
+        .json({ message: "Harap isi semua field yang diperlukan" });
     }
+
+    let uploadedProfileImg = previousImg || null;
+
+    let profileImg = req.files;
 
     const user = await User.findById(req.user._id);
 
-    if (req.body.profileImg) {
+    if (req.files && req.files.length > 0) {
+      profileImg = req.files.find((file) => file.fieldname === "profileImg");
+
       if (user.profileImg) {
-        const oldImagePublicId = user.profileImg.split("/").pop().split(".")[0];
+        const oldImagePublicId = uploadedProfileImg
+          .split("/")
+          .pop()
+          .split(".")[0];
 
         await cloudinary.uploader.destroy(
           `jalin/user/profile/${oldImagePublicId}`
         );
       }
 
-      const uploadedProfileImg = await cloudinary.uploader.upload(
-        req.body.profileImg,
-        {
-          folder: "jalin/user/profile",
-        }
+      uploadedProfileImg = await uploadStream(
+        profileImg.buffer,
+        "jalin/user/profile"
       );
-      updatedData.profileImg = uploadedProfileImg.secure_url;
     }
 
     await User.findByIdAndUpdate(
       req.user._id,
-      { $set: updatedData },
+      { $set: { name, noTelp, address, profileImg: uploadedProfileImg } },
       { new: true }
     ).select("-password");
 

@@ -90,7 +90,7 @@ const ListPenjahit = () => {
       <div className="flex flex-wrap gap-4">
         {currentData.length > 0 ? (
           currentData
-            .filter((p) => p.openToWork && p.isVerified)
+            .filter((p) => p.openToWork && p.isVerified === "diterima")
             .map((p) => (
               <CardPenjahit key={p._id} penjahit={p} authUser={authUser} />
             ))

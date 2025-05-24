@@ -32,8 +32,9 @@ const penjahitSchema = new mongoose.Schema(
       default: 5,
     },
     isVerified: {
-      type: Boolean,
-      default: false,
+      type: String,
+      enum: ["onreview", "diterima", "ditolak"],
+      default: "onreview",
     },
     isAgreeTerms: {
       type: Boolean,

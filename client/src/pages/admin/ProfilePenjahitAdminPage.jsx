@@ -79,19 +79,28 @@ const ProfilePenjahitAdminPage = () => {
                 Verifikasi
               </td>
               <td className="py-4 px-4 border border-base-content/5">
-                {penjahitByIdByAdmin?.isVerified ? (
+                {penjahitByIdByAdmin?.isVerified === "diterima" && (
                   <Icon
                     icon="ix:success-filled"
-                    width="20 "
+                    width="20"
                     height="20"
                     className="text-success"
                   />
-                ) : (
+                )}
+                {penjahitByIdByAdmin?.isVerified === "ditolak" && (
                   <Icon
                     icon="ix:namur-failure-filled"
                     width="20"
                     height="20"
                     className="text-error"
+                  />
+                )}
+                {penjahitByIdByAdmin?.isVerified === "onreview" && (
+                  <Icon
+                    icon="mingcute:time-fill"
+                    width="20"
+                    height="20"
+                    className="text-primary-jalin"
                   />
                 )}
               </td>

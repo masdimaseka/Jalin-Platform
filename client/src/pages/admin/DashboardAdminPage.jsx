@@ -59,7 +59,7 @@ const DashboardAdminPage = () => {
               Penjahit
             </div>
             <div className="stat-value  text-5xl mt-4 mb-2">
-              {penjahit?.filter((p) => p.isVerified).length}
+              {penjahit?.filter((p) => p.isVerified === "diterima").length}
             </div>
             <div className="stat-desc text-lg">orang</div>
           </div>
@@ -91,7 +91,7 @@ const DashboardAdminPage = () => {
               Verifikasi Penjahit
             </div>
             <div className="stat-value text-5xl mt-4 mb-2">
-              {penjahit?.filter((p) => !p.isVerified).length}
+              {penjahit?.filter((p) => p.isVerified === "onreview").length}
             </div>
             <div className="stat-desc text-lg">orang</div>
           </div>

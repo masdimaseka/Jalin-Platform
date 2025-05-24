@@ -13,8 +13,9 @@ const EditProfilePenjahitForm = ({ id }) => {
   const [address, setAddress] = useState("");
   const [profileImg, setProfileImg] = useState(null);
   const [previewImg, setPreviewImg] = useState(null);
+  const [previousImg, setPreviousImg] = useState(null);
   const [description, setDescription] = useState("");
-  const [rentangHarga, setRentangharga] = useState("");
+  const [rentangHarga, setRentangHarga] = useState("");
   const [kategori, setKategori] = useState([]);
   const [maxWords] = useState(100);
 
@@ -26,23 +27,15 @@ const EditProfilePenjahitForm = ({ id }) => {
 
   const { data: category } = useCategories();
 
-  const readFileAsDataURL = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  };
-
   useEffect(() => {
     if (penjahitById) {
       setName(penjahitById.user.name || "");
       setNoTelp(penjahitById.user.noTelp || "");
       setAddress(penjahitById.user.address || "");
       setPreviewImg(penjahitById.user.profileImg || null);
+      setPreviousImg(penjahitById.user.profileImg || null);
       setDescription(penjahitById.description || "");
-      setRentangharga(penjahitById.rentangHarga || "");
+      setRentangHarga(penjahitById.rentangHarga || "");
     }
   }, [penjahitById]);
 
@@ -68,7 +61,7 @@ const EditProfilePenjahitForm = ({ id }) => {
         return;
       }
       setProfileImg(file);
-      readFileAsDataURL(file).then(setPreviewImg);
+      setPreviewImg(URL.createObjectURL(file));
     };
   };
 
@@ -80,7 +73,7 @@ const EditProfilePenjahitForm = ({ id }) => {
   };
 
   const handleDescriptionChange = (e) => {
-    const words = e.target.value.split(/\s+/).filter((word) => word !== ""); // Hitung kata
+    const words = e.target.value.split(/\s+/).filter((word) => word !== "");
     if (words.length <= maxWords) {
       setDescription(e.target.value);
     }
@@ -89,21 +82,26 @@ const EditProfilePenjahitForm = ({ id }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const updateData = {
-      id,
-      name,
-      noTelp,
-      address,
-      description,
-      rentangHarga,
-      kategori,
-    };
-
-    if (profileImg) {
-      updateData.profileImg = await readFileAsDataURL(profileImg);
+    if (kategori.length === 0) {
+      toast.error("Harap pilih setidaknya satu kategori spesialisasi.");
+      return;
     }
 
-    updateProfilePenjahit(updateData);
+    const formData = new FormData();
+    formData.append("id", id);
+    formData.append("name", name);
+    formData.append("noTelp", noTelp);
+    formData.append("address", address);
+    formData.append("description", description);
+    formData.append("rentangHarga", rentangHarga);
+    kategori.forEach((id) => formData.append("kategori[]", id));
+    formData.append("previousImg", previousImg);
+
+    if (profileImg) {
+      formData.append("profileImg", profileImg);
+    }
+
+    updateProfilePenjahit(formData);
   };
 
   return (
@@ -163,9 +161,8 @@ const EditProfilePenjahitForm = ({ id }) => {
       </div>
 
       <div>
-        <label htmlFor="rentangBiaya">Deskripsi Profile</label>
+        <label htmlFor="description">Deskripsi Profile</label>
         <textarea
-          type="text"
           placeholder="Saya adalah seorang penjahit..."
           value={description}
           onChange={handleDescriptionChange}
@@ -179,12 +176,12 @@ const EditProfilePenjahitForm = ({ id }) => {
       </div>
 
       <div>
-        <label htmlFor="rentangBiaya">Rentang Biaya Jasa</label>
+        <label htmlFor="rentangHarga">Rentang Biaya Jasa</label>
         <input
           type="text"
           placeholder="Contoh : 50rb - 100rb"
           value={rentangHarga}
-          onChange={(e) => setRentangharga(e.target.value)}
+          onChange={(e) => setRentangHarga(e.target.value)}
           className="input input-bordered rounded-md w-full text-xs"
           required
         />
@@ -199,13 +196,13 @@ const EditProfilePenjahitForm = ({ id }) => {
             .join(", ") || "Belum ada"}
         </div>
         <span className="text-xs">
-          *harap masukkan kembali kategori speliasasi anda
+          *harap masukkan kembali kategori spesialisasi anda
         </span>
         <div className="dropdown dropdown-start mt-2 w-full h-full">
           <div tabIndex={0} role="button" className="btn w-full">
             Pilih Spesialisasi
           </div>
-          <ul className="dropdown-content bg-base-100 rounded-box z-50 w-full  grid grid-cols-2 gap-y-2 p-4  shadow-sm">
+          <ul className="dropdown-content bg-base-100 rounded-box z-50 w-full grid grid-cols-2 gap-y-2 p-4 shadow-sm">
             {category?.map((cat) => (
               <li key={cat._id} className="flex items-center gap-2">
                 <input
@@ -213,7 +210,7 @@ const EditProfilePenjahitForm = ({ id }) => {
                   value={cat._id}
                   checked={kategori.includes(cat._id)}
                   onChange={handleCheckboxChange}
-                  className="checkbox checkbox-sm checkbox-primary "
+                  className="checkbox checkbox-sm checkbox-primary"
                 />
                 <span className="text-sm">{cat.name}</span>
               </li>

@@ -9,20 +9,12 @@ const EditProfileForm = ({ id }) => {
   const [address, setAddress] = useState("");
   const [profileImg, setProfileImg] = useState(null);
   const [previewImg, setPreviewImg] = useState(null);
+  const [previousImg, setPreviousImg] = useState(null);
 
   const fileInputRef = useRef(null);
 
   const { data: user } = useUserById(id);
   const { mutate: updateProfile, isPending } = useUpdateProfile();
-
-  const readFileAsDataURL = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  };
 
   useEffect(() => {
     if (user) {
@@ -30,6 +22,7 @@ const EditProfileForm = ({ id }) => {
       setNoTelp(user.noTelp || "");
       setAddress(user.address || "");
       setPreviewImg(user.profileImg || null);
+      setPreviousImg(user.profileImg || null);
     }
   }, [user]);
 
@@ -47,25 +40,25 @@ const EditProfileForm = ({ id }) => {
         return;
       }
       setProfileImg(file);
-      readFileAsDataURL(file).then(setPreviewImg);
+      setPreviewImg(img.src);
     };
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const updateData = {
-      id,
-      name,
-      noTelp,
-      address,
-    };
+    const formData = new FormData();
+    formData.append("id", id);
+    formData.append("name", name);
+    formData.append("noTelp", noTelp);
+    formData.append("address", address);
+    formData.append("previousImg", previousImg);
 
     if (profileImg) {
-      updateData.profileImg = await readFileAsDataURL(profileImg);
+      formData.append("profileImg", profileImg);
     }
 
-    updateProfile(updateData);
+    updateProfile(formData);
   };
 
   return (

@@ -10,19 +10,19 @@ import {
   loginAdmin,
   logoutAdmin,
   registerCategoryByAdmin,
-} from "../controllers/admin.controller.js";
+} from "../controllers/admin/admin.controller.js";
 import {
   deleteUserByIdByAdmin,
   getUserByAdmin,
   getUserByIdByAdmin,
-} from "../controllers/admin.user.controller.js";
+} from "../controllers/admin/admin.user.controller.js";
 import {
   deletePenjahitByIdByAdmin,
   getPenjahitByAdmin,
   getPenjahitByIdByAdmin,
   setPenjahitPremium,
   verifyPenjahit,
-} from "../controllers/admin.penjahit.controller.js";
+} from "../controllers/admin/admin.penjahit.controller.js";
 
 const router = express.Router();
 

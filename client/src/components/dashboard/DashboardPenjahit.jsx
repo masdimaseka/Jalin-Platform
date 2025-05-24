@@ -1,21 +1,14 @@
-import { useAuthUser } from "../../queries/auth/authQuery";
+import { useAuthPenjahit } from "../../queries/auth/authQuery";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { usePenjahitByIdUser } from "../../queries/penjahit/penjahitQuery";
-import { ProfilePenjahit } from "../Profile";
-import {
-  ListTransaksiForPenjahit,
-  ListTransaksiForPenjahitFiltered,
-} from "../transaksi/ListTransaksiForPenjahit";
+import { ProfilePenjahit } from "../ProfilePenjahit";
+import { ListTransaksiForPenjahitFiltered } from "../transaksi/ListTransaksiForPenjahit";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const DashboardPenjahit = () => {
   const [activeTab, setActiveTab] = useState("diproses");
 
-  const { data: authUser } = useAuthUser();
-  const { data: penjahitByIdUser, isLoading } = usePenjahitByIdUser(
-    authUser._id
-  );
+  const { data: authPenjahit, isLoading } = useAuthPenjahit();
 
   if (isLoading) {
     return (
@@ -27,7 +20,7 @@ const DashboardPenjahit = () => {
 
   return (
     <div>
-      <ProfilePenjahit penjahit={penjahitByIdUser} />
+      <ProfilePenjahit penjahit={authPenjahit} />
 
       <div className="flex flex-col lg:flex-row justify-between gap-8 items-center mt-8 mb-4 bg-white rounded-xl p-8 shadow-sm">
         <h1 className="text-lg sm:text-2xl font-semibold flex items-center gap-2">
@@ -35,17 +28,17 @@ const DashboardPenjahit = () => {
           Point :{" "}
           <span
             className={`${
-              penjahitByIdUser.point > 2000 ? "text-success" : "text-error"
+              authPenjahit.point > 2000 ? "text-success" : "text-error"
             }`}
           >
-            {Number(penjahitByIdUser.point).toLocaleString("id-ID", {
+            {Number(authPenjahit.point).toLocaleString("id-ID", {
               minimumFractionDigits: 0,
               maximumFractionDigits: 0,
             })}
           </span>
         </h1>
         <Link
-          to={`/topup-point/${penjahitByIdUser._id}`}
+          to={`/topup-point/${authPenjahit._id}`}
           className="btn btn-primary"
         >
           <Icon icon="fluent:cart-24-filled" width="24" height="24" />
@@ -91,21 +84,21 @@ const DashboardPenjahit = () => {
           <div>
             {activeTab === "diproses" && (
               <ListTransaksiForPenjahitFiltered
-                penjahit={penjahitByIdUser}
+                penjahit={authPenjahit}
                 filter={["diproses"]}
               />
             )}
 
             {activeTab === "menunggu" && (
               <ListTransaksiForPenjahitFiltered
-                penjahit={penjahitByIdUser}
+                penjahit={authPenjahit}
                 filter={["menunggu"]}
               />
             )}
 
             {activeTab === "riwayat" && (
               <ListTransaksiForPenjahitFiltered
-                penjahit={penjahitByIdUser}
+                penjahit={authPenjahit}
                 filter={[
                   "selesai",
                   "dibatalkan",

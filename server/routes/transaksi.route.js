@@ -1,14 +1,19 @@
 import express from "express";
 import { protectRoute } from "../middleware/auth.middleware.js";
 import {
-  acceptTransaksiPenjahit,
-  createTransaksi,
-  createTransaksiToPenjahit,
   getTransaksi,
   getTransaksiById,
   getTransaksiPenjahit,
   getTransaksiPenjahitWaiting,
-} from "../controllers/transaksi.controller.js";
+} from "../controllers/transaksi/get.transaksi.controller.js";
+import {
+  createTransaksi,
+  createTransaksiToPenjahit,
+} from "../controllers/transaksi/create.transaksi.controller.js";
+import {
+  acceptTransaksiPenjahit,
+  rejectTransaksiPenjahit,
+} from "../controllers/transaksi/update.transaksi.controller.js";
 
 const router = express.Router();
 
@@ -18,6 +23,7 @@ router.get("/penjahit/:id/waiting", protectRoute, getTransaksiPenjahitWaiting);
 router.post("/create", protectRoute, createTransaksi);
 router.post("/create/:id", protectRoute, createTransaksiToPenjahit);
 router.put("/accept/:id", protectRoute, acceptTransaksiPenjahit);
+router.put("/reject/:id", protectRoute, rejectTransaksiPenjahit);
 router.get("/:id", getTransaksiById);
 
 export default router;

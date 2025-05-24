@@ -1,7 +1,7 @@
-import cloudinary from "../lib/cloudinary.js";
-import Penjahit from "../models/penjahit.model.js";
-import User from "../models/user.model.js";
-import { decrypting } from "../utils/encryption.js";
+import cloudinary from "../../lib/cloudinary.js";
+import Penjahit from "../../models/penjahit.model.js";
+import User from "../../models/user.model.js";
+import { decrypting } from "../../utils/encryption.js";
 
 export const getPenjahitByAdmin = async (req, res) => {
   try {
@@ -63,7 +63,7 @@ export const verifyPenjahit = async (req, res) => {
 
     const penjahit = await Penjahit.findByIdAndUpdate(
       id,
-      { isVerified: true },
+      { isVerified: "diterima" },
       { new: true }
     );
 

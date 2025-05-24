@@ -10,7 +10,7 @@ export const useRegisterPenjahit = () => {
   return useMutation({
     mutationFn: async (registerData) => {
       const res = await axiosInstance.post("/penjahit/register", registerData, {
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "multipart/form-data" },
       });
       return res.data;
     },
@@ -57,12 +57,12 @@ export const useUpdateProfilePenjahit = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (updateData) => {
+    mutationFn: async (formData) => {
       const res = await axiosInstance.put(
-        `/penjahit/update/${updateData.id}`,
-        updateData,
+        `/penjahit/update/${formData.get("id")}`,
+        formData,
         {
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "multipart/form-data" },
         }
       );
       return res.data;

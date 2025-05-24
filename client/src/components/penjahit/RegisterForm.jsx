@@ -20,15 +20,6 @@ const RegisterForm = () => {
 
   const maxWords = 100;
 
-  const readFileAsDataURL = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  };
-
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
     setKategori((prev) =>
@@ -37,7 +28,7 @@ const RegisterForm = () => {
   };
 
   const handleDescriptionChange = (e) => {
-    const words = e.target.value.split(/\s+/).filter((word) => word !== ""); // Hitung kata
+    const words = e.target.value.split(/\s+/).filter((word) => word !== "");
     if (words.length <= maxWords) {
       setDescription(e.target.value);
     }
@@ -59,29 +50,31 @@ const RegisterForm = () => {
       setProfileImg(file);
     };
   };
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
-      const registerData = {
-        description,
-        rentangHarga,
-        kategori,
-        isAgreeTerms,
-      };
+      const formData = new FormData();
+      formData.append("description", description);
+      formData.append("rentangHarga", rentangHarga);
+      formData.append("isAgreeTerms", isAgreeTerms);
+
+      kategori.forEach((id) => formData.append("kategori[]", id));
+
       if (profileImg) {
-        registerData.profileImg = await readFileAsDataURL(profileImg);
+        formData.append("profileImg", profileImg);
       }
       if (dokKTP) {
-        registerData.dokKTP = await readFileAsDataURL(dokKTP);
+        formData.append("dokKTP", dokKTP);
       }
       if (dokPortofolio.length > 0) {
-        const dokPortofolioUrls = await Promise.all(
-          [...dokPortofolio].map((file) => readFileAsDataURL(file))
-        );
-        registerData.dokPortofolio = dokPortofolioUrls;
+        dokPortofolio.forEach((file) => {
+          formData.append("dokPortofolio", file);
+        });
       }
-      registerPenjahit(registerData);
+
+      registerPenjahit(formData);
     } catch (err) {
       console.log("Error saat registrasi:", err);
     }
@@ -95,10 +88,11 @@ const RegisterForm = () => {
       <div>
         <label htmlFor="dokKTP">
           Foto Profile{" "}
-          <span className="text-xs">
-            (gunakan foto yang memperlihatkan wajah)
+          <span className="text-xs font-light">
+            (foto yang memperlihatkan wajah)
           </span>
         </label>
+
         <input
           type="file"
           accept="image/*"
@@ -134,12 +128,17 @@ const RegisterForm = () => {
           className="file-input input-bordered rounded-md w-full text-xs"
           required
         />
+        <p className="text-xs font-light mt-2">*ukuran max 3MB</p>
       </div>
+
       <div>
         <label htmlFor="dokPortofolio">
           Dokumen Portofolio{" "}
-          <span className="text-xs">(alat jahit, hasil pekerjaan)</span>
+          <span className="text-xs font-light">
+            (alat jahit/hasil pekerjaan)
+          </span>
         </label>
+
         <input
           type="file"
           multiple
@@ -147,7 +146,9 @@ const RegisterForm = () => {
           onChange={(e) => setDokPortofolio([...e.target.files])}
           className="file-input input-bordered rounded-md w-full text-xs"
         />
+        <p className="text-xs font-light mt-2">*ukuran max 3MB</p>
       </div>
+
       <div>
         <label htmlFor="rentangBiaya">Rentang Biaya Jasa</label>
         <input
@@ -159,6 +160,7 @@ const RegisterForm = () => {
           required
         />
       </div>
+
       <div>
         <label htmlFor="kategori">Kategori Spesialisasi</label>
         <p className="mt-2 text-sm text-gray-500">Kategori terpilih:</p>
@@ -188,6 +190,7 @@ const RegisterForm = () => {
           </ul>
         </div>
       </div>
+
       <div className="mt-8">
         <input
           required
@@ -207,6 +210,7 @@ const RegisterForm = () => {
           </Link>
         </span>
       </div>
+
       <button
         type="submit"
         className="btn btn-primary w-full"

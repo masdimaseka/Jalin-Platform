@@ -18,15 +18,6 @@ const InputTransaksi = () => {
   const fileInputRef = useRef(null);
   const { mutate: createTransaksi, isPending } = useCreateTransaksi();
 
-  const readFileAsDataURL = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  };
-
   const handleImgChange = (e) => {
     const files = Array.from(e.target.files);
     if (images.length + files.length > 3) {
@@ -34,11 +25,9 @@ const InputTransaksi = () => {
       return;
     }
 
+    const previews = files.map((file) => URL.createObjectURL(file));
     setImages((prev) => [...prev, ...files]);
-
-    Promise.all(files.map((file) => readFileAsDataURL(file))).then(
-      (newPreviews) => setPreviewImgs((prev) => [...prev, ...newPreviews])
-    );
+    setPreviewImgs((prev) => [...prev, ...previews]);
   };
 
   const handleRemoveImage = (index) => {
@@ -55,24 +44,16 @@ const InputTransaksi = () => {
       return;
     }
 
-    const createData = {
-      judul,
-      deskripsi,
-      tenggatWaktu,
-      prosesPengerjaan,
-      catatan,
-    };
+    const formData = new FormData();
+    formData.append("judul", judul);
+    formData.append("deskripsi", deskripsi);
+    formData.append("tenggatWaktu", tenggatWaktu);
+    formData.append("prosesPengerjaan", prosesPengerjaan);
+    formData.append("catatan", catatan);
 
-    if (images.length > 0) {
-      const imagesUrl = await Promise.all(
-        [...images].map((file) => readFileAsDataURL(file))
-      );
-      createData.images = imagesUrl;
-    }
+    images.forEach((img) => formData.append("images", img)); // multiple files
 
-    console.log(createData);
-
-    createTransaksi(createData, {
+    createTransaksi(formData, {
       onSuccess: () => toast.success("Transaksi berhasil dibuat"),
       onError: () => toast.error("Gagal membuat transaksi"),
     });
@@ -108,7 +89,7 @@ const InputTransaksi = () => {
               className="textarea textarea-bordered w-full"
               rows="3"
               required
-            ></textarea>
+            />
           </div>
 
           <div>
@@ -133,8 +114,8 @@ const InputTransaksi = () => {
               onChange={(e) => setProsesPengerjaan(e.target.value)}
               className="select w-full"
             >
-              <option value={"diantar ke penjahit"}>Diantar ke Penjahit</option>
-              <option value={"diambil oleh penjahit"}>
+              <option value="diantar ke penjahit">Diantar ke Penjahit</option>
+              <option value="diambil oleh penjahit">
                 Diambil oleh Penjahit
               </option>
             </select>
@@ -151,7 +132,7 @@ const InputTransaksi = () => {
               accept="image/*"
             />
             <p className="text-xs font-light mt-2">
-              *Maksimal 3 gambar, ukuran max 5MB
+              *Maksimal 3 gambar, ukuran max 3MB
             </p>
             <div className="flex flex-wrap gap-2 mt-4">
               {previewImgs.map((src, index) => (
@@ -163,7 +144,7 @@ const InputTransaksi = () => {
                   />
                   <button
                     type="button"
-                    className="absolute top-0 right-0  bg-red-500 text-white cursor-pointer rounded-full"
+                    className="absolute top-0 right-0 bg-red-500 text-white cursor-pointer rounded-full"
                     onClick={() => handleRemoveImage(index)}
                   >
                     <Icon

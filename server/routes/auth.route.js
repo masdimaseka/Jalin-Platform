@@ -7,12 +7,14 @@ import {
   verifyEmail,
   forgotPassword,
   resetPassword,
+  checkAuthPenjahit,
 } from "../controllers/auth.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
 router.get("/check-auth", protectRoute, checkAuth);
+router.get("/check-auth-penjahit", protectRoute, checkAuthPenjahit);
 
 router.post("/signup", signup);
 router.post("/login", login);
