@@ -1,8 +1,6 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 export const InfoTransaksiModal = ({ isOpen, onClose, transaksiData }) => {
-  console.log(transaksiData);
-
   if (!isOpen) {
     return null;
   }
