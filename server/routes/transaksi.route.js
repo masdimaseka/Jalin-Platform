@@ -12,7 +12,9 @@ import {
 } from "../controllers/transaksi/create.transaksi.controller.js";
 import {
   acceptTransaksiPenjahit,
+  finishTransaksiPenjahit,
   rejectTransaksiPenjahit,
+  reviewTransaksiPenjahit,
 } from "../controllers/transaksi/update.transaksi.controller.js";
 
 const router = express.Router();
@@ -24,6 +26,8 @@ router.post("/create", protectRoute, createTransaksi);
 router.post("/create/:id", protectRoute, createTransaksiToPenjahit);
 router.put("/accept/:id", protectRoute, acceptTransaksiPenjahit);
 router.put("/reject/:id", protectRoute, rejectTransaksiPenjahit);
+router.put("/finish/:id", protectRoute, finishTransaksiPenjahit);
+router.put("/review/:id", protectRoute, reviewTransaksiPenjahit);
 router.get("/:id", getTransaksiById);
 
 export default router;

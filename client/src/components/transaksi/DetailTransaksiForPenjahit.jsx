@@ -13,10 +13,18 @@ import {
 } from "../../queries/transaksi/transaksiMutation";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  ConfirmAcceptModal,
+  ConfirmRejectModal,
+} from "../modals/TransaksiModal";
+import { FinishTransaksiModal } from "../modals/FinishTransaksiModal";
+import { InfoTransaksiModal } from "../modals/InfoTransaksiModal";
 
 const DetailTransaksiForPenjahit = ({ id }) => {
   const [confirmAccept, setConfirmAccept] = useState(false);
   const [confirmReject, setConfirmReject] = useState(false);
+  const [confirmFinish, setConfirmFinish] = useState(false);
+  const [seeInformation, setSeeInformation] = useState(false);
 
   const { data: authPenjahit } = useAuthPenjahit();
   const { data: transaksiById, isLoading } = useTransaksiById(id);
@@ -78,8 +86,9 @@ const DetailTransaksiForPenjahit = ({ id }) => {
             </div>
           </div>
 
-          {transaksiById?.pengerjaan === "diambil oleh penjahit" && (
-            <div className="flex items-center gap-2 mt-4">
+          {transaksiById?.pengerjaan === "diambil oleh penjahit" ? (
+            <div className="flex flex-col lg:flex-row lg:items-center gap-2 mt-4">
+              <p>Alamat Customer:</p>
               <span className="flex gap-1">
                 <Icon
                   icon="carbon:location-filled"
@@ -87,7 +96,22 @@ const DetailTransaksiForPenjahit = ({ id }) => {
                   height="16"
                   className="text-primary"
                 />
-                <p className="text-sm">{transaksiById?.user?.address}</p>
+                <p className="text-sm">{transaksiById?.alamat}</p>
+              </span>
+            </div>
+          ) : (
+            <div className="flex flex-col lg:flex-row lg:items-center gap-2 mt-4">
+              <p>Alamat Penjahit :</p>
+              <span className="flex gap-1">
+                <Icon
+                  icon="carbon:location-filled"
+                  width="16"
+                  height="16"
+                  className="text-primary"
+                />
+                <p className="text-sm">
+                  {transaksiById?.penjahit?.user?.address}
+                </p>
               </span>
             </div>
           )}
@@ -131,7 +155,7 @@ const DetailTransaksiForPenjahit = ({ id }) => {
       <div className="card bg-base-100 w-full lg:w-80 h-full shadow-sm">
         <div className="card-body flex justify-between">
           <div className="my-4">
-            <p>Customer:</p>
+            <p>Customer :</p>
             <div className="flex items-center mt-2 gap-2">
               <img
                 src={transaksiById?.user?.profileImg || "/avatar.png"}
@@ -157,7 +181,7 @@ const DetailTransaksiForPenjahit = ({ id }) => {
                   <button
                     onClick={() => setConfirmAccept(true)}
                     className="btn btn-primary w-full mb-4"
-                    disabled={isPending}
+                    disabled={isPending || !authPenjahit} // Nonaktifkan jika authPenjahit belum ada
                   >
                     {isPending ? (
                       <Icon
@@ -187,17 +211,13 @@ const DetailTransaksiForPenjahit = ({ id }) => {
                   </button>
                 </>
               )}
+
               {transaksiById?.status === "Diproses" && (
-                <button
-                  onClick={() => {
-                    // Aksi buka halaman atau modal diskusi di sini
-                  }}
-                  className="btn btn-primary w-full"
-                  disabled={isPending}
-                >
-                  {isPending ? (
-                    <Icon icon="line-md:loading-loop" width="20" height="20" />
-                  ) : (
+                <>
+                  <Link
+                    to={`/jahitan/${transaksiById?._id}/chat/${transaksiById?.user?._id}`}
+                    className="btn btn-primary w-full mb-4"
+                  >
                     <>
                       <span className="flex items-center gap-2">
                         <Icon
@@ -208,7 +228,36 @@ const DetailTransaksiForPenjahit = ({ id }) => {
                         Hubungi customer
                       </span>
                     </>
-                  )}
+                  </Link>
+
+                  <button
+                    onClick={() => setConfirmFinish(true)}
+                    className="btn btn-success w-full mb-8"
+                  >
+                    <Icon icon="ep:success-filled" width="20" height="20" />
+                    Selesaikan Pekerjaan
+                  </button>
+
+                  <h2 className="text-xs text-center">
+                    Batalkan Pekerjaan?{" "}
+                    <Link
+                      className="text-error"
+                      to="https://wa.me/6285183949145/"
+                      target="_blank"
+                    >
+                      Ajukan Pembatalan
+                    </Link>
+                  </h2>
+                </>
+              )}
+
+              {transaksiById?.status === "Selesai" && (
+                <button
+                  onClick={() => setSeeInformation(true)}
+                  className="btn btn-success w-full mb-4"
+                >
+                  <Icon icon="mdi:information" width="20" height="20" />
+                  Pekerjaan Telah Selesai
                 </button>
               )}
             </div>
@@ -216,103 +265,36 @@ const DetailTransaksiForPenjahit = ({ id }) => {
         </div>
       </div>
 
-      {confirmAccept && (
-        <>
-          <div
-            className="fixed inset-0 bg-black opacity-50 z-40"
-            onClick={() => setConfirmAccept(false)}
-          ></div>
-
-          <dialog open className="modal z-50">
-            <div className="modal-box">
-              <h3 className="font-bold text-lg mb-6">Terima Pekerjaan</h3>
-
-              <div className="flex gap-2 items-center bg-blue-50 px-4 py-2 rounded-lg">
-                <h1 className="text-lg font-semibold flex items-center gap-2">
-                  <img src="/jalinPoint.svg" className="w-6" />
-                  Point kamu:
-                  <span
-                    className={
-                      authPenjahit.point >= 2000 ? "text-success" : "text-error"
-                    }
-                  >
-                    {Number(authPenjahit.point).toLocaleString("id-ID")}
-                  </span>
-                </h1>
-              </div>
-
-              {authPenjahit.point < 2000 ? (
-                <p className="my-4">
-                  Untuk menerima pekerjaan, memerlukan point <b>2.000.</b>{" "}
-                  Silahkan isi pointmu terlebih dahulu
-                </p>
-              ) : (
-                <p className="my-4">
-                  Untuk menerima pekerjaan, pointmu akan digunakan <b>2.000.</b>
-                </p>
-              )}
-
-              <div className="modal-action flex flex-col">
-                {authPenjahit.point < 2000 ? (
-                  <Link
-                    to={`/topup-point/${authPenjahit._id}`}
-                    className="btn btn-primary"
-                  >
-                    <Icon icon="fluent:cart-24-filled" width="24" height="24" />
-                    Isi Point
-                  </Link>
-                ) : (
-                  <button
-                    className="btn btn-primary w-full"
-                    onClick={() =>
-                      handleTerimaPekerjaan(transaksiById._id, authPenjahit._id)
-                    }
-                  >
-                    Bayar Sekarang
-                  </button>
-                )}
-                <button
-                  className="btn bg-none font-light"
-                  onClick={() => setConfirmAccept(false)}
-                >
-                  Batal
-                </button>
-              </div>
-            </div>
-          </dialog>
-        </>
+      {authPenjahit && transaksiById && (
+        <ConfirmAcceptModal
+          isOpen={confirmAccept}
+          onClose={() => setConfirmAccept(false)}
+          onConfirm={() =>
+            handleTerimaPekerjaan(transaksiById._id, authPenjahit._id)
+          }
+          authPenjahit={authPenjahit}
+        />
       )}
 
-      {confirmReject && (
+      {transaksiById && (
         <>
-          <div
-            className="fixed inset-0 bg-black opacity-50 z-40"
-            onClick={() => setConfirmAccept(false)}
-          ></div>
+          <ConfirmRejectModal
+            isOpen={confirmReject}
+            onClose={() => setConfirmReject(false)}
+            onConfirm={() => handleTolakPekerjaan(transaksiById._id)}
+          />
 
-          <dialog open className="modal z-50">
-            <div className="modal-box">
-              <h3 className="font-bold text-lg mb-6">Tolak Pekerjaan</h3>
+          <FinishTransaksiModal
+            isOpen={confirmFinish}
+            onClose={() => setConfirmFinish(false)}
+            transaksiId={transaksiById._id}
+          />
 
-              <p>Kamu yakin ingin menolak pekerjaan ini?</p>
-
-              <div className="modal-action flex flex-col">
-                <button
-                  className="btn btn-error w-full"
-                  onClick={() => handleTolakPekerjaan(transaksiById._id)}
-                >
-                  Tolak Pekerjaan
-                </button>
-
-                <button
-                  className="btn bg-none font-light"
-                  onClick={() => setConfirmReject(false)}
-                >
-                  Batal
-                </button>
-              </div>
-            </div>
-          </dialog>
+          <InfoTransaksiModal
+            isOpen={seeInformation}
+            onClose={() => setSeeInformation(false)}
+            transaksiData={transaksiById}
+          />
         </>
       )}
     </div>

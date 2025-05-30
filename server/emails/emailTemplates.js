@@ -51,7 +51,7 @@ export function verificationEmailTemplate(verificationCode) {
       </p>
       <p>
         Kode ini akan kedaluwarsa dalam 15 menit. Jika Anda tidak membuat akun
-        dengan kami, harap abaikan email ini. <a href="http://localhost:5173/verify-email" target="_blank"
+        dengan kami, harap abaikan email ini. <a href="http://jalin.my.id/verify-email" target="_blank"
           >menuju halaman verifikasi</a
         >
       </p>
@@ -115,7 +115,7 @@ export function getTransactionEmailTemplate(judul, nama) {
       <p>Detail transaksi dapat dilihat dengan mengunjungi dashboard kamu.</p>
       <div style="text-align: center; margin: 20px 0">
         <a
-          href="http://localhost:5173/penjahit/dashboard"
+          href="http://jalin.my.id/penjahit/dashboard"
           target="_blank"
           style="
             display: inline-block;

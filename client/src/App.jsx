@@ -30,6 +30,7 @@ import ProfileUserAdminPage from "./pages/admin/ProfileUserAdminPage";
 import ProfilePenjahitAdminPage from "./pages/admin/ProfilePenjahitAdminPage";
 import DetailTransaksiAdminPage from "./pages/admin/DetailTransaksiAdminPage";
 import DetailJahitanPage from "./pages/jahitan/DetailJahitanPage";
+import ChatPage from "./pages/jahitan/ChatPage";
 
 const App = () => {
   const { data: authUser, isLoading: isLoading } = useAuthUser();
@@ -115,6 +116,10 @@ const App = () => {
             }
           />
           <Route path="/jahitan/:id" element={<DetailJahitanPage />} />
+          <Route
+            path="/jahitan/:idTransaksi/chat/:id"
+            element={!authUser ? <Navigate to="/login" /> : <ChatPage />}
+          />
 
           <Route path="/about" element={<AboutPage />} />
 
