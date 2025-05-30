@@ -104,3 +104,52 @@ export const useRejectTransaksi = () => {
     },
   });
 };
+
+export const useFinishTransaksi = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (transaksiData) => {
+      const res = await axiosInstance.put(
+        `/transaksi/finish/${transaksiData.get("transaksiId")}`,
+        transaksiData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["transaksiById"]);
+      toast.success("Transaksi telah selesai");
+    },
+    onError: (error) => {
+      console.error(
+        "Gagal menyelesaikan transaksi:",
+        error.response?.data || error.message
+      );
+    },
+  });
+};
+
+export const useReviewTransaksi = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (reviewData) => {
+      const res = await axiosInstance.put(
+        `/transaksi/review/${reviewData.get("transaksiId")}`,
+        reviewData
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["transaksiById"]);
+      toast.success("Review berhasil ditambahkan");
+    },
+    onError: (error) => {
+      console.error(
+        "Gagal membuat review transaksi:",
+        error.response?.data || error.message
+      );
+    },
+  });
+};

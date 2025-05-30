@@ -1,4 +1,3 @@
-// [Semua import sudah sesuai — tidak perlu diubah, kecuali menghapus import Penjahit]
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useTransaksiById } from "../../queries/transaksi/transaksiQuery";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -7,8 +6,14 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
 import { useAuthUser } from "../../queries/auth/authQuery";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { InfoTransaksiModal } from "../modals/InfoTransaksiModal";
+import { ReviewTransaksiModal } from "../modals/ReviewTransaksiModal";
 
 const DetailTransaksi = ({ id }) => {
+  const [seeInformation, setSeeInformation] = useState(false);
+  const [review, setReview] = useState(false);
   const { data: authUser } = useAuthUser();
   const { data: transaksiById, isLoading } = useTransaksiById(id);
 
@@ -56,19 +61,36 @@ const DetailTransaksi = ({ id }) => {
             </div>
           </div>
 
-          {transaksiById?.pengerjaan === "diambil oleh penjahit" && (
-            <div className="flex items-center gap-2 mt-4">
-              <span className="flex gap-1">
-                <Icon
-                  icon="carbon:location-filled"
-                  width="16"
-                  height="16"
-                  className="text-primary"
-                />
-                <p className="text-sm">{transaksiById?.user?.address}</p>
-              </span>
-            </div>
-          )}
+          {authUser &&
+            (transaksiById?.pengerjaan === "diambil oleh penjahit" ? (
+              <div className="flex flex-col lg:flex-row lg:items-center gap-2 mt-4">
+                <p>Alamat Customer:</p>
+                <span className="flex gap-1">
+                  <Icon
+                    icon="carbon:location-filled"
+                    width="16"
+                    height="16"
+                    className="text-primary"
+                  />
+                  <p className="text-sm">{transaksiById?.alamat}</p>
+                </span>
+              </div>
+            ) : (
+              <div className="flex flex-col lg:flex-row lg:items-center gap-2 mt-4">
+                <p>Alamat Penjahit :</p>
+                <span className="flex gap-1">
+                  <Icon
+                    icon="carbon:location-filled"
+                    width="16"
+                    height="16"
+                    className="text-primary"
+                  />
+                  <p className="text-sm">
+                    {transaksiById?.penjahit?.user?.address}
+                  </p>
+                </span>
+              </div>
+            ))}
         </div>
 
         <Swiper
@@ -109,44 +131,100 @@ const DetailTransaksi = ({ id }) => {
       <div className="card bg-base-100 w-full lg:w-80 h-full shadow-sm">
         <div className="card-body flex justify-between">
           <div className="my-4">
-            <p>Customer:</p>
+            <p>Penjahit:</p>
             <div className="flex items-center mt-2 gap-2">
               <img
-                src={transaksiById?.user?.profileImg || "/avatar.png"}
+                src={transaksiById?.penjahit?.user?.profileImg || "/avatar.png"}
                 alt="avatar"
                 className="rounded-full w-8 h-8"
               />
               <div className="flex items-center gap-2 max-w-[200px]">
-                <h2 className="text-md font-semibold truncate flex-1">
-                  {transaksiById?.user?.name}
-                </h2>
-                <Icon
-                  icon="material-symbols:verified-rounded"
-                  width="20"
-                  height="20"
-                  className="text-primary-jalin"
-                />
+                {transaksiById?.penjahit ? (
+                  <>
+                    <h2 className="text-md font-semibold truncate flex-1">
+                      {transaksiById?.penjahit?.user?.name}
+                    </h2>
+                    <Icon
+                      icon="material-symbols:verified-rounded"
+                      width="20"
+                      height="20"
+                      className="text-primary-jalin"
+                    />
+                  </>
+                ) : (
+                  <h2 className="text-md font-semibold truncate flex-1">
+                    Belum ada penjahit
+                  </h2>
+                )}
               </div>
             </div>
 
-            {authUser && authUser._id === transaksiById?.user?._id && (
-              <div className="mt-8">
+            <div className="mt-8">
+              {transaksiById?.status === "Selesai" && (
                 <button
-                  onClick={() => {
-                    // Aksi buka halaman atau modal diskusi di sini
-                  }}
-                  disabled={transaksiById?.status !== "Diproses"}
-                  className={`btn btn-primary w-full`}
+                  onClick={() => setSeeInformation(true)}
+                  className="btn btn-success w-full mb-4"
                 >
-                  {transaksiById?.status === "Diproses"
-                    ? "Hubungi Penjahit"
-                    : transaksiById?.status}
+                  <Icon icon="mdi:information" width="20" height="20" />
+                  Pekerjaan Telah Selesai
                 </button>
-              </div>
-            )}
+              )}
+
+              {authUser && authUser._id === transaksiById?.user?._id && (
+                <>
+                  {transaksiById?.status !== "Selesai" ? (
+                    <Link
+                      to={`/jahitan/${transaksiById?._id}/chat/${transaksiById?.penjahit?.user?._id}`}
+                      disabled={transaksiById?.status !== "Diproses"}
+                      className={`btn btn-primary w-full`}
+                    >
+                      <Icon
+                        icon="fluent:chat-28-filled"
+                        width="20"
+                        height="20"
+                      />
+                      {transaksiById?.status === "Diproses"
+                        ? "Hubungi Penjahit"
+                        : transaksiById?.status}
+                    </Link>
+                  ) : (
+                    <>
+                      {transaksiById?.review?.length <= 0 && (
+                        <button
+                          onClick={() => setReview(true)}
+                          className="btn btn-primary w-full"
+                        >
+                          <Icon
+                            icon="material-symbols:star-rounded"
+                            width="20"
+                            height="20"
+                          />
+                          Berikan Review Penjahit
+                        </button>
+                      )}
+                    </>
+                  )}
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
+      {transaksiById && (
+        <>
+          <InfoTransaksiModal
+            isOpen={seeInformation}
+            onClose={() => setSeeInformation(false)}
+            transaksiData={transaksiById}
+          />
+
+          <ReviewTransaksiModal
+            isOpen={review}
+            onClose={() => setReview(false)}
+            transaksiData={transaksiById}
+          />
+        </>
+      )}
     </div>
   );
 };

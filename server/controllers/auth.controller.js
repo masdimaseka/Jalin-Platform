@@ -99,6 +99,17 @@ export const signup = async (req, res) => {
     });
     await user.save();
 
+    try {
+      await upsertStreamUser({
+        id: user._id.toString(),
+        name: user.name,
+        image: user.profileImg || "",
+      });
+      console.log(`Stream user created for ${user.name}`);
+    } catch (error) {
+      console.log("Error creating Stream user:", error);
+    }
+
     await sendVerificationEmail(user.email, verificationToken);
 
     res.status(201).json({ message: "User created successfully" });

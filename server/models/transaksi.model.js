@@ -28,6 +28,10 @@ const TransaksiSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    alamat: {
+      type: String,
+      required: true,
+    },
     review: [
       {
         rating: { type: Number, min: 1, max: 5 },
@@ -55,6 +59,10 @@ const TransaksiSchema = new mongoose.Schema(
     },
     catatan: {
       type: String,
+    },
+    imageSelesai: {
+      type: [String],
+      default: [],
     },
   },
   { timestamps: true }

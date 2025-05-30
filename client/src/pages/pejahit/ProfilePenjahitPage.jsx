@@ -30,7 +30,7 @@ const ProfilePenjahitPage = () => {
         </h1>
         <ListTransaksiForPenjahitFiltered
           penjahit={penjahitById}
-          filter={["menunggu", "selesai"]}
+          filter={["menunggu", "selesai", "diproses"]}
         />
       </div>
     </div>

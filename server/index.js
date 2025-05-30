@@ -11,8 +11,9 @@ import categoryRoutes from "./routes/category.route.js";
 import adminRoutes from "./routes/admin.route.js";
 import userRoutes from "./routes/user.route.js";
 import transaksiRoutes from "./routes/transaksi.route.js";
-import pointProductRoutes from "./routes/pointProduct.route.js";
 import transaksiPointRoutes from "./routes/transaksiPoint.route.js";
+import pointProductRoutes from "./routes/pointProduct.route.js";
+import chatRoutes from "./routes/chat.route.js";
 import multer from "multer";
 
 dotenv.config();
@@ -49,6 +50,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/transaksi", transaksiRoutes);
 app.use("/api/point-product", pointProductRoutes);
 app.use("/api/transaksi-point", transaksiPointRoutes);
+app.use("/api/chat", chatRoutes);
 
 connectDB();
 

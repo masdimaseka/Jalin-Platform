@@ -4,6 +4,8 @@ import { useRef, useState } from "react";
 import { useCreateTransaksiToPenjahit } from "../../queries/transaksi/transaksiMutation";
 import toast from "react-hot-toast";
 import { Icon } from "@iconify/react";
+import { useEffect } from "react";
+import { useAuthUser } from "../../queries/auth/authQuery";
 
 const InputTransaksiToPenjahit = ({ id }) => {
   const [judul, setJudul] = useState("");
@@ -15,11 +17,18 @@ const InputTransaksiToPenjahit = ({ id }) => {
   );
   const [images, setImages] = useState([]);
   const [previewImgs, setPreviewImgs] = useState([]);
+  const [alamat, setAlamat] = useState("");
 
   const fileInputRef = useRef(null);
+
+  const { data: authUser } = useAuthUser();
   const { data: penjahitById, isLoading } = usePenjahitById(id);
   const { mutate: createTransaksiToPenjahit, isPending } =
     useCreateTransaksiToPenjahit();
+
+  useEffect(() => {
+    setAlamat(authUser?.address || "");
+  }, [authUser]);
 
   const handleImgChange = (e) => {
     const files = Array.from(e.target.files);
@@ -53,6 +62,7 @@ const InputTransaksiToPenjahit = ({ id }) => {
     formData.append("tenggatWaktu", tenggatWaktu);
     formData.append("prosesPengerjaan", prosesPengerjaan);
     formData.append("catatan", catatan);
+    formData.append("alamat", alamat);
     images.forEach((img) => formData.append("images", img));
 
     createTransaksiToPenjahit(formData, {
@@ -135,6 +145,22 @@ const InputTransaksiToPenjahit = ({ id }) => {
                 Diambil oleh Penjahit
               </option>
             </select>
+          </div>
+
+          <div
+            className={`${
+              prosesPengerjaan === "diambil oleh penjahit" ? "block" : "hidden"
+            }`}
+          >
+            <label className="block text-sm font-medium">Alamat</label>
+            <input
+              type="text"
+              value={alamat}
+              onChange={(e) => setAlamat(e.target.value)}
+              placeholder="Masukkan alamat lengkap"
+              className="input input-bordered w-full"
+              required
+            />
           </div>
 
           <div>

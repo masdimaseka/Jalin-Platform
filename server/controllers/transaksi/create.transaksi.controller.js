@@ -8,8 +8,14 @@ export const createTransaksi = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const { judul, deskripsi, tenggatWaktu, prosesPengerjaan, catatan } =
-      req.body;
+    const {
+      judul,
+      deskripsi,
+      tenggatWaktu,
+      prosesPengerjaan,
+      catatan,
+      alamat,
+    } = req.body;
 
     let uploadedImgUrls = [];
 
@@ -27,6 +33,7 @@ export const createTransaksi = async (req, res) => {
       tenggatWaktu,
       pengerjaan: prosesPengerjaan,
       catatan,
+      alamat,
     });
 
     await transaksiBaru.save();
@@ -46,8 +53,14 @@ export const createTransaksiToPenjahit = async (req, res) => {
     const userId = req.user._id;
     const penjahitId = req.params.id;
 
-    const { judul, deskripsi, tenggatWaktu, prosesPengerjaan, catatan } =
-      req.body;
+    const {
+      judul,
+      deskripsi,
+      tenggatWaktu,
+      prosesPengerjaan,
+      catatan,
+      alamat,
+    } = req.body;
 
     let uploadedImgUrls = [];
 
@@ -66,6 +79,7 @@ export const createTransaksiToPenjahit = async (req, res) => {
       tenggatWaktu: tenggatWaktu ? new Date(tenggatWaktu) : null,
       pengerjaan: prosesPengerjaan,
       catatan,
+      alamat,
     });
 
     await transaksi.save();
