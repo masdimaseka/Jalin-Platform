@@ -1,3 +1,6 @@
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { Link } from "react-router-dom";
+
 export const CardTransaksiModal = ({ isOpen, onClose, transaksiData }) => {
   if (!isOpen) {
     return null;
