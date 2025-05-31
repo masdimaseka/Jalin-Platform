@@ -18,6 +18,7 @@ import { useAuthUser } from "../../queries/auth/authQuery";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useTransaksiById } from "../../queries/transaksi/transaksiQuery";
 import CustomHeader from "../../components/chat/CustomHeader";
+import { CardTransaksiModal } from "../../components/modals/CardTransaksiModal";
 
 const STREAM_API_KEY = import.meta.env.VITE_STREAM_API_KEY;
 
@@ -161,7 +162,7 @@ const ChatPage = () => {
               <Window>
                 <div className="flex lg:block items-center justify-between w-full gap-4 p-4">
                   <button
-                    onClick={() => setIsOpen(!isOpen)}
+                    onClick={() => setIsOpen(true)}
                     className="lg:hidden p-4 border-2 rounded-xl border-gray-200 "
                   >
                     <Icon
@@ -183,6 +184,14 @@ const ChatPage = () => {
           </Channel>
         </Chat>
       </div>
+
+      {isOpen && (
+        <CardTransaksiModal
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          transaksiData={transaksiById}
+        />
+      )}
     </div>
   );
 };
