@@ -49,7 +49,7 @@ const ChatPage = () => {
 
   useEffect(() => {
     const initChat = async () => {
-      if (!tokenData?.token || !authUser || !transaksiById?.judul) return;
+      if (!tokenData?.token || !authUser || !transaksiById?._id) return;
 
       try {
         const client = StreamChat.getInstance(STREAM_API_KEY);
@@ -63,7 +63,7 @@ const ChatPage = () => {
           tokenData.token
         );
 
-        const channelId = transaksiById.judul;
+        const channelId = transaksiById._id;
 
         const currChannel = client.channel("messaging", channelId, {
           members: [authUser._id, targetUserId],
@@ -82,7 +82,7 @@ const ChatPage = () => {
     };
 
     initChat();
-  }, [tokenData, authUser, targetUserId, transaksiById?.judul]);
+  }, [tokenData, authUser, targetUserId, transaksiById?._id]);
 
   if (isLoading || isLoadingTransaksi || !transaksiById) {
     return (
