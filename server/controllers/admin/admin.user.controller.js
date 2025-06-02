@@ -48,8 +48,6 @@ export const deleteUserByIdByAdmin = async (req, res) => {
 
 export const changeUserPasswordByAdmin = async (req, res) => {
   try {
-    console.log(req.body);
-
     const { username, email, newPassword } = req.body;
     const user = await User.findOne({ username });
     if (!user) {
