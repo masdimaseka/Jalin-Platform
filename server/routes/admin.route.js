@@ -12,6 +12,7 @@ import {
   registerCategoryByAdmin,
 } from "../controllers/admin/admin.controller.js";
 import {
+  changeUserPasswordByAdmin,
   deleteUserByIdByAdmin,
   getUserByAdmin,
   getUserByIdByAdmin,
@@ -38,6 +39,11 @@ router.get("/penjahit/:id", protectRouteAdmin, getPenjahitByIdByAdmin);
 router.delete("/penjahit/:id", protectRouteAdmin, deletePenjahitByIdByAdmin);
 
 router.get("/user", protectRouteAdmin, getUserByAdmin);
+router.put(
+  "/user/reset-password",
+  protectRouteAdmin,
+  changeUserPasswordByAdmin
+);
 router.get("/user/:id", protectRouteAdmin, getUserByIdByAdmin);
 router.delete("/user/:id", protectRouteAdmin, deleteUserByIdByAdmin);
 

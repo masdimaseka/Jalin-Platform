@@ -31,6 +31,7 @@ import ProfilePenjahitAdminPage from "./pages/admin/ProfilePenjahitAdminPage";
 import DetailTransaksiAdminPage from "./pages/admin/DetailTransaksiAdminPage";
 import DetailJahitanPage from "./pages/jahitan/DetailJahitanPage";
 import ChatPage from "./pages/jahitan/ChatPage";
+import ResetPasswordByAdminPage from "./pages/admin/ResetPasswordByAdminPage";
 
 const App = () => {
   const { data: authUser, isLoading: isLoading } = useAuthUser();
@@ -169,6 +170,16 @@ const App = () => {
               element={
                 authAdmin ? (
                   <ProfileUserAdminPage />
+                ) : (
+                  <Navigate to="/admin/login" />
+                )
+              }
+            />
+            <Route
+              path="/admin/user/reset-password"
+              element={
+                authAdmin ? (
+                  <ResetPasswordByAdminPage />
                 ) : (
                   <Navigate to="/admin/login" />
                 )
