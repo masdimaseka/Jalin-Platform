@@ -86,6 +86,16 @@ const ProfileUserAdminPage = () => {
                 )}
               </td>
             </tr>
+            {userByIdByAdmin?.isVerified === false && (
+              <tr>
+                <td className="py-4 px-4 border border-base-content/5 font-semibold">
+                  Kode Verifikasi
+                </td>
+                <td className="py-4 px-4 border border-base-content/5">
+                  {userByIdByAdmin?.verificationToken || "-"}
+                </td>
+              </tr>
+            )}
             <tr>
               <td className="py-4 px-4 border border-base-content/5 font-semibold">
                 S & K
