@@ -123,3 +123,26 @@ export const useDeleteCategoryByIdByAdmin = () => {
     },
   });
 };
+
+export const useChangeUserPasswordByAdmin = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: async (formData) => {
+      console.log("Updated Data:", formData);
+      await axiosInstance.put(`/admin/user/reset-password`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["userByAdmin"]);
+      navigate("/admin/user");
+      toast.success("Password berhasil diubah!");
+    },
+    onError: (error) => {
+      console.error("Gagal mengubah password:", error);
+      toast.error(error.response.data.message || "Something went wrong");
+    },
+  });
+};

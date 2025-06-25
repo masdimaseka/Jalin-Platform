@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import User from "../../models/user.model.js";
 
 export const getUserByAdmin = async (req, res) => {
@@ -41,6 +42,31 @@ export const deleteUserByIdByAdmin = async (req, res) => {
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
     console.log(`Error in deleteUser: ${error.message}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const changeUserPasswordByAdmin = async (req, res) => {
+  try {
+    const { username, email, newPassword } = req.body;
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.email !== email) {
+      return res.status(400).json({ message: "Email does not match" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.log(`Error in changeUserPasswordByAdmin: ${error.message}`);
     res.status(500).json({ message: "Internal server error" });
   }
 };

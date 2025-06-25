@@ -102,6 +102,21 @@ const NavbarAdmin = () => {
                   </Link>
                 </li>
               </ul>
+              <ul>
+                <li>
+                  <Link
+                    to="/admin/user/reset-password"
+                    className={`w-full hover:text-primary-jalin ${
+                      location.pathname === "/admin/user/reset-password"
+                        ? "font-bold text-blue-500"
+                        : ""
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Reset Password
+                  </Link>
+                </li>
+              </ul>
             </details>
           </li>
 
