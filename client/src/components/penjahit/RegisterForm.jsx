@@ -19,6 +19,7 @@ const RegisterForm = () => {
   const { mutate: registerPenjahit, isPending } = useRegisterPenjahit();
 
   const maxWords = 100;
+  const maxFileSize = 1048576; // 1MB
 
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
@@ -38,6 +39,12 @@ const RegisterForm = () => {
     const file = e.target.files[0];
     if (!file) return;
 
+    if (file.size > maxFileSize) {
+      toast.error("Ukuran foto tidak boleh lebih dari 1MB!");
+      fileInputRef.current.value = "";
+      return;
+    }
+
     const img = new Image();
     img.src = URL.createObjectURL(file);
 
@@ -53,6 +60,20 @@ const RegisterForm = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    // 🔒 Double check ukuran file
+    if (profileImg && profileImg.size > maxFileSize) {
+      toast.error("Ukuran foto profile melebihi 1MB!");
+      return;
+    }
+    if (dokKTP && dokKTP.size > maxFileSize) {
+      toast.error("Ukuran dokumen KTP melebihi 1MB!");
+      return;
+    }
+    if (dokPortofolio.some((file) => file.size > maxFileSize)) {
+      toast.error("Salah satu file portofolio melebihi 1MB!");
+      return;
+    }
 
     try {
       const formData = new FormData();
@@ -86,7 +107,7 @@ const RegisterForm = () => {
       className="flex flex-col gap-4 w-full lg:w-[30vw]"
     >
       <div>
-        <label htmlFor="dokKTP">
+        <label htmlFor="profileImg">
           Foto Profile{" "}
           <span className="text-xs font-light">
             (foto yang memperlihatkan wajah)
@@ -101,12 +122,12 @@ const RegisterForm = () => {
           className="file-input input-bordered rounded-md w-full text-xs"
           required
         />
+        <p className="text-xs font-light mt-2">*ukuran max 1MB</p>
       </div>
 
       <div>
-        <label htmlFor="rentangBiaya">Deskripsi Profile</label>
+        <label htmlFor="description">Deskripsi Profile</label>
         <textarea
-          type="text"
           placeholder="Saya adalah seorang penjahit..."
           value={description}
           onChange={handleDescriptionChange}
@@ -124,11 +145,18 @@ const RegisterForm = () => {
         <input
           type="file"
           accept="image/*"
-          onChange={(e) => setDokKTP(e.target.files[0])}
+          onChange={(e) => {
+            const file = e.target.files[0];
+            if (file && file.size > maxFileSize) {
+              toast.error("Ukuran dokumen KTP tidak boleh lebih dari 1MB!");
+              return;
+            }
+            setDokKTP(file);
+          }}
           className="file-input input-bordered rounded-md w-full text-xs"
           required
         />
-        <p className="text-xs font-light mt-2">*ukuran max 3MB</p>
+        <p className="text-xs font-light mt-2">*ukuran max 1MB</p>
       </div>
 
       <div>
@@ -143,10 +171,20 @@ const RegisterForm = () => {
           type="file"
           multiple
           accept="image/*"
-          onChange={(e) => setDokPortofolio([...e.target.files])}
+          onChange={(e) => {
+            const files = [...e.target.files];
+            const oversized = files.find((file) => file.size > maxFileSize);
+            if (oversized) {
+              toast.error(
+                "Setiap file portofolio harus berukuran maksimal 1MB!"
+              );
+              return;
+            }
+            setDokPortofolio(files);
+          }}
           className="file-input input-bordered rounded-md w-full text-xs"
         />
-        <p className="text-xs font-light mt-2">*ukuran max 3MB</p>
+        <p className="text-xs font-light mt-2">*ukuran max 1MB</p>
       </div>
 
       <div>

@@ -25,7 +25,11 @@ export const useRegisterPenjahit = () => {
       navigate("/status/" + status);
     },
     onError: (err) => {
-      toast.error(err.response.data.message || "Registrasi gagal!");
+      if (err?.response?.status === 413) {
+        toast.error("Ukuran file terlalu besar! Total maksimum sekitar 3MB.");
+      } else {
+        toast.error(err?.response?.data?.message || "Registrasi gagal!");
+      }
     },
   });
 };
