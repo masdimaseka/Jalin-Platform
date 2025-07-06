@@ -13,6 +13,17 @@ const EmailVerificationPage = () => {
         </p>
 
         <EmailVerificationForm />
+
+        <p className="text-body-text mb-4 text-xs">
+          Belum menerima email?{" "}
+          <a
+            target="_blank"
+            href="https://wa.me/6285183949145/"
+            className="text-secondary-jalin font-semibold"
+          >
+            Hubungi admin
+          </a>
+        </p>
       </div>
     </div>
   );
