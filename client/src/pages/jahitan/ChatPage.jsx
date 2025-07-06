@@ -19,6 +19,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useTransaksiById } from "../../queries/transaksi/transaksiQuery";
 import CustomHeader from "../../components/chat/CustomHeader";
 import { CardTransaksiModal } from "../../components/modals/CardTransaksiModal";
+import CustomMessageInput from "../../components/chat/CustomMessageInput";
 
 const STREAM_API_KEY = import.meta.env.VITE_STREAM_API_KEY;
 
@@ -177,7 +178,7 @@ const ChatPage = () => {
                   />
                 </div>
                 <MessageList />
-                <MessageInput focus />
+                <CustomMessageInput focus />
               </Window>
             </div>
             <Thread />

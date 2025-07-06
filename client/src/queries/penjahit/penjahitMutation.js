@@ -48,7 +48,7 @@ export const useUpdateStatusPenjahit = () => {
     onSuccess: () => {
       toast.success("Status Diperbarui");
 
-      queryClient.invalidateQueries({ queryKey: ["penjahitByIdUser"] });
+      queryClient.invalidateQueries({ queryKey: ["penjahitById"] });
     },
     onError: (err) => {
       toast.error(err.response.data.message || "Registrasi gagal!");
