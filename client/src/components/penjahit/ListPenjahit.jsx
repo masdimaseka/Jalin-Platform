@@ -58,9 +58,13 @@ const ListPenjahit = () => {
     return matchesCategory && matchesSearch && isNotCurrentUser;
   });
 
-  const totalPages = Math.ceil(filteredPenjahit.length / ITEMS_PER_PAGE);
+  const sortedPenjahit = filteredPenjahit.sort((a, b) => {
+    return (b.openToWork === true) - (a.openToWork === true);
+  });
 
-  const currentData = filteredPenjahit.slice(
+  const totalPages = Math.ceil(sortedPenjahit.length / ITEMS_PER_PAGE);
+
+  const currentData = sortedPenjahit.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
@@ -90,7 +94,7 @@ const ListPenjahit = () => {
       <div className="flex flex-wrap gap-4">
         {currentData.length > 0 ? (
           currentData
-            .filter((p) => p.openToWork && p.isVerified === "diterima")
+            .filter((p) => p.isVerified === "diterima")
             .map((p) => (
               <CardPenjahit key={p._id} penjahit={p} authUser={authUser} />
             ))

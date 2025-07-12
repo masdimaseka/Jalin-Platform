@@ -32,9 +32,15 @@ const CardPenjahit = ({ penjahit, authUser }) => {
             />
           </div>
 
-          <div className="badge badge-success my-4">
-            <p className="text-xs">Open To Work</p>
-          </div>
+          {penjahit.openToWork ? (
+            <div className="badge badge-success my-4">
+              <p className="text-xs">Open To Work</p>
+            </div>
+          ) : (
+            <div className="badge badge-error my-4">
+              <p className="text-xs">Closed To Work</p>
+            </div>
+          )}
 
           <div className="flex flex-col lg:flex-row gap-4 ">
             <span className="flex items-center gap-1">
@@ -89,12 +95,21 @@ const CardPenjahit = ({ penjahit, authUser }) => {
           )}
         </div>
 
-        <Link
-          to={`/penjahit/apply/${penjahit._id}`}
-          className={`btn mt-4 ${authUser ? "btn-primary" : "btn-disabled"}`}
-        >
-          {authUser ? "Hubungi Penjahit" : "Bergabung untuk Hubungi"}
-        </Link>
+        {penjahit.openToWork ? (
+          <Link
+            to={`/penjahit/apply/${penjahit._id}`}
+            className={`btn mt-4 ${authUser ? "btn-primary" : "btn-disabled"}`}
+          >
+            {authUser ? "Hubungi Penjahit" : "Bergabung untuk Hubungi"}
+          </Link>
+        ) : (
+          <Link
+            to={`/penjahit/apply/${penjahit._id}`}
+            className={`btn mt-4 btn-disabled`}
+          >
+            Penjahit sedang tidak tersedia
+          </Link>
+        )}
       </div>
     </div>
   );
