@@ -8,7 +8,28 @@ import { useAuthUser } from "../queries/auth/authQuery";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 
+import { motion, useInView } from "motion/react";
+import { useRef } from "react";
+import { TypeAnimation } from "react-type-animation";
+
 import "swiper/css";
+
+// Component untuk animasi fade up saat scroll
+const FadeUpOnScroll = ({ children, className }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  return (
+    <motion.div
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 const HomePage = () => {
   const { data: authUser } = useAuthUser();
@@ -31,32 +52,52 @@ const HomePage = () => {
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="relative z-10 lg:w-[50vw]">
-          <h1 className="text-xl lg:text-3xl font-bold">
-            Temukan Penjahit Terbaik <br /> atau Tawarkan Jasa Jahit Anda di
-            Sini!
-          </h1>
+          <motion.h1
+            className="text-3xl lg:text-5xl font-bold"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+          >
+            <TypeAnimation
+              sequence={[
+                "Temukan Penjahit Terbaik!",
+                2000,
+                "Tawarkan Jasa Jahit Anda!",
+                2000,
+                "",
+              ]}
+              wrapper="h1"
+              cursor={true}
+              repeat={Infinity}
+              className="text-3xl lg:text-5xl font-bold"
+            />
+          </motion.h1>
           <p className="mt-4 text-md">
             Butuh jasa jahit? Pilih penjahit terbaik sesuai kebutuhan. Seorang
             penjahit? Dapatkan lebih banyak pelanggan dengan mudah!
           </p>
           <div className="mt-6 flex flex-col lg:flex-row gap-2">
-            <Link
-              to="/penjahit"
-              className="btn btn-white text-primary-jalin px-6 py-3 font-semibold sm:max-lg:w-full"
-            >
-              Cari Penjahit
-            </Link>
-            <Link
-              to="/jahitan"
-              className="btn btn-primary text-white px-6 py-3 font-semibold sm:max-lg:w-full"
-            >
-              Dapatkan Jahitan
-            </Link>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                to="/penjahit"
+                className="btn btn-white text-primary-jalin px-6 py-3 font-semibold sm:max-lg:w-full"
+              >
+                Cari Penjahit
+              </Link>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                to="/jahitan"
+                className="btn btn-primary text-white px-6 py-3 font-semibold sm:max-lg:w-full"
+              >
+                Dapatkan Jahitan
+              </Link>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      <section className="px-8 lg:px-16 my-24">
+      <FadeUpOnScroll className="px-8 lg:px-16 my-24">
         <h1 className="text-xl sm:text-3xl font-semibold mb-8">
           Kenapa Memilih <span className="text-primary-jalin">Jalin</span>
         </h1>
@@ -82,9 +123,9 @@ const HomePage = () => {
             desc="Cocok untuk semua orang, dari customer individual hingga pelaku usaha yang membutuhkan layanan jahit lebih besar."
           />
         </div>
-      </section>
+      </FadeUpOnScroll>
 
-      <section className="px-8 lg:px-16 my-24">
+      <FadeUpOnScroll className="px-8 lg:px-16 my-24">
         <h1 className="text-xl sm:text-3xl font-semibold mb-2">
           Bergabung Bersama <span className="text-primary-jalin">Jalin</span>
         </h1>
@@ -120,10 +161,10 @@ const HomePage = () => {
             </div>
           ))}
         </div>
-      </section>
+      </FadeUpOnScroll>
 
       {penjahitPremium?.length > 0 && (
-        <section className="relative w-full h-[85vh] px-8 lg:px-16 my-24 flex items-center">
+        <FadeUpOnScroll className="relative w-full h-[85vh] px-8 lg:px-16 my-24 flex items-center">
           <img
             src="/banner.png"
             alt="Penjahit"
@@ -157,10 +198,10 @@ const HomePage = () => {
               })}
             </Swiper>
           </div>
-        </section>
+        </FadeUpOnScroll>
       )}
 
-      <section className="px-8 lg:px-16 my-24">
+      <FadeUpOnScroll className="px-8 lg:px-16 my-24">
         <h1 className="text-xl sm:text-3xl font-semibold mb-8">
           Langkah Mudah Mencari Penjahit di
           <span className="text-primary-jalin"> Jalin</span>
@@ -194,9 +235,9 @@ const HomePage = () => {
             alt="Langkah bergabung"
           />
         </div>
-      </section>
+      </FadeUpOnScroll>
 
-      <section className="relative w-full h-[40vh] px-8 lg:px-16 my-24 flex justify-center items-center">
+      <FadeUpOnScroll className="relative w-full h-[40vh] px-8 lg:px-16 my-24 flex justify-center items-center">
         <img
           src="/banner.png"
           alt="Penjahit"
@@ -207,21 +248,25 @@ const HomePage = () => {
             Yuk bergabung dan menjadi bagian dari Jalin!
           </h1>
           <div className="mt-6 flex flex-col lg:flex-row justify-center gap-2">
-            <Link
-              to="/penjahit"
-              className="btn btn-white text-primary-jalin px-6 py-3 font-semibold sm:max-lg:w-full"
-            >
-              Cari Penjahit
-            </Link>
-            <Link
-              to="/jahitan"
-              className="btn btn-primary text-white px-6 py-3 font-semibold sm:max-lg:w-full"
-            >
-              Dapatkan Jahitan
-            </Link>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                to="/penjahit"
+                className="btn btn-white text-primary-jalin px-6 py-3 font-semibold sm:max-lg:w-full"
+              >
+                Cari Penjahit
+              </Link>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                to="/jahitan"
+                className="btn btn-primary text-white px-6 py-3 font-semibold sm:max-lg:w-full"
+              >
+                Dapatkan Jahitan
+              </Link>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </FadeUpOnScroll>
     </div>
   );
 };
